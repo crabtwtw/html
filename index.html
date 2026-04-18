@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>14 天,266 小時,一個人的故事 — 從零到 200 萬系統</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e17;
+    --bg-2: #111827;
+    --bg-3: #1a2235;
+    --surface: #151b2a;
+    --surface-2: #1e2640;
+    --border: #2a3447;
+    --ink: #e8eef5;
+    --ink-2: #b4bece;
+    --ink-3: #7f8ba0;
+    --gold: #d4a574;
+    --gold-2: #e8c38a;
+    --gold-soft: rgba(212, 165, 116, 0.15);
+    --emerald: #4ade80;
+    --rose: #f87171;
+    --sky: #7dd3fc;
+    --display: "Noto Serif TC", serif;
+    --body: "Noto Sans TC", sans-serif;
+    --mono: "JetBrains Mono", monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    background-image:
+      radial-gradient(at 20% 10%, rgba(212, 165, 116, 0.08) 0, transparent 50%),
+      radial-gradient(at 80% 80%, rgba(74, 222, 128, 0.05) 0, transparent 50%);
+    background-attachment: fixed;
+    color: var(--ink);
+    font-family: var(--body);
+    line-height: 1.85;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ───── Hero ───── */
+  .hero {
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 80px 24px 60px;
+    position: relative;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent 0 80px,
+      rgba(212, 165, 116, 0.02) 80px 81px
+    );
+    pointer-events: none;
+  }
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--gold);
+    letter-spacing: 4px;
+    margin-bottom: 32px;
+    position: relative;
+  }
+  .hero-eyebrow::before, .hero-eyebrow::after {
+    content: "—";
+    color: var(--gold);
+    margin: 0 12px;
+    opacity: 0.5;
+  }
+  .hero h1 {
+    font-family: var(--display);
+    font-weight: 900;
+    font-size: clamp(42px, 7vw, 80px);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 32px;
+    position: relative;
+  }
+  .hero h1 em {
+    font-style: normal;
+    color: var(--gold);
+    font-size: 1.15em;
+  }
+  .hero-sub {
+    font-family: var(--display);
+    font-size: 20px;
+    color: var(--ink-2);
+    max-width: 540px;
+    line-height: 1.8;
+    margin-bottom: 60px;
+  }
+  .hero-signature {
+    font-family: var(--display);
+    font-size: 14px;
+    color: var(--ink-3);
+    font-style: italic;
+    letter-spacing: 1px;
+  }
+  .hero-scroll {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--ink-3);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 3px;
+    animation: bounce 2s ease-in-out infinite;
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translate(-50%, 0); opacity: 0.5; }
+    50% { transform: translate(-50%, -8px); opacity: 1; }
+  }
+
+  /* ───── Chapter ───── */
+  .chapter {
+    padding: 100px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .chapter-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--gold);
+    letter-spacing: 5px;
+    margin-bottom: 16px;
+  }
+  .chapter-title {
+    font-family: var(--display);
+    font-size: clamp(32px, 5vw, 48px);
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    margin-bottom: 40px;
+  }
+  .chapter-title em {
+    font-style: normal;
+    color: var(--gold);
+  }
+
+  /* ───── Prose ───── */
+  .prose {
+    font-size: 17px;
+    color: var(--ink-2);
+    line-height: 1.9;
+  }
+  .prose p {
+    margin-bottom: 22px;
+  }
+  .prose p.lead {
+    font-family: var(--display);
+    font-size: 22px;
+    color: var(--ink);
+    line-height: 1.7;
+    margin-bottom: 32px;
+  }
+  .prose strong {
+    color: var(--gold);
+    font-weight: 600;
+  }
+  .prose em {
+    color: var(--ink);
+    font-style: italic;
+    font-weight: 500;
+  }
+
+  /* ───── Pull quote ───── */
+  .pull-quote {
+    font-family: var(--display);
+    font-size: clamp(26px, 4vw, 36px);
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--ink);
+    text-align: center;
+    padding: 60px 20px;
+    margin: 60px -20px;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+  .pull-quote::before {
+    content: "";
+    position: absolute;
+    top: -1px; left: 50%;
+    width: 80px;
+    height: 3px;
+    background: var(--gold);
+    transform: translateX(-50%);
+  }
+  .pull-quote em {
+    color: var(--gold);
+    font-style: normal;
+  }
+
+  /* ───── Stats inline ───── */
+  .inline-stats {
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 40px 0;
+    padding: 40px 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+  .inline-stat {
+    text-align: center;
+  }
+  .inline-stat-num {
+    font-family: var(--display);
+    font-weight: 900;
+    font-size: 44px;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .inline-stat-label {
+    font-size: 12px;
+    color: var(--ink-3);
+    letter-spacing: 2px;
+  }
+
+  /* ───── Day Scene (踩坑場景) ───── */
+  .scene {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 10px 10px 0;
+    padding: 32px;
+    margin: 32px 0;
+    position: relative;
+  }
+  .scene-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px dashed var(--border);
+  }
+  .scene-day {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--gold);
+    letter-spacing: 3px;
+    font-weight: 600;
+  }
+  .scene-time {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-3);
+    letter-spacing: 1px;
+  }
+  .scene-title {
+    font-family: var(--display);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 16px;
+    line-height: 1.3;
+  }
+  .scene-body {
+    font-size: 15.5px;
+    color: var(--ink-2);
+    line-height: 1.85;
+  }
+  .scene-body p { margin-bottom: 12px; }
+  .scene-body .inner-mono {
+    background: var(--bg-3);
+    color: var(--gold);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: var(--mono);
+    font-size: 0.9em;
+  }
+  .scene-reaction {
+    margin-top: 20px;
+    padding: 16px;
+    background: var(--bg);
+    border-radius: 6px;
+    font-style: italic;
+    color: var(--ink);
+    border-left: 2px solid var(--rose);
+  }
+  .scene-reaction::before {
+    content: "我當下的反應:";
+    display: block;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--rose);
+    letter-spacing: 2px;
+    font-style: normal;
+    margin-bottom: 6px;
+  }
+  .scene-solved {
+    margin-top: 12px;
+    padding: 16px;
+    background: rgba(74, 222, 128, 0.05);
+    border-radius: 6px;
+    font-size: 14px;
+    color: var(--ink-2);
+    border-left: 2px solid var(--emerald);
+  }
+  .scene-solved::before {
+    content: "後來怎麼解決的:";
+    display: block;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--emerald);
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+
+  /* ───── Big Number Block ───── */
+  .big-num-block {
+    text-align: center;
+    padding: 80px 20px;
+    margin: 60px -20px;
+    background: linear-gradient(180deg, var(--surface) 0%, transparent 100%);
+    border-radius: 12px;
+  }
+  .big-num-label {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-3);
+    letter-spacing: 3px;
+    margin-bottom: 16px;
+  }
+  .big-num {
+    font-family: var(--display);
+    font-weight: 900;
+    font-size: clamp(80px, 14vw, 160px);
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 16px;
+    letter-spacing: -0.04em;
+  }
+  .big-num-sub {
+    font-family: var(--display);
+    font-size: 20px;
+    color: var(--ink);
+    line-height: 1.6;
+  }
+
+  /* ───── Day Timeline Chart ───── */
+  .day-chart {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 32px 24px;
+    margin: 40px 0;
+  }
+  .day-chart-title {
+    font-family: var(--display);
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--ink);
+  }
+  .day-chart-sub {
+    font-size: 13px;
+    color: var(--ink-3);
+    margin-bottom: 28px;
+  }
+  .day-row {
+    display: grid;
+    grid-template-columns: 60px 1fr 60px;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .day-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-3);
+    letter-spacing: 1px;
+  }
+  .day-bar {
+    height: 22px;
+    background: var(--bg-3);
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+  }
+  .day-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold), var(--gold-2));
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    font-size: 10px;
+    color: var(--bg);
+    font-weight: 700;
+    font-family: var(--mono);
+  }
+  .day-bar-fill.rest {
+    background: linear-gradient(90deg, var(--sky), #0ea5e9);
+  }
+  .day-hours {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--gold);
+    font-weight: 600;
+    text-align: right;
+  }
+
+  /* ───── Contrast Block ───── */
+  .contrast-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin: 40px 0;
+  }
+  @media (max-width: 640px) {
+    .contrast-grid { grid-template-columns: 1fr; }
+  }
+  .contrast-col {
+    padding: 28px 24px;
+    border-radius: 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+  }
+  .contrast-col.bad { border-top: 3px solid var(--rose); }
+  .contrast-col.good { border-top: 3px solid var(--emerald); background: linear-gradient(180deg, rgba(74, 222, 128, 0.05) 0%, var(--surface) 60%); }
+  .contrast-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 3px;
+    margin-bottom: 12px;
+  }
+  .contrast-col.bad .contrast-label { color: var(--rose); }
+  .contrast-col.good .contrast-label { color: var(--emerald); }
+  .contrast-col h4 {
+    font-family: var(--display);
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--ink);
+  }
+  .contrast-col p {
+    font-size: 14.5px;
+    color: var(--ink-2);
+    line-height: 1.8;
+  }
+
+  /* ───── Truth list (你贏/工程師贏) ───── */
+  .truth-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 32px;
+    margin: 32px 0;
+  }
+  .truth-block h3 {
+    font-family: var(--display);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--gold);
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .truth-item {
+    padding: 12px 0;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    border-bottom: 1px dashed var(--border);
+  }
+  .truth-item:last-child { border-bottom: none; }
+  .truth-icon {
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 15px;
+  }
+  .truth-icon.win {
+    background: rgba(74, 222, 128, 0.15);
+    color: var(--emerald);
+  }
+  .truth-icon.lose {
+    background: rgba(248, 113, 113, 0.15);
+    color: var(--rose);
+  }
+  .truth-text {
+    font-size: 15px;
+    color: var(--ink-2);
+    line-height: 1.7;
+  }
+  .truth-text strong { color: var(--ink); }
+
+  /* ───── Price Tag (最終價值) ───── */
+  .price-tag {
+    background: linear-gradient(135deg, rgba(212, 165, 116, 0.12) 0%, rgba(212, 165, 116, 0.02) 100%);
+    border: 1px solid rgba(212, 165, 116, 0.4);
+    border-radius: 14px;
+    padding: 48px 32px;
+    text-align: center;
+    margin: 48px 0;
+    position: relative;
+  }
+  .price-tag::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 14px;
+    border: 2px solid transparent;
+    background: linear-gradient(135deg, var(--gold), transparent) border-box;
+    -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+  .price-tag-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--gold);
+    letter-spacing: 4px;
+    margin-bottom: 16px;
+  }
+  .price-tag-num {
+    font-family: var(--display);
+    font-weight: 900;
+    font-size: clamp(56px, 10vw, 100px);
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 12px;
+    letter-spacing: -0.03em;
+  }
+  .price-tag-unit {
+    font-family: var(--display);
+    font-size: 20px;
+    color: var(--ink);
+    margin-bottom: 24px;
+  }
+  .price-tag-note {
+    font-size: 14px;
+    color: var(--ink-3);
+    font-style: italic;
+  }
+
+  /* ───── Ending ───── */
+  .ending {
+    padding: 120px 24px;
+    text-align: center;
+    background: var(--bg-2);
+  }
+  .ending-mark {
+    font-family: var(--display);
+    font-size: 32px;
+    color: var(--gold);
+    opacity: 0.4;
+    margin-bottom: 32px;
+  }
+  .ending h2 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(28px, 4vw, 40px);
+    line-height: 1.4;
+    color: var(--ink);
+    margin-bottom: 24px;
+  }
+  .ending h2 em {
+    font-style: normal;
+    color: var(--gold);
+  }
+  .ending p {
+    font-size: 16px;
+    color: var(--ink-2);
+    max-width: 560px;
+    margin: 0 auto 32px;
+    line-height: 1.9;
+  }
+  .ending-sig {
+    font-family: var(--display);
+    font-style: italic;
+    font-size: 14px;
+    color: var(--gold);
+    letter-spacing: 2px;
+    margin-top: 48px;
+  }
+
+  footer {
+    padding: 40px 24px;
+    text-align: center;
+    color: var(--ink-3);
+    font-size: 11px;
+    letter-spacing: 3px;
+    border-top: 1px solid var(--border);
+    background: var(--bg);
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ HERO ═══════════ -->
+<section class="hero">
+  <div class="hero-eyebrow">A TRUE STORY · 2026</div>
+  <h1>我用 14 天,<br>換了一個<br><em>200 萬</em></h1>
+  <p class="hero-sub">
+    一個非工程師,<br>
+    從零開始,<br>
+    獨自打造交易自動化 SaaS 系統的真實記錄。
+  </p>
+  <div class="hero-signature">— 這是我的故事 —</div>
+  <div class="hero-scroll">SCROLL ↓</div>
+</section>
+
+<!-- ═══════════ 第一章:起點 ═══════════ -->
+<section class="chapter">
+  <div class="container">
+    <div class="chapter-num">CHAPTER · 01</div>
+    <h2 class="chapter-title">起點:一個<em>瘋狂的念頭</em></h2>
+
+    <div class="prose">
+      <p class="lead">
+        兩週前,我只是一個**普通人**。
+        不是工程師、沒寫過幾行程式碼、看到英文報錯訊息會頭暈。
+      </p>
+
+      <p>
+        但我心裡有個念頭:
+        <strong>「我想做一套自動化交易系統,讓訊號來了機器人就自動下單,還要能收月費做成 SaaS。」</strong>
+      </p>
+
+      <p>
+        我去找工程師問價錢,得到的答案讓我閉嘴了:
+        <em>「這種完整度的系統,至少 120 萬起跳,時間 6 到 9 個月,而且還不保證做到你要的樣子。」</em>
+      </p>
+
+      <p>
+        我沒有 120 萬。<br>
+        也沒有 9 個月可以等。<br>
+        但我有一樣東西 —— <strong>AI</strong>,和那股「不信邪」的執念。
+      </p>
+
+      <p style="margin-top: 32px; font-size: 19px; color: var(--ink);">
+        於是,那天晚上,我打開 AI 對話框,敲下了第一句話:
+      </p>
+    </div>
+
+    <div class="pull-quote" style="margin-top: 20px;">
+      「幫我寫一個能接收<br>TradingView 訊號的<br><em>Telegram 機器人</em>」
+    </div>
+
+    <div class="prose">
+      <p>
+        那一刻,我還不知道,<br>
+        接下來的 14 天,<br>
+        我會經歷什麼。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 第二章:19 小時的日常 ═══════════ -->
+<section class="chapter">
+  <div class="container">
+    <div class="chapter-num">CHAPTER · 02</div>
+    <h2 class="chapter-title">當別人在睡,<br>我在<em>肝</em></h2>
+
+    <div class="prose">
+      <p class="lead">
+        從第 1 天到第 14 天,我每天平均工作 <strong>19 個小時</strong>。
+      </p>
+
+      <p>
+        不是誇飾。是真的 19 小時。
+      </p>
+
+      <p>
+        早上 7 點眼睛睜開,就抓手機看昨晚 AI 給的 code 部署上去會不會炸。
+        中午邊吃泡麵邊看 BingX 的 API 文件。
+        晚上 11 點,大部分人都睡了,我還在改第 17 個 bug。
+        凌晨 2 點,終於找到一個誤字修好了,躺下 4 小時,又爬起來。
+      </p>
+
+      <p>
+        兩週 × 19 小時 = <strong>266 小時</strong>。
+      </p>
+    </div>
+
+    <div class="day-chart">
+      <div class="day-chart-title">我 vs 一般人的兩週工時</div>
+      <div class="day-chart-sub">這不是在比慘,是在告訴你「完整度不是白來的」</div>
+
+      <div class="day-row">
+        <span class="day-label">上班族</span>
+        <div class="day-bar"><div class="day-bar-fill rest" style="width: 30%;">80 小時</div></div>
+        <span class="day-hours">30%</span>
+      </div>
+      <div class="day-row">
+        <span class="day-label">加班族</span>
+        <div class="day-bar"><div class="day-bar-fill rest" style="width: 45%;">120 小時</div></div>
+        <span class="day-hours">45%</span>
+      </div>
+      <div class="day-row">
+        <span class="day-label">創業肝</span>
+        <div class="day-bar"><div class="day-bar-fill" style="width: 55%;">140 小時</div></div>
+        <span class="day-hours">55%</span>
+      </div>
+      <div class="day-row">
+        <span class="day-label" style="color: var(--gold); font-weight: 700;">我</span>
+        <div class="day-bar"><div class="day-bar-fill" style="width: 100%;">266 小時 · 每天 19h</div></div>
+        <span class="day-hours">100%</span>
+      </div>
+    </div>
+
+    <div class="pull-quote">
+      <em>創業肝爆</em>的強度,<br>我還再翻兩倍
+    </div>
+
+    <div class="prose">
+      <p>
+        朋友問我:「你這樣不會死嗎?」<br>
+        我說:「這兩週死了也甘願,做完再說。」
+      </p>
+      <p>
+        結果,我真的沒死。但是<strong>罵 AI 罵了不下 50 次</strong>。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 第三章:踩坑 ═══════════ -->
+<section class="chapter">
+  <div class="container">
+    <div class="chapter-num">CHAPTER · 03</div>
+    <h2 class="chapter-title">每一個坑,<br>都差點讓我<em>放棄</em></h2>
+
+    <div class="prose">
+      <p class="lead">
+        人家說「寫程式不難」,那是還沒被 BingX 操過的人說的。
+      </p>
+
+      <p>
+        這 14 天我踩過的坑,夠寫一本血淚史。我只挑最經典的 5 個講給你聽。
+      </p>
+    </div>
+
+    <!-- 坑 1 -->
+    <div class="scene">
+      <div class="scene-header">
+        <span class="scene-day">DAY 03</span>
+        <span class="scene-time">凌晨 2:47</span>
+      </div>
+      <h3 class="scene-title">TIMESTAMP ERROR — 天書一樣的錯誤訊息</h3>
+      <div class="scene-body">
+        <p>
+          下單時莫名其妙失敗,錯誤訊息是 <span class="inner-mono">timestamp for this request is outside of the recvWindow</span>。
+          我完全不知道這是什麼意思。
+        </p>
+        <p>
+          Google 搜了 2 小時,翻了 5 個 Stack Overflow 問答,才搞懂:
+          <strong>伺服器時間跟交易所差了幾百毫秒,請求就會被拒絕。</strong>
+        </p>
+      </div>
+      <div class="scene-reaction">
+        「拜託,就差 500 毫秒而已,至於把單拒掉嗎?我是要下錢耶!」
+      </div>
+      <div class="scene-solved">
+        自動在時間戳加 500ms 補正重試。從此一勞永逸。
+      </div>
+    </div>
+
+    <!-- 坑 2 -->
+    <div class="scene">
+      <div class="scene-header">
+        <span class="scene-day">DAY 07</span>
+        <span class="scene-time">深夜 23:12</span>
+      </div>
+      <h3 class="scene-title">下單成功,卻<em>沒有止損止盈</em></h3>
+      <div class="scene-body">
+        <p>
+          當下我以為修完了,開心下了真實單測試。結果 API 回「成功」,但實際上<strong>止損止盈根本沒掛上去</strong>。
+        </p>
+        <p>
+          如果是真實用戶遇到這個,他會以為有保險,結果市場一反轉 —— <strong>直接爆倉</strong>。
+        </p>
+        <p>
+          我查了快 3 天,才發現 BingX 文件上寫得模糊的一行:
+          <span class="inner-mono">stopLoss 參數必須用 json.dumps 序列化</span>,不能直接傳 dict。
+        </p>
+      </div>
+      <div class="scene-reaction">
+        「這種鬼東西怎麼可能想得到啊!!!」
+      </div>
+      <div class="scene-solved">
+        所有下單呼叫加上 json.dumps 包裝,並加上驗證機制,確認 TP/SL 真的掛上去了才回報成功。
+      </div>
+    </div>
+
+    <!-- 坑 3 -->
+    <div class="scene">
+      <div class="scene-header">
+        <span class="scene-day">DAY 14</span>
+        <span class="scene-time">中午 13:00</span>
+      </div>
+      <h3 class="scene-title">我設 100 倍槓桿,<br>他給我 50 倍 — 還不告訴我</h3>
+      <div class="scene-body">
+        <p>
+          BingX 的槓桿有個暗雷:你設定成功了,它也回傳「OK」,但<strong>實際上只給你一半</strong>。
+        </p>
+        <p>
+          更可怕的是 —— 它不會跟你說!你要去**查倉位細節**才會發現:原來我要 100x,系統只給 50x。
+        </p>
+        <p>
+          結果本來 19U 保證金能開 1900U 的倉位,變成只能開 950U。用戶收到訊號卡覺得「金額怎麼這麼小?」,我還以為自己算錯了。
+        </p>
+      </div>
+      <div class="scene-reaction">
+        「你到底是在搞什麼鬼啊 BingX!」
+      </div>
+      <div class="scene-solved">
+        寫了一個「二分法探測槓桿上限」邏輯:從設定值開始嘗試,失敗就減半,直到找到真正能用的最高槓桿。這個邏輯沒人教,要自己想出來。
+      </div>
+    </div>
+
+    <!-- 坑 4 -->
+    <div class="scene">
+      <div class="scene-header">
+        <span class="scene-day">DAY 21</span>
+        <span class="scene-time">清晨 05:30</span>
+      </div>
+      <h3 class="scene-title">名義倉位上限 —<br>我以為我瘋了</h3>
+      <div class="scene-body">
+        <p>
+          這是最靠北的一關。
+        </p>
+        <p>
+          我下 TP1 成功了,接著下 TP2,結果失敗:<span class="inner-mono">position value exceeds limit</span>。
+        </p>
+        <p>
+          「我明明算好了啊!為什麼 TP1 可以,TP2 不行?」
+        </p>
+        <p>
+          查了整整<strong>一整天</strong>,才發現某些幣在高槓桿時,交易所有一個隱藏的「名義倉位上限」。
+          意思是:你設定 100 倍槓桿時,這個幣最多只能開 5000U 的倉位,超過就直接拒絕。
+        </p>
+        <p>
+          這件事**沒有任何文件寫**。要自己從錯誤訊息裡**抓上限值**,然後自動縮單、快取給下次用。
+        </p>
+      </div>
+      <div class="scene-reaction">
+        「90% 的工程師接這個案子都會卡在這裡放棄。」
+      </div>
+      <div class="scene-solved">
+        從錯誤訊息用 regex 抓出上限值 → 自動縮單到合法範圍 → 存進資料庫,下次同幣同槓桿直接套用。
+      </div>
+    </div>
+
+    <!-- 坑 5 -->
+    <div class="scene">
+      <div class="scene-header">
+        <span class="scene-day">DAY 50</span>
+        <span class="scene-time">接到第一位用戶時</span>
+      </div>
+      <h3 class="scene-title">50 個人同時收訊號,<br>系統卡住了</h3>
+      <div class="scene-body">
+        <p>
+          這是多人系統才會遇到的問題,叫「<strong>並發</strong>」。
+        </p>
+        <p>
+          講白話就是:一則訊號來了,我要同時把訊號卡發給所有已開通的用戶。
+        </p>
+        <p>
+          最單純的寫法,是「一個接一個發」:先發給用戶 A,發完才發給用戶 B,再發給 C... 像排隊買飲料。
+        </p>
+        <p>
+          問題來了 — 每發一個人要跟 Telegram 的伺服器溝通一次,大概<strong>半秒</strong>。50 個人排下來:
+        </p>
+        <p style="color: var(--gold); font-weight: 600; text-align: center; font-size: 20px; margin: 24px 0;">
+          第 1 個人 0.5 秒收到<br>
+          第 50 個人 25 秒才收到
+        </p>
+        <p>
+          加密貨幣的世界,25 秒價格早飛走了。第 50 個人收到訊號時,進場點可能已經過掉,單下進去直接賠錢。
+        </p>
+        <p>
+          他們會罵我:<em>「你這破 bot 根本是慢半拍,是在玩我嗎?」</em>
+        </p>
+      </div>
+      <div class="scene-reaction">
+        「不行,必須讓所有人同時收到。」
+      </div>
+      <div class="scene-solved">
+        改用「多執行緒並行」的寫法,同時開 20 條通道發訊號,所有用戶在 1 秒內都能收到。就像銀行從 1 個窗口變成 20 個窗口,所有人幾乎同時被服務到。
+      </div>
+    </div>
+
+    <div class="pull-quote">
+      這些坑,<br>不是技術問題,<br>是<em>意志力問題</em>
+    </div>
+
+    <div class="prose">
+      <p>
+        每踩一個坑,我都想砸手機。<br>
+        每修好一個 bug,我又覺得「再撐一下」。
+      </p>
+      <p>
+        普通人遇到這些,大概 <strong>第 3 個坑就放棄了</strong>。<br>
+        工程師遇到這些,大概 <strong>第 4 個坑就加價</strong>。<br>
+        我呢?我還要繼續往第 10 個、20 個、50 個坑走下去。
+      </p>
+      <p>
+        因為我是老闆,我沒得放棄。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 第四章:痛苦與 AI ═══════════ -->
+<section class="chapter">
+  <div class="container">
+    <div class="chapter-num">CHAPTER · 04</div>
+    <h2 class="chapter-title">AI 不是萬能,<br>我罵了它 <em>50 次</em></h2>
+
+    <div class="prose">
+      <p class="lead">
+        很多人以為「用 AI 寫 code = 打個字就完成」。
+      </p>
+
+      <p>
+        不是的。<br>
+        AI 是工具,是實習生,<strong>不是神</strong>。
+      </p>
+
+      <p>
+        這 14 天裡,我跟 AI 的對話,比跟家人還多。而我氣它的次數,比氣家人還多 10 倍。
+      </p>
+    </div>
+
+    <div class="contrast-grid">
+      <div class="contrast-col bad">
+        <div class="contrast-label">AI 的毛病</div>
+        <h4>它會繞路</h4>
+        <p>
+          我說「方向關鍵字沒加買漲」,它跑去分析是不是 Telegram 權限問題、是不是 Privacy Mode... 繞了 30 分鐘才回到問題本身。
+        </p>
+      </div>
+      <div class="contrast-col bad">
+        <div class="contrast-label">AI 的毛病</div>
+        <h4>它記性差到爆</h4>
+        <p>
+          前面討論過的決定,再過幾輪它就忘了。我要一直複製貼上提醒「我們之前說過 XX 不要改」。
+        </p>
+      </div>
+      <div class="contrast-col bad">
+        <div class="contrast-label">AI 的毛病</div>
+        <h4>它自作主張</h4>
+        <p>
+          我叫它改 A,它順便改了 B 和 C,結果 B 和 C 壞了。我要回去逐行檢查它偷改了什麼。
+        </p>
+      </div>
+      <div class="contrast-col bad">
+        <div class="contrast-label">AI 的毛病</div>
+        <h4>它沒有產品直覺</h4>
+        <p>
+          邏輯上「正確」但體驗很爛的 code,它寫得面不改色。用戶會爽不爽,它完全不在意。那是我的責任。
+        </p>
+      </div>
+    </div>
+
+    <div class="pull-quote">
+      AI 是手,<br><em>我是大腦</em>
+    </div>
+
+    <div class="prose">
+      <p>
+        我的工作,不是「打字」,是:
+      </p>
+      <ul style="list-style: none; padding: 0; font-size: 17px;">
+        <li style="padding: 8px 0; padding-left: 28px; position: relative;">
+          <span style="position: absolute; left: 0; color: var(--gold);">▸</span>
+          <strong>想到要做什麼</strong>(產品直覺)
+        </li>
+        <li style="padding: 8px 0; padding-left: 28px; position: relative;">
+          <span style="position: absolute; left: 0; color: var(--gold);">▸</span>
+          <strong>準確描述需求</strong>(溝通能力)
+        </li>
+        <li style="padding: 8px 0; padding-left: 28px; position: relative;">
+          <span style="position: absolute; left: 0; color: var(--gold);">▸</span>
+          <strong>測試出真正的 bug</strong>(實戰回饋)
+        </li>
+        <li style="padding: 8px 0; padding-left: 28px; position: relative;">
+          <span style="position: absolute; left: 0; color: var(--gold);">▸</span>
+          <strong>判斷 AI 給的方案對不對</strong>(經驗)
+        </li>
+        <li style="padding: 8px 0; padding-left: 28px; position: relative;">
+          <span style="position: absolute; left: 0; color: var(--gold);">▸</span>
+          <strong>扛住所有壓力</strong>(老闆的責任)
+        </li>
+      </ul>
+      <p style="margin-top: 24px;">
+        AI 只是讓我寫 code 的速度變快。<br>
+        但「<strong>知道要寫什麼</strong>」這件事,從頭到尾都是我。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 第五章:成果 ═══════════ -->
+<section class="chapter">
+  <div class="container">
+    <div class="chapter-num">CHAPTER · 05</div>
+    <h2 class="chapter-title">266 小時後,<br>我做出了<em>這個</em></h2>
+
+    <div class="prose">
+      <p class="lead">
+        到了第 14 天凌晨,我看著我手刻出來的系統,眼眶濕了。
+      </p>
+    </div>
+
+    <div class="inline-stats">
+      <div class="inline-stat">
+        <div class="inline-stat-num">8,985</div>
+        <div class="inline-stat-label">程式碼行數</div>
+      </div>
+      <div class="inline-stat">
+        <div class="inline-stat-num">177</div>
+        <div class="inline-stat-label">函式</div>
+      </div>
+      <div class="inline-stat">
+        <div class="inline-stat-num">49</div>
+        <div class="inline-stat-label">功能</div>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>
+        這不是一個「玩具」。這是:
+      </p>
+      <ul style="list-style: none; padding: 0; font-size: 16px; color: var(--ink-2);">
+        <li style="padding: 6px 0; padding-left: 24px; position: relative;">
+          <span style="position: absolute; left: 0; color: var(--emerald);">✓</span>
+          可以自動解析 TradingView 訊號並下單的機器人
+        </li>
+        <li style="padding: 6px 0; padding-left: 24px; position: relative;">
+          <span style="position: absolute; left: 0; color: var(--emerald);">✓</span>
+          可以同時服務 50+ 個用戶的 SaaS 平台
+        </li>
+        <li style="padding: 6px 0; padding-left: 24px; position: relative;">
+          <span style="position: absolute; left: 0; color: var(--emerald);">✓</span>
+          有三層付費機制(季繳 / 永久 / 交易量達標)
+        </li>
+        <li style="padding: 6px 0; padding-left: 24px; position: relative;">
+          <span style="position: absolute; left: 0; color: var(--emerald);">✓</span>
+          有風控、有統計、有管理員後台
+        </li>
+        <li style="padding: 6px 0; padding-left: 24px; position: relative;">
+          <span style="position: absolute; left: 0; color: var(--emerald);">✓</span>
+          有移動止損保本、多 TP 分批出場策略
+        </li>
+        <li style="padding: 6px 0; padding-left: 24px; position: relative;">
+          <span style="position: absolute; left: 0; color: var(--emerald);">✓</span>
+          有一次性邀請連結,陌生人拿到也沒用
+        </li>
+      </ul>
+    </div>
+
+    <div class="price-tag">
+      <div class="price-tag-label">APPRAISED VALUE · 客觀估價</div>
+      <div class="price-tag-num">180 ~ 290</div>
+      <div class="price-tag-unit">萬元新台幣</div>
+      <div class="price-tag-note">
+        含:程式開發成本 + 踩坑經驗 + 商業邏輯設計 + 穩定運行驗證
+      </div>
+    </div>
+
+    <div class="big-num-block">
+      <div class="big-num-label">換算我的時薪</div>
+      <div class="big-num">7,500</div>
+      <div class="big-num-sub">
+        200 萬 ÷ 266 小時<br>
+        = 每小時 <strong style="color: var(--gold);">7,500 元</strong>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>
+        我這輩子從沒有過時薪這麼高的工作。<br>
+        代價是兩週眼睛沒睜過完整的 8 小時,吃了 20 包泡麵。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 第六章:誠實說 ═══════════ -->
+<section class="chapter">
+  <div class="container">
+    <div class="chapter-num">CHAPTER · 06</div>
+    <h2 class="chapter-title">誠實說 —<br>我沒有<em>贏工程師</em></h2>
+
+    <div class="prose">
+      <p class="lead">
+        有人會問:「你兩週做出人家半年的東西,你是不是比工程師厲害?」
+      </p>
+
+      <p>
+        我必須誠實說:<strong>不是。</strong>
+      </p>
+
+      <p>
+        我跟資深工程師,根本不是同一類人,沒辦法比較。
+      </p>
+    </div>
+
+    <div class="truth-block">
+      <h3>🏆 我贏工程師的地方</h3>
+      <div class="truth-item">
+        <div class="truth-icon win">✓</div>
+        <div class="truth-text">
+          <strong>產品直覺</strong>:我知道用戶會用哪些功能、會卡在哪裡、會想要什麼。工程師很多時候是「寫出來能跑就好」,但我會想「用戶爽不爽」。
+        </div>
+      </div>
+      <div class="truth-item">
+        <div class="truth-icon win">✓</div>
+        <div class="truth-text">
+          <strong>決策速度</strong>:要用什麼資料庫、要怎麼設付費牆、要不要做 V1/V2 雙格式... 我一個人拍板,不用開會。工程師光開會就兩個月。
+        </div>
+      </div>
+      <div class="truth-item">
+        <div class="truth-icon win">✓</div>
+        <div class="truth-text">
+          <strong>執行力</strong>:我真的下真實倉測試、真的付錢給交易所踩雷、真的每天工作 19 小時。這不是技術能力,是態度。
+        </div>
+      </div>
+    </div>
+
+    <div class="truth-block">
+      <h3>⚠️ 工程師贏我的地方</h3>
+      <div class="truth-item">
+        <div class="truth-icon lose">✗</div>
+        <div class="truth-text">
+          <strong>Debug 能力</strong>:真正出大 bug 時,我還是要靠 AI 幫我找。工程師會自己看 log、讀 stack trace、跳進 code 改。
+        </div>
+      </div>
+      <div class="truth-item">
+        <div class="truth-icon lose">✗</div>
+        <div class="truth-text">
+          <strong>架構能力</strong>:如果明天要加新功能,從零設計資料庫、鎖、並發處理...我沒辦法獨立完成。需要 AI 協作。
+        </div>
+      </div>
+      <div class="truth-item">
+        <div class="truth-icon lose">✗</div>
+        <div class="truth-text">
+          <strong>獨立性</strong>:萬一 AI 不能用了,我會卡死。工程師不會。
+        </div>
+      </div>
+    </div>
+
+    <div class="pull-quote">
+      我贏的不是工程師,<br>我贏的是<em>舊時代</em>
+    </div>
+
+    <div class="prose">
+      <p>
+        傳統的開發流程是:<br>
+        <em>想需求 → 找工程師 → 開會 → 報價 → 簽約 → 開發 → 改需求 → 重做 → 9 個月後上線 → bug 一堆 → 再修半年。</em>
+      </p>
+      <p>
+        我的流程是:<br>
+        <em>想需求 → 對 AI 下指令 → AI 寫 code → 我測試 → 回報 bug → AI 修 → 2 週上線 → 有 bug 立刻修。</em>
+      </p>
+      <p>
+        我沒有更聰明,我只是<strong>選對了武器</strong>。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 結尾 ═══════════ -->
+<section class="ending">
+  <div class="container">
+    <div class="ending-mark">※ ※ ※</div>
+    <h2>
+      這是 <em>2026</em> 年<br>
+      「<em>會用 AI 的人</em>」的時代
+    </h2>
+    <p>
+      不是工程師被取代,<br>
+      是「有想法 + 會用 AI + 耐得住苦」的人崛起。
+    </p>
+    <p>
+      如果你問我這 14 天值不值得 ——<br>
+      <strong style="color: var(--gold);">值得。</strong>
+    </p>
+    <p>
+      但如果你問我要不要再來一次 ——<br>
+      <em>讓我先睡飽,再說。</em>
+    </p>
+    <div class="ending-sig">— 寫於第 15 天,我終於可以睡超過 6 小時了 —</div>
+  </div>
+</section>
+
+<footer>
+  A TRUE STORY · AI-ASSISTED DEVELOPMENT · 2026
+</footer>
+
+</body>
+</html>
