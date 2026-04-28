@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>用戶指令完整介紹 — BingX 訊號跟單 Bot v24</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fbf9f4;
+  --bg-soft:#f1ede2;
+  --bg-card:#ffffff;
+  --text:#1a1a1a;
+  --text-soft:#4a4a4a;
+  --text-mute:#7a7a7a;
+  --line:#e5dfd0;
+  --line-strong:#cfc7b3;
+  --gold:#a8884a;
+  --gold-bright:#c9a558;
+  --gold-soft:#f0e5c8;
+  --green:#2d7a3e;
+  --green-soft:#e3efe5;
+  --red:#b53a3a;
+  --red-soft:#f8e0e0;
+  --blue:#2c5a8c;
+  --blue-soft:#e0e8f2;
+  --serif:'Noto Serif TC',serif;
+  --sans:'Noto Sans TC',sans-serif;
+  --mono:'JetBrains Mono','Noto Sans TC',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--sans);
+  font-weight:400;
+  line-height:1.8;
+  font-size:17px;
+}
+
+/* ======= HEADER ======= */
+.header{
+  background:linear-gradient(180deg,#1f1b15 0%,#2a2520 100%);
+  color:#fff;
+  padding:72px 24px 88px;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+.header::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background-image:
+    repeating-linear-gradient(45deg,transparent,transparent 80px,rgba(184,146,74,0.04) 80px,rgba(184,146,74,0.04) 81px),
+    radial-gradient(circle at 30% 20%,rgba(184,146,74,0.15),transparent 50%);
+}
+.header-content{position:relative;z-index:2;max-width:780px;margin:0 auto}
+.header-tag{
+  display:inline-block;
+  font-family:var(--mono);
+  font-size:12px;
+  letter-spacing:0.3em;
+  color:var(--gold-bright);
+  margin-bottom:20px;
+  padding:6px 18px;
+  border:1px solid rgba(201,165,88,0.4);
+  border-radius:2px;
+}
+.header h1{
+  font-family:var(--serif);
+  font-size:clamp(36px,5.5vw,60px);
+  line-height:1.15;
+  font-weight:900;
+  margin-bottom:18px;
+  color:#fff;
+}
+.header h1 em{
+  color:var(--gold-bright);
+  font-style:italic;
+  font-weight:700;
+}
+.header-sub{
+  font-size:18px;
+  color:#c8c2b0;
+  font-weight:300;
+  margin-bottom:36px;
+}
+.header-meta{
+  display:flex;
+  justify-content:center;
+  gap:48px;
+  flex-wrap:wrap;
+  font-family:var(--mono);
+  font-size:13px;
+  color:#aaa;
+}
+.header-meta span{color:var(--gold-bright)}
+
+/* ======= CONTAINER ======= */
+.container{
+  max-width:920px;
+  margin:0 auto;
+  padding:60px 24px 100px;
+}
+
+/* ======= INTRO ======= */
+.intro-box{
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-left:4px solid var(--gold);
+  padding:32px 36px;
+  margin-bottom:48px;
+  border-radius:2px;
+}
+.intro-box h2{
+  font-family:var(--serif);
+  font-size:24px;
+  margin-bottom:14px;
+  font-weight:700;
+}
+.intro-box p{color:var(--text-soft)}
+
+/* ======= QUICK NAV ======= */
+.quick-nav{
+  background:var(--bg-soft);
+  padding:28px 32px;
+  margin-bottom:64px;
+  border-radius:4px;
+}
+.quick-nav-title{
+  font-size:13px;
+  letter-spacing:0.25em;
+  color:var(--text-mute);
+  text-transform:uppercase;
+  font-weight:500;
+  margin-bottom:16px;
+}
+.quick-nav-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+  gap:8px;
+}
+.quick-nav a{
+  display:block;
+  padding:10px 14px;
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:3px;
+  color:var(--text);
+  text-decoration:none;
+  font-family:var(--mono);
+  font-size:14px;
+  font-weight:500;
+  transition:all 0.2s;
+}
+.quick-nav a:hover{
+  background:var(--gold-soft);
+  border-color:var(--gold);
+  color:var(--gold);
+}
+
+/* ======= COMMAND CARD ======= */
+.cmd-card{
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  margin-bottom:36px;
+  border-radius:4px;
+  overflow:hidden;
+  scroll-margin-top:24px;
+}
+.cmd-card.active{border-color:var(--green)}
+.cmd-card.active .cmd-status{background:var(--green-soft);color:var(--green)}
+.cmd-card.advanced .cmd-status{background:var(--gold-soft);color:var(--gold)}
+.cmd-card.deprecated{opacity:0.7}
+.cmd-card.deprecated .cmd-status{background:#ddd;color:#888}
+
+.cmd-header{
+  background:#1f1b15;
+  color:#fff;
+  padding:24px 32px;
+  display:flex;
+  align-items:center;
+  gap:16px;
+  flex-wrap:wrap;
+}
+.cmd-name{
+  font-family:var(--mono);
+  font-size:24px;
+  font-weight:700;
+  color:var(--gold-bright);
+  letter-spacing:0.5px;
+}
+.cmd-status{
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:0.15em;
+  text-transform:uppercase;
+  font-weight:600;
+  padding:4px 10px;
+  border-radius:2px;
+}
+.cmd-tagline{
+  flex:1;
+  text-align:right;
+  font-size:14px;
+  color:#c0bba8;
+  min-width:200px;
+}
+
+.cmd-body{
+  padding:32px 36px;
+}
+
+.cmd-section{
+  margin-bottom:24px;
+}
+.cmd-section:last-child{margin-bottom:0}
+.cmd-section-title{
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color:var(--gold);
+  margin-bottom:12px;
+  font-weight:600;
+}
+.cmd-section h4{
+  font-family:var(--serif);
+  font-size:18px;
+  margin:20px 0 10px;
+  color:var(--text);
+  font-weight:700;
+}
+
+.cmd-section p{color:var(--text-soft);margin-bottom:12px}
+
+/* ======= USE CASE BADGE ======= */
+.usecase{
+  display:inline-block;
+  background:var(--gold-soft);
+  color:var(--gold);
+  font-size:12px;
+  padding:3px 10px;
+  border-radius:2px;
+  margin-right:6px;
+  margin-bottom:6px;
+  font-weight:500;
+  border:1px solid var(--gold);
+}
+
+/* ======= TYPING DEMO ======= */
+.typing{
+  background:#0d1117;
+  color:#c9d1d9;
+  padding:14px 20px;
+  border-radius:4px;
+  font-family:var(--mono);
+  font-size:14px;
+  margin:14px 0;
+  border-left:3px solid var(--gold-bright);
+  letter-spacing:0.3px;
+}
+.typing .prompt{color:var(--gold-bright)}
+.typing .cmd{color:#79c0ff}
+.typing .cmt{color:#8b949e}
+
+/* ======= MSG BUBBLE ======= */
+.bubble{
+  background:#e8f0e8;
+  border-radius:14px 14px 14px 2px;
+  padding:16px 22px;
+  margin:14px 0;
+  font-size:14.5px;
+  line-height:1.7;
+  max-width:560px;
+  box-shadow:0 1px 3px rgba(0,0,0,0.04);
+}
+.bubble.gold{background:var(--gold-soft)}
+.bubble.blue{background:var(--blue-soft)}
+.bubble.red{background:var(--red-soft)}
+.bubble.gray{background:#eeeae0}
+.bubble strong{display:block;font-size:14px;margin-bottom:6px;color:var(--text)}
+.bubble pre{
+  background:rgba(0,0,0,0.05);
+  padding:8px 12px;
+  border-radius:3px;
+  margin-top:8px;
+  font-family:var(--mono);
+  font-size:12.5px;
+  overflow-x:auto;
+}
+
+/* ======= CALLOUT ======= */
+.callout{
+  padding:18px 26px;
+  border-radius:4px;
+  margin:18px 0;
+  border-left:3px solid;
+  font-size:14.5px;
+}
+.callout strong{display:block;font-size:13px;letter-spacing:0.05em;margin-bottom:6px;text-transform:uppercase;font-weight:600}
+.callout.tip{background:var(--green-soft);border-color:var(--green)}
+.callout.tip strong{color:var(--green)}
+.callout.warn{background:#fcf3df;border-color:#c89a3a}
+.callout.warn strong{color:#9a7424}
+.callout.info{background:var(--blue-soft);border-color:var(--blue)}
+.callout.info strong{color:var(--blue)}
+.callout.danger{background:var(--red-soft);border-color:var(--red)}
+.callout.danger strong{color:var(--red)}
+
+/* ======= TABLE ======= */
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin:16px 0;
+  font-size:14.5px;
+  background:var(--bg-card);
+}
+th{
+  text-align:left;
+  padding:12px 16px;
+  background:var(--bg-soft);
+  font-weight:700;
+  color:var(--text);
+  border-bottom:2px solid var(--line-strong);
+  font-size:13px;
+  font-family:var(--mono);
+  letter-spacing:0.05em;
+  text-transform:uppercase;
+}
+td{padding:12px 16px;border-bottom:1px solid var(--line);color:var(--text-soft);vertical-align:top}
+td strong{color:var(--text)}
+tr:last-child td{border-bottom:none}
+
+/* ======= LIST ======= */
+ul,ol{margin:12px 0 12px 24px;color:var(--text-soft)}
+ul li,ol li{margin-bottom:8px;font-size:15px}
+ul li::marker,ol li::marker{color:var(--gold)}
+
+/* ======= BUTTON DEMO ======= */
+.btn{
+  display:inline-block;
+  padding:8px 16px;
+  border-radius:3px;
+  font-size:13px;
+  font-weight:500;
+  margin:4px;
+  background:#333;
+  color:#fff;
+}
+.btn.green{background:var(--green)}
+.btn.gold{background:var(--gold)}
+.btn.red{background:var(--red)}
+.btn.gray{background:#888}
+.btn.blue{background:var(--blue)}
+
+/* ======= FOOTER ======= */
+footer{
+  background:#1f1b15;
+  color:#aaa;
+  text-align:center;
+  padding:48px 24px;
+  font-size:14px;
+}
+footer .gold{color:var(--gold-bright)}
+footer .serif{font-family:var(--serif);font-weight:700}
+
+/* ======= PRINT ======= */
+@media print{
+  .header{background:#fff;color:#000;padding:32px 24px}
+  .header h1{color:#000}
+  .header h1 em{color:#000}
+  .header-sub,.header-meta{color:#666}
+  .cmd-header{background:#f0ede5;color:#000}
+  .cmd-name{color:#a8884a}
+  .cmd-tagline{color:#666}
+  .cmd-card,.bubble,.callout,table{break-inside:avoid;background:#fff;border-color:#ccc}
+  .typing{background:#f5f5f5;color:#000;border-color:#a8884a}
+  footer{background:#fff;color:#000;border-top:1px solid #000}
+  .quick-nav a{background:#fff;border-color:#ccc}
+}
+
+/* ======= MOBILE ======= */
+@media (max-width:720px){
+  .header{padding:48px 18px 64px}
+  .header h1{font-size:30px}
+  .container{padding:40px 16px 80px}
+  .cmd-header{padding:18px 22px;gap:10px}
+  .cmd-name{font-size:20px}
+  .cmd-tagline{text-align:left;font-size:13px;width:100%}
+  .cmd-body{padding:24px 22px}
+  .quick-nav-grid{grid-template-columns:repeat(2,1fr)}
+  th,td{padding:8px 10px;font-size:13px}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ HEADER ============ -->
+<div class="header">
+  <div class="header-content">
+    <div class="header-tag">USER COMMANDS · v24</div>
+    <h1>用戶指令<em>完整使用手冊</em></h1>
+    <p class="header-sub">每個指令的真實用途、實戰情境、注意事項</p>
+    <div class="header-meta">
+      <span>14 個指令 ·</span>
+      <span>4 個核心 ·</span>
+      <span>3 個進階 ·</span>
+      <span>4 個查詢</span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ============ INTRO ============ -->
+<div class="intro-box">
+  <h2>📖 怎麼看這份手冊</h2>
+  <p>這份手冊把所有用戶可以打的指令都拆開來說明。每個指令包含：</p>
+  <ul>
+    <li><strong>用途</strong>：這個指令是幹嘛用的</li>
+    <li><strong>使用情境</strong>：什麼時候會用到</li>
+    <li><strong>實際輸入</strong>：怎麼打</li>
+    <li><strong>系統回應</strong>：機器人會回什麼</li>
+    <li><strong>注意事項</strong>：要小心什麼</li>
+  </ul>
+  <p style="margin-top:14px"><strong>大部分操作直接點訊號卡按鈕就好</strong>，指令是給找不到按鈕、或想用快捷方式的進階用戶。</p>
+</div>
+
+<!-- ============ QUICK NAV ============ -->
+<nav class="quick-nav">
+  <div class="quick-nav-title">14 個指令快速跳轉</div>
+  <div class="quick-nav-grid">
+    <a href="#start">/start</a>
+    <a href="#api">/api</a>
+    <a href="#uid">/uid</a>
+    <a href="#cancel">/cancel</a>
+    <a href="#settings">/settings</a>
+    <a href="#pnl">/pnl</a>
+    <a href="#order">/order</a>
+    <a href="#last">/last</a>
+    <a href="#risk">/risk</a>
+    <a href="#margin">/margin</a>
+    <a href="#slotcount">/slotcount</a>
+    <a href="#timeframe">/timeframe</a>
+    <a href="#resetsettings">/resetsettings</a>
+    <a href="#symbol">/symbol</a>
+  </div>
+</nav>
+
+<!-- ============================== -->
+<!-- ====== /start =============== -->
+<!-- ============================== -->
+<div class="cmd-card active" id="start">
+  <div class="cmd-header">
+    <span class="cmd-name">/start</span>
+    <span class="cmd-status">必備</span>
+    <span class="cmd-tagline">註冊帳號 / 查看當前狀態</span>
+  </div>
+  <div class="cmd-body">
+    <div class="cmd-section">
+      <div class="cmd-section-title">📌 用途</div>
+      <p>第一次接觸機器人 → 開始註冊流程<br>
+      已註冊用戶 → 顯示當前帳號狀態</p>
+    </div>
+
+    <div class="cmd-section">
+      <div class="cmd-section-title">🎯 使用情境</div>
+      <span class="usecase">第一次用</span>
+      <span class="usecase">重新申請</span>
+      <span class="usecase">查狀態</span>
+      <span class="usecase">忘記目前進度</span>
+    </div>
+
+    <div class="cmd-section">
+      <div class="cmd-section-title">💬 實際輸入</div>
+      <div class="typing"><span class="prompt">你 ▶</span> <span class="cmd">/start</span></div>
+    </div>
+
+    <div class="cmd-section">
+      <div class="cmd-section-title">📨 系統可能的回應</div>
+
+      <p><strong>情境 1：新用戶</strong></p>
+      <div class="bubble gold">👋 歡迎！<br><br>請直接輸入你的 BingX API Key 開始申請：<br><br>⚠️ 請確認 API Key 已開啟「合約交易」與「讀取」權限<br>系統將自動驗證並取得你的 UID，不需要手動輸入</div>
+
+      <p><strong>情境 2：已開通</strong></p>
+      <div class="bubble">✅ 你的帳號已開通！可以開始轉傳訊號下單。</div>
+
+      <p><strong>情境 3：審核中</strong></p>
+      <div class="bubble blue">⏳ 你的 API 正在審核中，請耐心等待。</div>
+
+      <p><strong>情境 4：被暫停</strong></p>
+      <div class="bubble red">⚠️ 你的帳號已被暫停，請聯繫管理員。</div>
+
+      <p><strong>情境 5：被拒絕後想重新申請</strong></p>
+      <div class="bubble">👋 歡迎！<br>請直接輸入你的 BingX API Key 開始申請：…</div>
+    </div>
+
+    <div class="callout tip">
+      <strong>💡 小技巧</strong>
+      <p>當你不確定自己當前狀態（例如忘記是不是已開通），打 <strong>/start</strong> 系統會直接告訴你。</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- ====== /api ================= -->
+<!-- ============================== -->
+<div class="cmd-card active" id="api">
+  <div class="cmd-header">
+    <span class="cmd-name">/api</span>
+    <span class="cmd-status">必備</span>
+    <span class="cmd-tagline">查 API 申請狀態 / 進入 API 設定</span>
+  </div>
+  <div class="cmd-body">
+    <div class="cmd-section">
+      <div class="cmd-section-title">📌 用途</div>
+      <p>查詢自己的 API Key 申請進度，或進入 API Key 輸入流程。</p>
+    </div>
+
+    <div class="cmd-section">
+      <div class="cmd-section-title">🎯 使用情境</div>
+      <span class="usecase">想看 API 審核到哪</span>
+      <span class="usecase">沒收到審核通過訊息</span>
+      <span class="usecase">確認 API 是否啟用</span>
+    </div>
+
+    <div class="cmd-section">
+      <div class="cmd-section-title">📨 各種狀態的回應</div>
+
+      <table>
+        <thead><tr><th>當前狀態</th><th>系統回應</th></tr></thead>
+        <tbody>
+          <tr><td>已開通</td><td>✅ 你的 API 已開通！如果想要更換 API，請聯繫管理員幫你重設。</td></tr>
+          <tr><td>API 審核中</td><td>⏳ 你的 API 申請正在審核中或流程進行中，請繼續完成輸入。</td></tr>
+          <tr><td>還沒 /start</td><td>❌ 請先輸入 /start 並完成 UID 審核，才能進入 API 設定。</td></tr>
+          <tr><td>UID 審核中</td><td>⏳ 你的 UID 還在審核中，請等管理員批准後系統會自動引導你輸入 API Key。</td></tr>
+          <tr><td>已被拒絕</td><td>❌ 你的申請已被拒絕，請聯繫管理員。</td></tr>
+          <tr><td>被暫停</td><td>⚠️ 你的帳號已被暫停，請聯繫管理員。</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout warn">
+      <strong>⚠️ 重要</strong>
+      <p>已開通用戶想<strong>換 API Key</strong>，<strong>不能</strong>用 /api，要找管理員用「🔑 刪除 API（重設）」操作。</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- ====== /uid ================= -->
+<!-- ============================== -->
+<div class="cmd-card active" id="uid">
+  <div class="cmd-header">
+    <span class="cmd-name">/uid</span>
+    <span class="cmd-status">查群連結</span>
+    <span class="cmd-tagline">取得訊號群一次性邀請連結</span>
+  </div>
+  <div class="cmd-body">
+    <div class="cmd-section">
+      <div class="cmd-section-title">📌 用途</div>
+      <p>已開通的用戶可用此指令取得「訊號群」的一次性邀請連結，方便加入訊號發送群。</p>
+    </div>
+
+    <div class="cmd-section">
+      <div class="cmd-section-title">🎯 使用情境</div>
+      <span class="usecase">第一次想加訊號群</span>
+      <span class="usecase">換手機要重新加群</span>
+      <span class="usecase">不小心退群想重新加</span>
+    </div>
+
+    <div class="cmd-section">
+      <div class="cmd-section-title">💬 實際輸入</div>
+      <div class="typing"><span class="prompt">你 ▶</span> <span class="cmd">/uid</span></div>
+    </div>
+
+    <div class="cmd-section">
+      <div class="cmd-section-title">📨 系統回應</div>
+      <div class="bubble gold">🎉 這是你的訊號群邀請連結：<br><br>https://t.me/joinchat/AbCdEf...<br><br>⚠️ 此連結只能使用一次，請勿轉發給他人。</div>
+    </div>
+
+    <div class="callout danger">
+      <strong>🔒 安全警告</strong>
+      <p>連結是<strong>一次性</strong>的，<strong>不要轉發給朋友</strong>！轉發後對方點掉連結就失效，<strong>你自己反而加不進去</strong>。</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- ====== /cancel ============== -->
+<!-- ============================== -->
+<div class="cmd-card active" id="cancel">
+  <div class="cmd-header">
+    <span class="cmd-name">/cancel</span>
+    <span class="cmd-status">救星</span>
+    <span class="cmd-tagline">取消當前操作 / 跳出輸入狀態</span>
+  </div>
+  <div class="cmd-body">
+    <div class="cmd-section">
+      <div class="cmd-section-title">📌 用途</div>
+      <p>當系統正在等你輸入某個東西（例如「請輸入金額」）時，你想退出 → 打 /cancel 跳出。</p>
+    </div>
+
+    <div class="cmd-section">
+      <div class="cmd-section-title">🎯 使用情境</div>
+      <span class="usecase">輸錯了想重來</span>
+      <span class="usecase">不小心進了輸入狀態</span>
+      <span class="usecase">想換指令操作</span>
+    </div>
+
+    <div class="cmd-section">
+      <div class="cmd-section-title">💡 真實場景</div>
+      <ol>
+        <li>你按了「✏️ 自訂倉數」</li>
+        <li>系統說「請輸入分倉數，例如：5、10、30、100」</li>
+        <li>你想：<strong>啊我不想改了</strong></li>
+        <li>打 <code>/cancel</code> → 退出輸入狀態</li>
+      </ol>
+    </div>
+
+    <div class="callout tip">
+      <strong>💡 訣竅</strong>
+      <p>如果機器人卡住或一直要你輸入金額/倉數，<strong>打 /cancel</strong> 就能脫離。</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- ====== /settings ============ -->
+<!-- ============================== -->
+<div class="cmd-card active" id="settings">
+  <div class="cmd-header">
+    <span class="cmd-name">/settings</span>
+    <span class="cmd-status">查設定</span>
+    <span class="cmd-tagline">查看當前帳號設定</span>
+  </div>
+  <div class="cmd-body">
+    <div class="cmd-section">
+      <div class="cmd-section-title">📌 用途</div>
+      <p>顯示你當前所有設定（保證金模式、分倉數、預設環境等），並提供按鈕快速切換。</p>
+    </div>
+
+    <div class="cmd-section">
+      <div class="cmd-section-title">🎯 使用情境</div>
+      <span class="usecase">忘記目前用幾倉</span>
+      <span class="usecase">想快速調整設定</span>
+      <span class="usecase">沒收到訊號時驗證設定</span>
+    </div>
+
+    <div class="cmd-section">
+      <div class="cmd-section-title">📨 系統回應</div>
+      <div class="bubble">⚙️ 預設值設定（點按鈕即時生效）<br><br>
+── V1 訊號 ──<br>
+下單環境：💰 真實<br>
+進場方式：⚡ 立即市價<br>
+出場方式：TP1+TP2 70%/30%<br>
+保證金：🗂 分倉 20 倉<br><br>
+── V2 訊號 ──<br>
+下單環境：💰 真實<br>
+進場方式：⚡ 立即市價<br>
+保證金：🗂 分倉 20 倉<br><br>
+── 風控設定 ──<br>
+🔐 移動保本：🔐 TP1 保本（緩衝 0.3%）<br>
+🛡️ 每日虧損上限：✅ 100 USDT（今日已虧 0U）</div>
+
+      <p style="margin-top:10px">下方會出現按鈕讓你切換：</p>
+      <p>
+        <span class="btn gold">10 倉</span>
+        <span class="btn green">✅ 20 倉</span>
+        <span class="btn">50 倉</span>
+        <span class="btn">✏️ 自訂倉數</span>
+        <span class="btn blue">刷新目前設定</span>
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- ====== /pnl ================= -->
+<!-- ============================== -->
+<div class="cmd-card active" id="pnl">
+  <div class="cmd-header">
+    <span class="cmd-name">/pnl</span>
+    <span class="cmd-status">查損益</span>
+    <span class="cmd-tagline">查看自己的累計獲利 / 勝率</span>
+  </div>
+  <div class="cmd-body">
+    <div class="cmd-section">
+      <div class="cmd-section-title">📌 用途</div>
+      <p>顯示你透過 bot 下單的所有訊號損益統計，分 V1 / V2 訊號、真實 / 模擬倉。</p>
+    </div>
+
+    <div class="cmd-section">
+      <div class="cmd-section-title">🎯 使用情境</div>
+      <span class="usecase">每天結束看戰績</span>
+      <span class="usecase">月底看整月表現</span>
+      <span class="usecase">確認勝率符合預期</span>
+    </div>
+
+    <div class="cmd-section">
+      <div class="cmd-section-title">📨 系統回應範例</div>
+      <div class="bubble">📊 你的損益統計<br><br>
+<strong>V1 訊號（諧波）</strong><br>
+　💰 真實倉（45 筆，勝率 67%）<br>
+　　┌ 今日　：🟢+12.50 U<br>
+　　├ 本月　：🟢+286.32 U<br>
+　　└ 累計　：🟢+853.21 U<br>
+<br>
+　🌐 模擬倉（120 筆，勝率 70%）<br>
+　　┌ 今日　：🟢+25.30 U<br>
+　　├ 本月　：🟢+1,520.45 U<br>
+　　└ 累計　：🟢+5,234.18 U<br>
+<br>
+<strong>V2 訊號（多TP）</strong><br>
+　💰 真實倉：尚無記錄<br>
+　🌐 模擬倉（25 筆，勝率 64%）<br>
+　　┌ 今日　：🔴-5.00 U<br>
+　　├ 本月　：🟢+95.20 U<br>
+　　└ 累計　：🟢+312.50 U</div>
+    </div>
+
+    <div class="cmd-section">
+      <div class="cmd-section-title">📈 數據解讀</div>
+      <table>
+        <tr><th>欄位</th><th>意思</th></tr>
+        <tr><td><strong>筆</strong></td><td>已結算的訂單數</td></tr>
+        <tr><td><strong>勝率</strong></td><td>賺錢的訂單 / 總訂單</td></tr>
+        <tr><td><strong>今日</strong></td><td>今天 00:00 後的損益</td></tr>
+        <tr><td><strong>本月</strong></td><td>當月累計（可能顯示「本週」「近兩週」）</td></tr>
+        <tr><td><strong>累計</strong></td><td>從開始用到現在</td></tr>
+        <tr><td><strong>⏳ 待結算</strong></td><td>還沒平倉的訂單數</td></tr>
+      </table>
+    </div>
+
+    <div class="callout tip">
+      <strong>💡 看勝率的觀念</strong>
+      <p>諧波訊號天生<strong>勝率 60-70%</strong> 算正常。連虧 3 筆很正常，<strong>看的是長期累計</strong>。</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- ====== /order =============== -->
+<!-- ============================== -->
+<div class="cmd-card active" id="order">
+  <div class="cmd-header">
+    <span class="cmd-name">/order</span>
+    <span class="cmd-status">查訂單</span>
+    <span class="cmd-tagline">查看上次下單詳情</span>
+  </div>
+  <div class="cmd-body">
+    <div class="cmd-section">
+      <div class="cmd-section-title">📌 用途</div>
+      <p>顯示你最近一次下單的詳細資訊（含進場價、止損、止盈、實際倉位）。</p>
+    </div>
+
+    <div class="cmd-section">
+      <div class="cmd-section-title">🎯 使用情境</div>
+      <span class="usecase">忘記剛剛下了什麼</span>
+      <span class="usecase">確認訂單是否成功</span>
+      <span class="usecase">想再看訊號卡內容</span>
+    </div>
+
+    <div class="cmd-section">
+      <div class="cmd-section-title">💬 實際輸入</div>
+      <div class="typing"><span class="prompt">你 ▶</span> <span class="cmd">/order</span></div>
+    </div>
+
+    <div class="callout info">
+      <strong>ℹ️ 跟 /last 的差別</strong>
+      <p><strong>/order</strong> 顯示你<strong>最近一次操作</strong>的訂單。<br><strong>/last</strong> 顯示<strong>上一筆訂單詳細</strong>，兩個有時相同有時不同。</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- ====== /last ================ -->
+<!-- ============================== -->
+<div class="cmd-card active" id="last">
+  <div class="cmd-header">
+    <span class="cmd-name">/last 或 /lastorder</span>
+    <span class="cmd-status">查訂單</span>
+    <span class="cmd-tagline">查上一筆訂單詳細狀態</span>
+  </div>
+  <div class="cmd-body">
+    <div class="cmd-section">
+      <div class="cmd-section-title">📌 用途</div>
+      <p>查詢你上一筆訂單的<strong>當前狀態</strong>（已成交 / 待結算 / 已平倉等）。</p>
+    </div>
+
+    <div class="cmd-section">
+      <div class="cmd-section-title">🎯 使用情境</div>
+      <span class="usecase">下單後想確認</span>
+      <span class="usecase">結算前看狀態</span>
+      <span class="usecase">確認 SL/TP 設定</span>
+    </div>
+
+    <div class="cmd-section">
+      <div class="cmd-section-title">💬 實際輸入</div>
+      <div class="typing"><span class="prompt">你 ▶</span> <span class="cmd">/last</span> <span class="cmt"># 兩種都可以</span><br>
+<span class="prompt">你 ▶</span> <span class="cmd">/lastorder</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- ====== /risk ================ -->
+<!-- ============================== -->
+<div class="cmd-card advanced" id="risk">
+  <div class="cmd-header">
+    <span class="cmd-name">/risk</span>
+    <span class="cmd-status">進階</span>
+    <span class="cmd-tagline">設定每日虧損上限（風控熔斷）</span>
+  </div>
+  <div class="cmd-body">
+    <div class="cmd-section">
+      <div class="cmd-section-title">📌 用途</div>
+      <p>設定每日真實倉虧損上限。當虧損達到上限，<strong>系統自動暫停所有真實下單</strong>到隔天 00:00 才解除。</p>
+    </div>
+
+    <div class="cmd-section">
+      <div class="cmd-section-title">🎯 為什麼需要</div>
+      <p><strong>避免情緒化連續下單導致大虧</strong>。例如連虧 3 筆心情很差，可能會亂下單追損 → 風控熔斷讓你冷靜。</p>
+    </div>
+
+    <div class="cmd-section">
+      <div class="cmd-section-title">💬 實際輸入</div>
+      <div class="typing"><span class="prompt">你 ▶</span> <span class="cmd">/risk</span></div>
+    </div>
+
+    <div class="cmd-section">
+      <div class="cmd-section-title">📨 系統回應</div>
+      <div class="bubble">🛡️ 每日風控設定<br><br>
+當日真實倉虧損超過上限，自動停止真實下單。<br>
+隔天 00:00 自動重置。</div>
+
+      <p style="margin-top:10px">提供按鈕：</p>
+      <p>
+        <span class="btn">50U</span>
+        <span class="btn">100U</span>
+        <span class="btn">200U</span>
+        <span class="btn">✏️ 自訂</span>
+        <span class="btn red">🔕 關閉風控</span>
+      </p>
+    </div>
+
+    <div class="cmd-section">
+      <div class="cmd-section-title">🎯 建議數值（基於餘額）</div>
+      <table>
+        <tr><th>真實倉餘額</th><th>建議上限</th><th>意思</th></tr>
+        <tr><td>500 USDT</td><td><strong>50 USDT</strong></td><td>單日最多虧 10%</td></tr>
+        <tr><td>1,000 USDT</td><td><strong>100 USDT</strong></td><td>單日最多虧 10%</td></tr>
+        <tr><td>5,000 USDT</td><td><strong>200-500 USDT</strong></td><td>單日最多虧 4-10%</td></tr>
+        <tr><td>10,000+ USDT</td><td><strong>500-1000 USDT</strong></td><td>看你風險偏好</td></tr>
+      </table>
+    </div>
+
+    <div class="callout warn">
+      <strong>⚠️ 觸發後</strong>
+      <p>系統會發訊息告訴你已熔斷，<strong>當天無法再用真實倉下單</strong>（模擬倉不受影響）。隔天 00:00 自動重置。</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- ====== /margin ============== -->
+<!-- ============================== -->
+<div class="cmd-card advanced" id="margin">
+  <div class="cmd-header">
+    <span class="cmd-name">/margin</span>
+    <span class="cmd-status">進階</span>
+    <span class="cmd-tagline">固定保證金模式為「逐倉」</span>
+  </div>
+  <div class="cmd-body">
+    <div class="cmd-section">
+      <div class="cmd-section-title">📌 用途</div>
+      <p>把保證金模式固定為「逐倉」（單一訂單最多虧損該訂單保證金，不會擴散）。</p>
+    </div>
+
+    <div class="cmd-section">
+      <div class="cmd-section-title">🎯 使用情境</div>
+      <span class="usecase">想確保用逐倉模式</span>
+      <span class="usecase">害怕全倉風險</span>
+    </div>
+
+    <div class="cmd-section">
+      <div class="cmd-section-title">💬 實際輸入</div>
+      <div class="typing"><span class="prompt">你 ▶</span> <span class="cmd">/margin</span></div>
+    </div>
+
+    <div class="callout info">
+      <strong>📖 名詞解釋</strong>
+      <p><strong>逐倉</strong>：每筆訂單只用該訂單的保證金，<strong>單筆爆倉不影響其他</strong>。<br><strong>全倉</strong>：所有訂單共用同一筆保證金，一筆嚴重虧損會拖垮其他。</p>
+      <p style="margin-top:8px">本系統<strong>強制用逐倉</strong>，這個指令是讓你「重新確認」用逐倉。</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- ====== /slotcount =========== -->
+<!-- ============================== -->
+<div class="cmd-card advanced" id="slotcount">
+  <div class="cmd-header">
+    <span class="cmd-name">/slotcount</span>
+    <span class="cmd-status">進階</span>
+    <span class="cmd-tagline">調整分倉數（餘額分幾份用）</span>
+  </div>
+  <div class="cmd-body">
+    <div class="cmd-section">
+      <div class="cmd-section-title">📌 用途</div>
+      <p>設定你的餘額要分成幾倉用。<strong>數字越大每筆風險越小</strong>。</p>
+    </div>
+
+    <div class="cmd-section">
+      <div class="cmd-section-title">💬 實際輸入</div>
+      <div class="typing"><span class="prompt">你 ▶</span> <span class="cmd">/slotcount</span> <span class="cmt"># 不帶數字 = 看當前設定</span><br>
+<span class="prompt">你 ▶</span> <span class="cmd">/slotcount 20</span> <span class="cmt"># 設成 20 倉</span><br>
+<span class="prompt">你 ▶</span> <span class="cmd">/slotcount 50</span> <span class="cmt"># 設成 50 倉（保守）</span></div>
+    </div>
+
+    <div class="cmd-section">
+      <div class="cmd-section-title">🎯 數字選擇建議</div>
+      <table>
+        <tr><th>分倉數</th><th>每筆保證金</th><th>適合誰</th></tr>
+        <tr><td><strong>5 倉</strong></td><td>餘額 / 5 × 0.95 = 19% 餘額</td><td>積極派（高風險高報酬）</td></tr>
+        <tr><td><strong>10 倉</strong></td><td>餘額 / 10 × 0.95 = 9.5% 餘額</td><td>偏積極</td></tr>
+        <tr><td><strong>20 倉</strong>（推薦）</td><td>餘額 / 20 × 0.95 = 4.75% 餘額</td><td>⭐ <strong>大部分人</strong></td></tr>
+        <tr><td><strong>50 倉</strong></td><td>餘額 / 50 × 0.95 = 1.9% 餘額</td><td>保守派</td></tr>
+        <tr><td><strong>100 倉</strong></td><td>餘額 / 100 × 0.95 = 0.95% 餘額</td><td>超保守 / 大資金</td></tr>
+      </table>
+    </div>
+
+    <div class="callout tip">
+      <strong>💡 規則範圍</strong>
+      <p>系統允許 <strong>5 ~ 100 倉</strong>。一般推薦 <strong>20 倉</strong>，這是「<strong>規則 1 寧可賺少不要爆倉</strong>」的最佳平衡點。</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- ====== /timeframe =========== -->
+<!-- ============================== -->
+<div class="cmd-card advanced" id="timeframe">
+  <div class="cmd-header">
+    <span class="cmd-name">/timeframe 或 /time</span>
+    <span class="cmd-status">進階</span>
+    <span class="cmd-tagline">切換訊號時框過濾</span>
+  </div>
+  <div class="cmd-body">
+    <div class="cmd-section">
+      <div class="cmd-section-title">📌 用途</div>
+      <p>篩選只接收特定時框的訊號（如只要 1 小時 / 4 小時 / 日線）。</p>
+    </div>
+
+    <div class="cmd-section">
+      <div class="cmd-section-title">💬 實際輸入</div>
+      <div class="typing"><span class="prompt">你 ▶</span> <span class="cmd">/timeframe</span> <span class="cmt"># 看當前設定 + 提供選擇按鈕</span></div>
+    </div>
+
+    <div class="callout info">
+      <strong>ℹ️ 何時用</strong>
+      <p>當你只想跟<strong>特定時框</strong>的訊號（例如不想接 5 分鐘短線，只要 1H+ 的）→ 用這個過濾。</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- ====== /resetsettings ======= -->
+<!-- ============================== -->
+<div class="cmd-card advanced" id="resetsettings">
+  <div class="cmd-header">
+    <span class="cmd-name">/resetsettings</span>
+    <span class="cmd-status">進階</span>
+    <span class="cmd-tagline">重設聊天室預設值（恢復原廠）</span>
+  </div>
+  <div class="cmd-body">
+    <div class="cmd-section">
+      <div class="cmd-section-title">📌 用途</div>
+      <p>把所有設定還原成系統預設值。</p>
+    </div>
+
+    <div class="cmd-section">
+      <div class="cmd-section-title">🎯 使用情境</div>
+      <span class="usecase">設定改亂了想重來</span>
+      <span class="usecase">把 bot 借朋友用過想恢復</span>
+    </div>
+
+    <div class="cmd-section">
+      <div class="cmd-section-title">💬 實際輸入</div>
+      <div class="typing"><span class="prompt">你 ▶</span> <span class="cmd">/resetsettings</span></div>
+    </div>
+
+    <div class="cmd-section">
+      <div class="cmd-section-title">📨 系統回應</div>
+      <div class="bubble gold">已重設目前聊天室預設設定<br>
+⚙️ 保證金模式：逐倉<br>
+🗂 分倉數：20 倉<br>
+📊 槓桿：依訊號止損% 自動換算</div>
+    </div>
+
+    <div class="callout danger">
+      <strong>⚠️ 注意</strong>
+      <p>這個指令<strong>不可逆</strong>，重設後所有自訂的偏好（例如你設的 50 倉、自訂保證金）都會回到預設值。</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- ====== /symbol ============== -->
+<!-- ============================== -->
+<div class="cmd-card deprecated" id="symbol">
+  <div class="cmd-header">
+    <span class="cmd-name">/symbol</span>
+    <span class="cmd-status">已淘汰</span>
+    <span class="cmd-tagline">舊版指令（保留相容）</span>
+  </div>
+  <div class="cmd-body">
+    <div class="cmd-section">
+      <div class="cmd-section-title">📌 用途</div>
+      <p>舊版用來切換預設交易對的指令。<strong>新版已不需要</strong>，因為訊號會自動帶交易對資訊。</p>
+    </div>
+
+    <div class="callout warn">
+      <strong>⚠️ 不需要用</strong>
+      <p>新流程裡這個指令已經沒實際作用，保留只是為了相容舊用戶。<strong>正常操作不需要打這個</strong>。</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 總整理 ============ -->
+<div style="margin-top:60px">
+<h2 style="font-family:var(--serif);font-size:32px;font-weight:900;text-align:center;margin-bottom:20px;color:var(--text);border-bottom:2px solid var(--gold);padding-bottom:16px;display:inline-block;width:auto;left:50%;position:relative;transform:translateX(-50%)">所有指令一覽</h2>
+
+<table style="margin-top:30px">
+<thead>
+<tr><th>指令</th><th>類型</th><th>頻率</th><th>主要用途</th></tr>
+</thead>
+<tbody>
+<tr><td><a href="#start" style="color:var(--gold)"><strong>/start</strong></a></td><td>必備</td><td>偶爾</td><td>註冊 / 看狀態</td></tr>
+<tr><td><a href="#api" style="color:var(--gold)"><strong>/api</strong></a></td><td>必備</td><td>很少</td><td>查 API 狀態</td></tr>
+<tr><td><a href="#uid" style="color:var(--gold)"><strong>/uid</strong></a></td><td>查連結</td><td>偶爾</td><td>取訊號群連結</td></tr>
+<tr><td><a href="#cancel" style="color:var(--gold)"><strong>/cancel</strong></a></td><td>救星</td><td>偶爾</td><td>取消當前操作</td></tr>
+<tr><td><a href="#settings" style="color:var(--gold)"><strong>/settings</strong></a></td><td>查設定</td><td>常用</td><td>看當前所有設定</td></tr>
+<tr><td><a href="#pnl" style="color:var(--gold)"><strong>/pnl</strong></a></td><td>查損益</td><td><strong>每天</strong></td><td>看戰績</td></tr>
+<tr><td><a href="#order" style="color:var(--gold)"><strong>/order</strong></a></td><td>查訂單</td><td>常用</td><td>看上次下單</td></tr>
+<tr><td><a href="#last" style="color:var(--gold)"><strong>/last</strong></a></td><td>查訂單</td><td>偶爾</td><td>看上一筆狀態</td></tr>
+<tr><td><a href="#risk" style="color:var(--gold)"><strong>/risk</strong></a></td><td>進階</td><td>第一次設定</td><td>每日虧損上限</td></tr>
+<tr><td><a href="#margin" style="color:var(--gold)"><strong>/margin</strong></a></td><td>進階</td><td>很少</td><td>固定逐倉模式</td></tr>
+<tr><td><a href="#slotcount" style="color:var(--gold)"><strong>/slotcount</strong></a></td><td>進階</td><td>偶爾</td><td>調整分倉數</td></tr>
+<tr><td><a href="#timeframe" style="color:var(--gold)"><strong>/timeframe</strong></a></td><td>進階</td><td>很少</td><td>篩選訊號時框</td></tr>
+<tr><td><a href="#resetsettings" style="color:var(--gold)"><strong>/resetsettings</strong></a></td><td>進階</td><td>很少</td><td>恢復預設</td></tr>
+<tr><td><a href="#symbol" style="color:var(--gold)"><strong>/symbol</strong></a></td><td>已淘汰</td><td>不用</td><td>—</td></tr>
+</tbody>
+</table>
+</div>
+
+</div>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <p style="margin-bottom:8px"><span class="serif gold" style="font-size:20px">BingX 訊號跟單 Bot</span></p>
+  <p>用戶指令完整手冊 · v24 · 14 個指令完整解說</p>
+  <p style="margin-top:14px;font-size:12px">「不爆倉設計 · 諧波訊號 · 自動鎖利 · 一條龍服務」</p>
+  <p style="margin-top:8px;font-size:11px;color:#666">遇到問題請聯繫管理員</p>
+</footer>
+
+</body>
+</html>
