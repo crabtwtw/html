@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BingX Bot 管理者操作手冊</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --bg-card: #161b22;
+    --bg-hover: #1c2128;
+    --border: #30363d;
+    --text: #e6edf3;
+    --text-dim: #8b949e;
+    --accent: #58a6ff;
+    --purple: #bc8cff;
+    --green: #3fb950;
+    --orange: #d29922;
+    --red: #f85149;
+    --code-bg: #1c2128;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "Microsoft JhengHei", "PingFang TC", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    padding: 24px 16px;
+    max-width: 980px;
+    margin: 0 auto;
+  }
+  header {
+    text-align: center;
+    padding: 32px 0 24px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 32px;
+  }
+  header .badge {
+    display: inline-block;
+    background: rgba(188, 140, 255, 0.12);
+    color: var(--purple);
+    border: 1px solid var(--purple);
+    padding: 4px 14px;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    margin-bottom: 14px;
+    letter-spacing: 0.05em;
+  }
+  header h1 {
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    background: linear-gradient(135deg, var(--accent), var(--purple));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 8px;
+  }
+  header .subtitle {
+    color: var(--text-dim);
+    font-size: 0.95rem;
+  }
+  .toc {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 32px;
+  }
+  .toc h2 {
+    font-size: 1rem;
+    color: var(--text-dim);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .toc ul {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 8px;
+  }
+  .toc a {
+    color: var(--accent);
+    text-decoration: none;
+    padding: 6px 10px;
+    border-radius: 6px;
+    display: block;
+    transition: background 0.15s;
+  }
+  .toc a:hover { background: var(--bg-hover); }
+  section {
+    margin-bottom: 48px;
+    scroll-margin-top: 16px;
+  }
+  h2.section-title {
+    font-size: 1.5rem;
+    margin-bottom: 16px;
+    padding-left: 12px;
+    border-left: 4px solid var(--accent);
+  }
+  h3.sub-title {
+    margin: 20px 0 12px;
+    color: var(--text-dim);
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .cmd-grid { display: grid; gap: 12px; }
+  .cmd-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    transition: border-color 0.2s, transform 0.1s;
+  }
+  .cmd-card:hover {
+    border-color: var(--accent);
+    transform: translateX(2px);
+  }
+  .cmd-card.new {
+    border-color: var(--purple);
+    background: linear-gradient(135deg, rgba(188, 140, 255, 0.04), transparent);
+  }
+  .cmd-name {
+    font-family: "JetBrains Mono", "Consolas", monospace;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .cmd-card.new .cmd-name { color: var(--purple); }
+  .new-tag {
+    display: inline-block;
+    font-size: 0.7rem;
+    background: var(--purple);
+    color: var(--bg);
+    padding: 1px 8px;
+    border-radius: 4px;
+    margin-left: 8px;
+    font-weight: 600;
+    vertical-align: middle;
+  }
+  .cmd-desc { color: var(--text); margin-bottom: 8px; }
+  .cmd-example {
+    background: var(--code-bg);
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-family: "JetBrains Mono", "Consolas", monospace;
+    font-size: 0.88rem;
+    color: var(--text-dim);
+    margin-top: 8px;
+    border-left: 3px solid var(--border);
+    overflow-x: auto;
+  }
+  .cmd-example::before {
+    content: "範例 → ";
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .cmd-output {
+    background: var(--code-bg);
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-family: "JetBrains Mono", "Consolas", monospace;
+    font-size: 0.85rem;
+    color: var(--text);
+    margin-top: 8px;
+    border-left: 3px solid var(--green);
+    white-space: pre-line;
+    overflow-x: auto;
+  }
+  .cmd-output::before {
+    content: "輸出範例 ↓";
+    color: var(--green);
+    font-weight: 600;
+    display: block;
+    margin-bottom: 6px;
+  }
+  .note {
+    background: rgba(88, 166, 255, 0.08);
+    border: 1px solid rgba(88, 166, 255, 0.3);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 16px 0;
+    font-size: 0.92rem;
+  }
+  .note::before { content: "💡 "; margin-right: 4px; }
+  .warn {
+    background: rgba(248, 81, 73, 0.08);
+    border: 1px solid rgba(248, 81, 73, 0.3);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 16px 0;
+    font-size: 0.92rem;
+  }
+  .warn::before { content: "⚠️ "; margin-right: 4px; }
+  code {
+    background: var(--code-bg);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: "JetBrains Mono", "Consolas", monospace;
+    font-size: 0.88em;
+    color: var(--purple);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 0.92rem;
+  }
+  th, td {
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  th {
+    background: var(--bg-card);
+    color: var(--text-dim);
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+  }
+  tr:hover td { background: var(--bg-hover); }
+  footer {
+    text-align: center;
+    padding: 32px 0;
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    border-top: 1px solid var(--border);
+    margin-top: 32px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="badge">🛠 ADMIN</span>
+  <h1>BingX Bot 管理者手冊</h1>
+  <div class="subtitle">所有管理者可用指令與操作流程</div>
+</header>
+
+<nav class="toc">
+  <h2>目錄</h2>
+  <ul>
+    <li><a href="#users">用戶管理</a></li>
+    <li><a href="#pnl">損益查詢</a></li>
+    <li><a href="#broadcast">廣播 / 系統</a></li>
+    <li><a href="#defaults">全局預設</a></li>
+    <li><a href="#orders">訂單管理</a></li>
+    <li><a href="#auto">全自動 /auto</a></li>
+    <li><a href="#buttons">用戶操作按鈕</a></li>
+    <li><a href="#flow">審核流程</a></li>
+    <li><a href="#troubleshoot">常見排查</a></li>
+  </ul>
+</nav>
+
+<div class="note">
+  所有指令在「<strong>管理 Bot</strong>」對話框輸入。打 <code>/help</code> 可看官方完整列表。
+</div>
+
+<section id="users">
+  <h2 class="section-title">📊 用戶管理</h2>
+  <div class="cmd-grid">
+    <div class="cmd-card">
+      <div class="cmd-name">/users 或 /list</div>
+      <div class="cmd-desc">列出所有用戶,標題會顯示<strong>全站總人數</strong>與各狀態分布。可加篩選條件。</div>
+      <div class="cmd-example">/users active(已開通) /users pending(待審) /users rejected(已拒) /users search 王(搜尋)</div>
+      <div class="cmd-output">📋 用戶列表(全部)
+👥 全站共 29 人  |  ✅ 已開通 25  ⏳ 待審 3  ❌ 已拒 1
+
+✅ 黃 935554
+   ID: 8569719572
+   UID: 34988913
+   ...</div>
+    </div>
+    <div class="cmd-card">
+      <div class="cmd-name">/user &lt;chat_id&gt;</div>
+      <div class="cmd-desc">查單一用戶詳細(API 狀態、設定、損益、操作按鈕)。</div>
+      <div class="cmd-example">/user 12345678</div>
+    </div>
+    <div class="cmd-card">
+      <div class="cmd-name">/uid &lt;BingX UID&gt;</div>
+      <div class="cmd-desc">用 BingX UID 反查 Telegram 用戶。</div>
+      <div class="cmd-example">/uid 34988913</div>
+    </div>
+  </div>
+</section>
+
+<section id="pnl">
+  <h2 class="section-title">💰 損益查詢</h2>
+  <div class="cmd-grid">
+    <div class="cmd-card">
+      <div class="cmd-name">/pnl &lt;chat_id&gt;</div>
+      <div class="cmd-desc">查指定用戶損益(今日 / 本月 / 累計)。</div>
+      <div class="cmd-example">/pnl 12345678</div>
+    </div>
+    <div class="cmd-card">
+      <div class="cmd-name">/stats</div>
+      <div class="cmd-desc">本月 bot 下單成績總覽,按用戶分組,V1/V2 模擬/真實各自統計筆數與勝率。<strong>結尾顯示全用戶本月合計</strong>。</div>
+      <div class="cmd-output">📊 本月 bot 下單成績(2026/04)
+
+👤 Cat Cat
+  V1 🌐模擬:🟢+73.84U (11筆 91%)
+  V1 💰真實:🟢+0.39U (9筆 67%)
+👤 YUNA
+  V1 🌐模擬:🟢+2378.97U (58筆 78%)
+...
+━━━━━━━━━━━━━━━
+📊 全用戶本月合計:🟢+2461.92 U (95筆)</div>
+    </div>
+    <div class="cmd-card new">
+      <div class="cmd-name">/today<span class="new-tag">NEW</span></div>
+      <div class="cmd-desc">所有用戶<strong>今日</strong> bot 下單成績。今日無單的用戶不列入(避免列出一堆「尚無記錄」)。</div>
+      <div class="cmd-output">🌅 今日 bot 下單成績(2026-04-30)
+
+👤 Cat Cat
+  V1 🌐模擬:🟢+12.50U (3筆 100%)
+👤 YUNA
+  V1 🌐模擬:🟢+45.20U (8筆 75%)
+━━━━━━━━━━━━━━━
+📊 全用戶今日合計:🟢+57.70 U (11筆)</div>
+    </div>
+    <div class="cmd-card new">
+      <div class="cmd-name">/losers<span class="new-tag">NEW</span></div>
+      <div class="cmd-desc">列今日<strong>虧損 Top 5</strong> 用戶。快速發現異常用戶或可能的訊號問題。</div>
+      <div class="cmd-output">💔 今日虧損 Top 5(2026-04-30)
+
+1. 王小明
+   🔴 -125.50U (3筆)
+2. 李大華
+   🔴 -88.20U (2筆)
+...</div>
+    </div>
+  </div>
+</section>
+
+<section id="broadcast">
+  <h2 class="section-title">📢 廣播 / 系統</h2>
+  <div class="cmd-grid">
+    <div class="cmd-card">
+      <div class="cmd-name">/bc &lt;內容&gt;</div>
+      <div class="cmd-desc">廣播公告給所有 active 用戶。送出前有確認按鈕避免誤發。</div>
+      <div class="cmd-example">/bc 系統將於今晚 23:00 維護 30 分鐘</div>
+    </div>
+    <div class="cmd-card">
+      <div class="cmd-name">/maint</div>
+      <div class="cmd-desc">系統維護模式開關(暫停訊號廣播 + 公告用戶)。</div>
+    </div>
+    <div class="cmd-card">
+      <div class="cmd-name">/gd on/off</div>
+      <div class="cmd-desc">訊號群顯示控制。關了訊號群不顯示訊號,但全自動還是會跑。</div>
+    </div>
+    <div class="cmd-card">
+      <div class="cmd-name">/regflow on/off</div>
+      <div class="cmd-desc">註冊流程開關(是否需要審核才能用)。</div>
+    </div>
+    <div class="cmd-card">
+      <div class="cmd-name">/ch</div>
+      <div class="cmd-desc">訊號頻道路由切換(A 通道 / B 通道)。</div>
+    </div>
+  </div>
+  <div class="warn">
+    <strong>/maint</strong> 一打就會通知所有用戶。確定要維護再用,不要拿來測試。
+  </div>
+</section>
+
+<section id="defaults">
+  <h2 class="section-title">⚙️ 全局預設</h2>
+  <div class="cmd-grid">
+    <div class="cmd-card">
+      <div class="cmd-name">/ds 或 /defaultsettings</div>
+      <div class="cmd-desc">開啟全局預設面板(下單環境、進場方式、TP 模式、保證金模式等)。</div>
+    </div>
+    <div class="cmd-card">
+      <div class="cmd-name">/pf 或 /pushdefaults</div>
+      <div class="cmd-desc">把目前全局預設值一鍵推送給所有現有用戶。</div>
+    </div>
+    <div class="cmd-card">
+      <div class="cmd-name">/trendfilter</div>
+      <div class="cmd-desc">趨勢過濾器(逆勢警告、檢查週期 1h / 4h)。</div>
+      <div class="cmd-example">/trendfilter 1h(寬鬆) /trendfilter 4h(平衡) /trendfilter both(嚴格) /trendfilter off /trendfilter on</div>
+    </div>
+  </div>
+</section>
+
+<section id="orders">
+  <h2 class="section-title">📂 訂單管理</h2>
+  <div class="cmd-grid">
+    <div class="cmd-card">
+      <div class="cmd-name">/orders [chat_id]</div>
+      <div class="cmd-desc">列訂單。沒帶參數查自己,帶 chat_id 查指定用戶。</div>
+      <div class="cmd-example">/orders 或 /orders 12345678</div>
+    </div>
+    <div class="cmd-card">
+      <div class="cmd-name">/order &lt;symbol&gt;</div>
+      <div class="cmd-desc">查單筆訂單詳細(含強平距離)。</div>
+      <div class="cmd-example">/order BTC-USDT</div>
+    </div>
+    <div class="cmd-card">
+      <div class="cmd-name">/resettle</div>
+      <div class="cmd-desc">手動觸發結算所有 pending 訂單(平常 3 分鐘自動跑一次)。</div>
+    </div>
+    <div class="cmd-card">
+      <div class="cmd-name">/clearpending [天數]</div>
+      <div class="cmd-desc">清空待結算訂單,可指定只清超過 N 天的。</div>
+      <div class="cmd-example">/clearpending 或 /clearpending 7</div>
+    </div>
+    <div class="cmd-card">
+      <div class="cmd-name">/clearuser &lt;chat_id&gt; [symbol]</div>
+      <div class="cmd-desc">清指定用戶所有 pending,可只清某幣。</div>
+      <div class="cmd-example">/clearuser 12345678 BTC-USDT</div>
+    </div>
+    <div class="cmd-card">
+      <div class="cmd-name">/fixpending [confirm]</div>
+      <div class="cmd-desc">修復 pending 訂單缺漏欄位。沒帶 confirm 是預覽,加 confirm 才執行。</div>
+      <div class="cmd-example">/fixpending(預覽) /fixpending confirm(執行)</div>
+    </div>
+    <div class="cmd-card">
+      <div class="cmd-name">/debugorders</div>
+      <div class="cmd-desc">查最近 5 筆訂單的 DB 原始資料(除錯用)。</div>
+    </div>
+  </div>
+</section>
+
+<section id="auto">
+  <h2 class="section-title">🤖 全自動 /auto</h2>
+  <p>管理員自己也是 auto member 1。完整 /auto 指令請看用戶手冊的全自動章節。</p>
+  <div class="cmd-grid">
+    <div class="cmd-card">
+      <div class="cmd-name">/auto status / vst / live / both / off</div>
+      <div class="cmd-desc">查狀態 / 切換下單環境(只下 VST / 只下 LIVE / 都下 / 全關)。</div>
+    </div>
+    <div class="cmd-card">
+      <div class="cmd-name">/auto rev / skip / raw</div>
+      <div class="cmd-desc">逆勢處理:翻轉 / 跳過 / 下原方向。</div>
+    </div>
+    <div class="cmd-card">
+      <div class="cmd-name">/auto summary / verify / debug / blocklist</div>
+      <div class="cmd-desc">數據總結 / 對帳 / 訂單明細 / 黑名單。</div>
+    </div>
+  </div>
+</section>
+
+<section id="buttons">
+  <h2 class="section-title">👤 用戶操作按鈕</h2>
+  <p>在 <code>/user &lt;chat_id&gt;</code> 顯示的用戶卡片上會看到以下按鈕:</p>
+  <table>
+    <tr><th>按鈕</th><th>動作</th></tr>
+    <tr><td>🔑 刪除 API(重設)</td><td>清掉用戶 API Key,讓他重新輸入。</td></tr>
+    <tr><td>⏸️ 暫停</td><td>停止該用戶接收訊號與下單。</td></tr>
+    <tr><td>▶️ 恢復</td><td>從暫停恢復。</td></tr>
+    <tr><td>🗑️ 移除</td><td>完全刪除用戶,要重新 /start 才能再申請。</td></tr>
+    <tr><td>✅ 通過 / ❌ 拒絕</td><td>待審核用戶的審核按鈕。</td></tr>
+  </table>
+</section>
+
+<section id="flow">
+  <h2 class="section-title">🚪 用戶審核流程</h2>
+  <ol style="margin-left: 20px;">
+    <li>用戶在訊號 Bot 打 <code>/start</code></li>
+    <li>用戶輸入 BingX UID,Bot 自動驗證 API Key</li>
+    <li>管理員收到「新用戶申請」通知 + 審核按鈕</li>
+    <li>點 <strong>✅ 通過</strong> 或 <strong>❌ 拒絕</strong></li>
+    <li>用戶收到結果通知;通過的可開始接訊號</li>
+  </ol>
+</section>
+
+<section id="troubleshoot">
+  <h2 class="section-title">💡 常見排查</h2>
+  <table>
+    <tr><th>狀況</th><th>處理</th></tr>
+    <tr><td>用戶說「訊號收不到」</td><td>查 <code>/gd</code> 是否開啟;查 <code>/user &lt;id&gt;</code> 是否被暫停;查用戶 timeframe / symbol 過濾。</td></tr>
+    <tr><td>用戶 API 失效</td><td>用「🔑 刪除 API」讓他重新輸入。</td></tr>
+    <tr><td>大量 pending 訂單卡住</td><td><code>/resettle</code> 強制結算;或 <code>/clearpending 7</code> 清舊的。</td></tr>
+    <tr><td>每日總結數字不對</td><td>新版用 BingX income API 為準。打 <code>/auto verify</code> 對帳檢查。</td></tr>
+    <tr><td>同個幣一直推失敗訊息</td><td>該幣會自動進黑名單。<code>/auto blocklist</code> 看清單,然後去 TV 把該幣從訊號移除。</td></tr>
+    <tr><td>需要全系統暫停</td><td><code>/maint</code> 開維護模式,所有用戶會收到暫停通知。</td></tr>
+    <tr><td>想知道今天哪個用戶賠最多</td><td>新指令 <code>/losers</code>,直接列今日虧損 Top 5。</td></tr>
+    <tr><td>想看當天整體成績</td><td>新指令 <code>/today</code>,當日所有用戶下單統計。</td></tr>
+  </table>
+</section>
+
+<footer>
+  BingX Bot 管理者手冊 · v2 · 2026-04-30
+</footer>
+
+</body>
+</html>

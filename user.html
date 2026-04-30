@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BingX Bot 用戶操作手冊</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --bg-card: #161b22;
+    --bg-hover: #1c2128;
+    --border: #30363d;
+    --text: #e6edf3;
+    --text-dim: #8b949e;
+    --accent: #58a6ff;
+    --purple: #bc8cff;
+    --green: #3fb950;
+    --orange: #d29922;
+    --red: #f85149;
+    --code-bg: #1c2128;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "Microsoft JhengHei", "PingFang TC", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    padding: 24px 16px;
+    max-width: 980px;
+    margin: 0 auto;
+  }
+  header {
+    text-align: center;
+    padding: 32px 0 24px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 32px;
+  }
+  header .badge {
+    display: inline-block;
+    background: rgba(88, 166, 255, 0.12);
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    padding: 4px 14px;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    margin-bottom: 14px;
+    letter-spacing: 0.05em;
+  }
+  header h1 {
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    background: linear-gradient(135deg, var(--accent), var(--purple));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 8px;
+  }
+  header .subtitle {
+    color: var(--text-dim);
+    font-size: 0.95rem;
+  }
+  .toc {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 32px;
+  }
+  .toc h2 {
+    font-size: 1rem;
+    color: var(--text-dim);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .toc ul {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 8px;
+  }
+  .toc a {
+    color: var(--accent);
+    text-decoration: none;
+    padding: 6px 10px;
+    border-radius: 6px;
+    display: block;
+    transition: background 0.15s;
+  }
+  .toc a:hover { background: var(--bg-hover); }
+  section {
+    margin-bottom: 48px;
+    scroll-margin-top: 16px;
+  }
+  h2.section-title {
+    font-size: 1.5rem;
+    margin-bottom: 16px;
+    padding-left: 12px;
+    border-left: 4px solid var(--accent);
+  }
+  h2.section-title.auto { border-left-color: var(--purple); }
+  .cmd-grid { display: grid; gap: 12px; }
+  .cmd-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    transition: border-color 0.2s, transform 0.1s;
+  }
+  .cmd-card:hover {
+    border-color: var(--accent);
+    transform: translateX(2px);
+  }
+  .cmd-name {
+    font-family: "JetBrains Mono", "Consolas", monospace;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .cmd-desc { color: var(--text); margin-bottom: 8px; }
+  .cmd-example {
+    background: var(--code-bg);
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-family: "JetBrains Mono", "Consolas", monospace;
+    font-size: 0.88rem;
+    color: var(--text-dim);
+    margin-top: 8px;
+    border-left: 3px solid var(--border);
+    overflow-x: auto;
+  }
+  .cmd-example::before {
+    content: "範例 → ";
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .note {
+    background: rgba(88, 166, 255, 0.08);
+    border: 1px solid rgba(88, 166, 255, 0.3);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 16px 0;
+    font-size: 0.92rem;
+  }
+  .note::before { content: "💡 "; margin-right: 4px; }
+  .warn {
+    background: rgba(248, 81, 73, 0.08);
+    border: 1px solid rgba(248, 81, 73, 0.3);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 16px 0;
+    font-size: 0.92rem;
+  }
+  .warn::before { content: "⚠️ "; margin-right: 4px; }
+  code {
+    background: var(--code-bg);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: "JetBrains Mono", "Consolas", monospace;
+    font-size: 0.88em;
+    color: var(--purple);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 0.92rem;
+  }
+  th, td {
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  th {
+    background: var(--bg-card);
+    color: var(--text-dim);
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+  }
+  tr:hover td { background: var(--bg-hover); }
+  .mode-pill {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    font-weight: 600;
+  }
+  .pill-off { background: rgba(248, 81, 73, 0.15); color: var(--red); }
+  .pill-vst { background: rgba(88, 166, 255, 0.15); color: var(--accent); }
+  .pill-live { background: rgba(63, 185, 80, 0.15); color: var(--green); }
+  .pill-both { background: rgba(188, 140, 255, 0.15); color: var(--purple); }
+  .step {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .step-num {
+    background: linear-gradient(135deg, var(--accent), var(--purple));
+    color: var(--bg);
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.9rem;
+  }
+  footer {
+    text-align: center;
+    padding: 32px 0;
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    border-top: 1px solid var(--border);
+    margin-top: 32px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="badge">👤 USER</span>
+  <h1>BingX Bot 用戶手冊</h1>
+  <div class="subtitle">用戶與全自動會員操作說明</div>
+</header>
+
+<nav class="toc">
+  <h2>目錄</h2>
+  <ul>
+    <li><a href="#start">開始使用</a></li>
+    <li><a href="#settings">個人設定</a></li>
+    <li><a href="#filter">訊號過濾</a></li>
+    <li><a href="#query">查詢</a></li>
+    <li><a href="#trade">下單操作</a></li>
+    <li><a href="#auto">全自動 /auto</a></li>
+    <li><a href="#tips">注意事項</a></li>
+  </ul>
+</nav>
+
+<div class="note">
+  所有指令在「<strong>訊號 Bot</strong>」對話框輸入。大部分操作可從訊號訊息底下的<strong>按鈕</strong>完成,不用記指令。
+</div>
+
+<section id="start">
+  <h2 class="section-title">🚀 開始使用</h2>
+  <div class="cmd-grid">
+    <div class="cmd-card">
+      <div class="cmd-name">/start</div>
+      <div class="cmd-desc">註冊或重新申請。新用戶第一個指令。</div>
+    </div>
+    <div class="cmd-card">
+      <div class="cmd-name">/help</div>
+      <div class="cmd-desc">看可用指令說明。</div>
+    </div>
+  </div>
+
+  <h3 style="margin: 20px 0 12px; color: var(--text-dim);">🚪 註冊流程</h3>
+  <div class="step"><div class="step-num">1</div><div>在訊號 Bot 打 <code>/start</code></div></div>
+  <div class="step"><div class="step-num">2</div><div>輸入 BingX UID(Bot 會自動驗證 API)</div></div>
+  <div class="step"><div class="step-num">3</div><div>狀態變「待審核」,等管理員審核</div></div>
+  <div class="step"><div class="step-num">4</div><div>收到「帳號已開通」通知後即可使用</div></div>
+  <div class="step"><div class="step-num">5</div><div>訊號來時會收到訊息 + 下單按鈕</div></div>
+</section>
+
+<section id="settings">
+  <h2 class="section-title">⚙️ 個人設定</h2>
+  <div class="cmd-grid">
+    <div class="cmd-card">
+      <div class="cmd-name">/risk &lt;百分比&gt;</div>
+      <div class="cmd-desc">每筆訊號的風險比例(餘額的 X%)。沒設用全局預設。</div>
+      <div class="cmd-example">/risk 2 → 每筆風險 2%</div>
+    </div>
+    <div class="cmd-card">
+      <div class="cmd-name">/margin &lt;模式&gt;</div>
+      <div class="cmd-desc">保證金模式:isolated(逐倉) / cross(全倉)。</div>
+      <div class="cmd-example">/margin isolated</div>
+    </div>
+    <div class="cmd-card">
+      <div class="cmd-name">/slotcount &lt;數字&gt;</div>
+      <div class="cmd-desc">分倉模式的倉位數。20 = 分 20 倉,每倉 = 餘額 ÷ 20。</div>
+      <div class="cmd-example">/slotcount 20</div>
+    </div>
+    <div class="cmd-card">
+      <div class="cmd-name">/autosl &lt;模式&gt;</div>
+      <div class="cmd-desc">自動移動止損:tp1(TP1 保本) / trailing(逐步鎖利) / off(關閉)。</div>
+      <div class="cmd-example">/autosl tp1</div>
+    </div>
+  </div>
+</section>
+
+<section id="filter">
+  <h2 class="section-title">📋 訊號過濾</h2>
+  <div class="cmd-grid">
+    <div class="cmd-card">
+      <div class="cmd-name">/symbol</div>
+      <div class="cmd-desc">設定幣種白名單(只接收特定幣的訊號)。</div>
+    </div>
+    <div class="cmd-card">
+      <div class="cmd-name">/timeframe 或 /time</div>
+      <div class="cmd-desc">設定時間週期過濾(只接 1h / 4h / 全部)。</div>
+    </div>
+  </div>
+</section>
+
+<section id="query">
+  <h2 class="section-title">💰 查詢</h2>
+  <div class="cmd-grid">
+    <div class="cmd-card">
+      <div class="cmd-name">/pnl</div>
+      <div class="cmd-desc">查自己的損益(今日 / 本月 / 累計)。</div>
+    </div>
+    <div class="cmd-card">
+      <div class="cmd-name">/orders</div>
+      <div class="cmd-desc">查自己目前的持倉訂單。</div>
+    </div>
+    <div class="cmd-card">
+      <div class="cmd-name">/order &lt;symbol&gt;</div>
+      <div class="cmd-desc">查單筆訂單詳細(含強平距離)。</div>
+      <div class="cmd-example">/order BTC-USDT</div>
+    </div>
+  </div>
+</section>
+
+<section id="trade">
+  <h2 class="section-title">💱 下單操作流程</h2>
+  <p>訊號到達後,Bot 會推訊息給你。以下是按鈕操作流程:</p>
+  <div class="step"><div class="step-num">1</div><div>收到訊號訊息(含交易對 / 進場 / 止盈 / 止損)</div></div>
+  <div class="step"><div class="step-num">2</div><div>選環境:<strong>💰 真實</strong>(用 USDT)或 <strong>🌐 模擬</strong>(用 VST)</div></div>
+  <div class="step"><div class="step-num">3</div><div>選進場方式:<strong>⚡ 立即市價</strong>(馬上成交)或 <strong>🎯 理想 D 點</strong>(預掛單等價)</div></div>
+  <div class="step"><div class="step-num">4</div><div>選保證金模式:<strong>🗂 分倉</strong>(餘額 ÷ N)或 <strong>💰 固定金額</strong></div></div>
+  <div class="step"><div class="step-num">5</div><div>選出場方式:<strong>💯 只下 TP1 100%</strong>(保守)或 <strong>TP1+TP2 70%/30%</strong>(分批)</div></div>
+  <div class="step"><div class="step-num">6</div><div>選保本:<strong>🔐 TP1 保本</strong>(避免回吐)、<strong>🔄 移動保本</strong>、或關閉讓波段跑</div></div>
+  <div class="step"><div class="step-num">7</div><div>按 <strong>真實下單</strong> 或 <strong>模擬下單</strong> 送出</div></div>
+
+  <div class="note">
+    所有設定一旦選定就會記住,下次訊號來預設用同樣設定,你可隨時改。
+  </div>
+</section>
+
+<section id="auto">
+  <h2 class="section-title auto">🤖 全自動指令(/auto)</h2>
+  <p>給「全自動會員」用,跑獨立 API 自動接收訊號下單。需先登錄白名單。</p>
+
+  <h3 style="margin: 20px 0 12px; color: var(--text-dim);">📊 狀態</h3>
+  <div class="cmd-grid">
+    <div class="cmd-card">
+      <div class="cmd-name">/auto status</div>
+      <div class="cmd-desc">看目前模式、逆勢處理、今日失敗筆數。</div>
+    </div>
+  </div>
+
+  <h3 style="margin: 20px 0 12px; color: var(--text-dim);">🔧 模式切換</h3>
+  <div class="cmd-grid">
+    <div class="cmd-card">
+      <div class="cmd-name">/auto vst</div>
+      <div class="cmd-desc"><span class="mode-pill pill-vst">🔵 只下 VST(模擬)</span> 養數據用,不花真錢。</div>
+    </div>
+    <div class="cmd-card">
+      <div class="cmd-name">/auto live</div>
+      <div class="cmd-desc"><span class="mode-pill pill-live">🟢 只下 LIVE(真實)</span> 真金白銀下單。</div>
+    </div>
+    <div class="cmd-card">
+      <div class="cmd-name">/auto both</div>
+      <div class="cmd-desc"><span class="mode-pill pill-both">🟣 VST+LIVE 都下</span> 兩個都跑。</div>
+    </div>
+    <div class="cmd-card">
+      <div class="cmd-name">/auto off</div>
+      <div class="cmd-desc"><span class="mode-pill pill-off">❌ 全部關閉</span> 訊號來也不下。</div>
+    </div>
+  </div>
+
+  <h3 style="margin: 20px 0 12px; color: var(--text-dim);">🔁 逆勢訊號處理</h3>
+  <div class="cmd-grid">
+    <div class="cmd-card">
+      <div class="cmd-name">/auto skip</div>
+      <div class="cmd-desc">⏭ 跳過不下(預設)— 逆勢訊號就不下單。</div>
+    </div>
+    <div class="cmd-card">
+      <div class="cmd-name">/auto rev</div>
+      <div class="cmd-desc">🔁 翻轉下反向 — 訊號做多就改下做空。</div>
+    </div>
+    <div class="cmd-card">
+      <div class="cmd-name">/auto raw</div>
+      <div class="cmd-desc">➡️ 下原方向 — 不管逆勢,照訊號方向下。</div>
+    </div>
+  </div>
+
+  <h3 style="margin: 20px 0 12px; color: var(--text-dim);">📈 數據 / 診斷</h3>
+  <div class="cmd-grid">
+    <div class="cmd-card">
+      <div class="cmd-name">/auto summary</div>
+      <div class="cmd-desc">立即推昨日總結(每日 00:00:10 自動推一次)。</div>
+    </div>
+    <div class="cmd-card">
+      <div class="cmd-name">/auto verify</div>
+      <div class="cmd-desc">對帳檢查 — 用 BingX income API 抓真實 PnL,跟 DB 推算對比。</div>
+    </div>
+    <div class="cmd-card">
+      <div class="cmd-name">/auto debug</div>
+      <div class="cmd-desc">列昨日訂單明細(診斷用)。</div>
+    </div>
+    <div class="cmd-card">
+      <div class="cmd-name">/auto blocklist</div>
+      <div class="cmd-desc">看幣黑名單 — 列出失敗過的幣(BingX 不支援、下架等)。</div>
+    </div>
+  </div>
+
+  <div class="note">
+    黑名單在訊號失敗時<strong>自動加入</strong>(只對「下架/不存在」這種錯誤,餘額不足等暫時問題不會擋)。<br>
+    成功下單會<strong>自動移除</strong>。看到清單後可至 TV 把那些幣從訊號清單移除,根治洗版問題。
+  </div>
+</section>
+
+<section id="tips">
+  <h2 class="section-title">💡 注意事項</h2>
+  <table>
+    <tr><th>狀況</th><th>說明</th></tr>
+    <tr><td>訊號來但沒看到</td><td>可能你的 timeframe / symbol 過濾擋掉了,或被管理員暫停。</td></tr>
+    <tr><td>下單失敗「保證金不足」</td><td>BingX 餘額不夠,或設的 risk / leverage 太高。</td></tr>
+    <tr><td>下單失敗「目前市價已超過 TP」</td><td>訊號太晚進來,行情已經跑超過止盈點。BingX 會直接拒絕,正常的。</td></tr>
+    <tr><td>下單失敗「此幣模擬倉暫時無法交易」</td><td>BingX 該幣 VST 下架,系統自動加黑名單。打 <code>/auto blocklist</code> 看清單。</td></tr>
+    <tr><td>API 失效</td><td>找管理員「🔑 重設 API」,然後重新輸入。</td></tr>
+  </table>
+
+  <div class="warn">
+    <strong>真實下單是真錢操作</strong>,BingX 餘額會實際進出。新用戶建議先用<strong>🌐 模擬</strong>練習,熟悉後再用<strong>💰 真實</strong>。
+  </div>
+</section>
+
+<footer>
+  BingX Bot 用戶手冊 · v2 · 2026-04-30
+</footer>
+
+</body>
+</html>
