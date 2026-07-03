@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>自動交易助手 · 新手完全指南</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0B0F1E;
+    --bg2:#0E1428;
+    --card:#141B33;
+    --card2:#1A2340;
+    --line:#243154;
+    --ink:#EAF0FF;
+    --ink2:#9FB0D0;
+    --ink3:#6F82A8;
+    --cyan:#22D3EE;
+    --blue:#3B82F6;
+    --green:#34D399;
+    --amber:#FBBF24;
+    --red:#F87171;
+    --violet:#A78BFA;
+    --grad:linear-gradient(120deg,#22D3EE 0%,#3B82F6 60%,#A78BFA 100%);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"Noto Sans TC","Sora",system-ui,sans-serif;
+    line-height:1.75;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  .num,.stat,.eyebrow,.tag{font-family:"Sora","Noto Sans TC",sans-serif}
+  .wrap{max-width:920px;margin:0 auto;padding:0 22px}
+
+  /* ---------- ambient ---------- */
+  .glow{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+  .glow::before,.glow::after{content:"";position:absolute;border-radius:50%;filter:blur(120px);opacity:.28}
+  .glow::before{width:520px;height:520px;background:#1D4ED8;top:-160px;right:-120px}
+  .glow::after{width:460px;height:460px;background:#0E7490;bottom:-120px;left:-140px}
+
+  section{position:relative;z-index:1}
+
+  /* ---------- hero ---------- */
+  .hero{padding:64px 0 40px;text-align:center}
+  .badge{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:13px;letter-spacing:.12em;color:var(--cyan);
+    border:1px solid var(--line);border-radius:999px;padding:7px 16px;
+    background:rgba(34,211,238,.06);text-transform:uppercase;font-weight:600;
+  }
+  .pulse{width:8px;height:8px;border-radius:50%;background:var(--cyan);position:relative;flex:none}
+  .pulse::after{content:"";position:absolute;inset:-4px;border-radius:50%;border:1px solid var(--cyan);animation:ping 1.8s ease-out infinite}
+  @keyframes ping{0%{transform:scale(.6);opacity:.9}100%{transform:scale(2.2);opacity:0}}
+  h1{
+    font-size:clamp(34px,7vw,60px);line-height:1.12;font-weight:900;
+    margin:22px 0 14px;letter-spacing:-.01em;
+  }
+  h1 .hl{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .lead{font-size:clamp(16px,2.4vw,19px);color:var(--ink2);max-width:600px;margin:0 auto 34px}
+
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:8px}
+  .statcard{
+    background:linear-gradient(180deg,var(--card),var(--bg2));
+    border:1px solid var(--line);border-radius:16px;padding:20px 14px;
+    position:relative;overflow:hidden;
+  }
+  .statcard::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:var(--grad)}
+  .stat{font-size:clamp(28px,6vw,40px);font-weight:800;line-height:1;color:#fff}
+  .stat.cyan{color:var(--cyan)}.stat.green{color:var(--green)}.stat.violet{color:var(--violet)}
+  .statlbl{font-size:12.5px;color:var(--ink3);margin-top:8px;letter-spacing:.03em}
+
+  /* ---------- section shell ---------- */
+  .block{padding:44px 0;border-top:1px solid rgba(36,49,84,.5)}
+  .eyebrow{
+    font-size:12.5px;letter-spacing:.18em;color:var(--cyan);text-transform:uppercase;
+    font-weight:700;display:flex;align-items:center;gap:10px;margin-bottom:14px;
+  }
+  .eyebrow .en{color:var(--ink3);font-weight:600}
+  h2{font-size:clamp(24px,4.4vw,32px);font-weight:800;line-height:1.25;margin-bottom:10px;letter-spacing:-.01em}
+  .sub{color:var(--ink2);font-size:15.5px;margin-bottom:26px;max-width:640px}
+
+  /* ---------- what is it ---------- */
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .mode{
+    border:1px solid var(--line);border-radius:18px;padding:24px;background:var(--card);
+    position:relative;
+  }
+  .mode.auto{background:linear-gradient(180deg,rgba(34,211,238,.08),var(--card))}
+  .mode.manual{background:linear-gradient(180deg,rgba(167,139,250,.08),var(--card))}
+  .mode .ico{font-size:30px;margin-bottom:12px}
+  .mode h3{font-size:19px;font-weight:800;margin-bottom:6px}
+  .mode .who{font-size:13px;color:var(--cyan);margin-bottom:12px;font-weight:600}
+  .mode.manual .who{color:var(--violet)}
+  .mode p{font-size:14.5px;color:var(--ink2)}
+  .mode ul{list-style:none;margin-top:12px;font-size:14px;color:var(--ink2)}
+  .mode li{padding:5px 0 5px 24px;position:relative}
+  .mode li::before{content:"→";position:absolute;left:0;color:var(--cyan)}
+  .mode.manual li::before{color:var(--violet)}
+
+  /* ---------- steps ---------- */
+  .steps{display:flex;flex-direction:column;gap:14px}
+  .step{
+    display:grid;grid-template-columns:56px 1fr;gap:18px;align-items:start;
+    background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 22px;
+    transition:border-color .25s,transform .25s;
+  }
+  .step:hover{border-color:var(--cyan);transform:translateX(3px)}
+  .step .n{
+    font-family:"Sora";font-size:26px;font-weight:800;color:transparent;
+    background:var(--grad);-webkit-background-clip:text;background-clip:text;
+    line-height:1;padding-top:2px;
+  }
+  .step h3{font-size:17.5px;font-weight:700;margin-bottom:5px}
+  .step p{font-size:14.5px;color:var(--ink2)}
+  .step .hint{margin-top:8px;font-size:13px;color:var(--cyan);background:rgba(34,211,238,.07);border-radius:8px;padding:7px 12px;display:inline-block}
+
+  /* ---------- features ---------- */
+  .feat{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .fcard{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
+  .fcard .ico{font-size:24px;margin-bottom:10px}
+  .fcard h3{font-size:16px;font-weight:700;margin-bottom:6px}
+  .fcard p{font-size:13.5px;color:var(--ink2)}
+
+  /* ---------- choose: risk ---------- */
+  .pick{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px;margin-bottom:16px}
+  .pick-h{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+  .pick-h .ico{font-size:24px}
+  .pick-h h3{font-size:20px;font-weight:800}
+  .pick .note{font-size:14px;color:var(--ink2);margin-bottom:18px}
+  .rtable{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+  .risk{border:1px solid var(--line);border-radius:12px;padding:16px;text-align:center;background:var(--bg2)}
+  .risk .lv{font-size:15px;font-weight:800;margin-bottom:8px}
+  .risk.low .lv{color:var(--green)}.risk.mid .lv{color:var(--amber)}.risk.high .lv{color:var(--red)}
+  .risk .big{font-family:"Sora";font-size:30px;font-weight:800;line-height:1}
+  .risk .cap{font-size:12px;color:var(--ink3);margin:8px 0 10px}
+  .risk .for{font-size:12.5px;color:var(--ink2);border-top:1px dashed var(--line);padding-top:10px}
+  .risk.low{box-shadow:0 0 0 1px rgba(52,211,153,.35);position:relative}
+  .risk.low::after{content:"新手建議";position:absolute;top:-10px;left:50%;transform:translateX(-50%);
+    background:var(--green);color:#04231A;font-size:11px;font-weight:800;padding:2px 10px;border-radius:999px;white-space:nowrap}
+
+  .callout{
+    display:flex;gap:14px;align-items:flex-start;
+    background:linear-gradient(120deg,rgba(59,130,246,.1),rgba(167,139,250,.06));
+    border:1px solid var(--line);border-left:3px solid var(--cyan);
+    border-radius:12px;padding:16px 18px;margin-top:18px;font-size:14px;color:var(--ink2);
+  }
+  .callout b{color:var(--ink)}
+  .callout .k{font-size:20px;flex:none}
+
+  /* ---------- choose: lock modes ---------- */
+  .locks{display:flex;flex-direction:column;gap:12px}
+  .lock{
+    display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:center;
+    background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 20px;
+  }
+  .lock .emo{font-size:26px}
+  .lock h4{font-size:16px;font-weight:700;margin-bottom:3px}
+  .lock p{font-size:13px;color:var(--ink2)}
+  .lock .tag{font-size:11.5px;font-weight:700;padding:5px 11px;border-radius:999px;white-space:nowrap}
+  .tag.steady{background:rgba(52,211,153,.14);color:var(--green)}
+  .tag.balance{background:rgba(34,211,238,.14);color:var(--cyan)}
+  .tag.aggr{background:rgba(251,191,36,.14);color:var(--amber)}
+  .lock.rec{box-shadow:0 0 0 1px rgba(52,211,153,.3)}
+
+  /* ---------- faq ---------- */
+  .faq{display:flex;flex-direction:column;gap:10px}
+  details{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  summary{padding:16px 20px;font-weight:700;font-size:15.5px;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px}
+  summary::-webkit-details-marker{display:none}
+  summary .q{color:var(--cyan);font-family:"Sora";font-weight:800;flex:none}
+  summary .plus{color:var(--ink3);font-size:22px;transition:transform .25s;flex:none}
+  details[open] summary .plus{transform:rotate(45deg);color:var(--cyan)}
+  details p{padding:0 20px 18px 54px;font-size:14px;color:var(--ink2)}
+
+  /* ---------- safety ---------- */
+  .safe{background:linear-gradient(180deg,var(--card2),var(--bg2));border:1px solid var(--line);border-radius:20px;padding:28px}
+  .safe h2{margin-bottom:20px}
+  .rules{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .rule{display:flex;gap:12px;align-items:flex-start;font-size:14px;color:var(--ink2)}
+  .rule .chk{width:26px;height:26px;border-radius:8px;background:rgba(52,211,153,.14);color:var(--green);
+    display:grid;place-items:center;flex:none;font-weight:800;font-size:14px}
+  .rule b{color:var(--ink);display:block;margin-bottom:2px;font-size:14.5px}
+
+  /* ---------- footer ---------- */
+  footer{padding:40px 0 56px;text-align:center;color:var(--ink3);font-size:13px;border-top:1px solid rgba(36,49,84,.5);margin-top:44px}
+  footer .big{font-family:"Sora";font-size:18px;font-weight:800;color:var(--ink2);margin-bottom:8px}
+  footer .warn{max-width:620px;margin:14px auto 0;font-size:12px;line-height:1.7;color:var(--ink3)}
+
+  @media(max-width:680px){
+    .stats{grid-template-columns:1fr;gap:10px}
+    .split,.feat{grid-template-columns:1fr}
+    .rtable{grid-template-columns:1fr}
+    .rules{grid-template-columns:1fr}
+    .risk.low::after{top:-9px}
+    .lock{grid-template-columns:auto 1fr;grid-template-areas:"emo body" "tag tag"}
+    .lock .emo{grid-area:emo}.lock .tag{grid-area:tag;justify-self:start;margin-top:4px}
+    details p{padding-left:20px}
+  }
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="glow" aria-hidden="true"></div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <span class="badge"><span class="pulse"></span>新手完全指南</span>
+    <h1>訊號來了，<br><span class="hl">機器人自動幫你下單</span></h1>
+    <p class="lead">你不用盯盤、不用手動搶進場。訊號一出現，機器人自動下單、自動掛止損、自動鎖利。這份指南帶你 3 步上手，並教你做對兩個最重要的選擇。</p>
+    <div class="stats">
+      <div class="statcard"><div class="stat cyan">3 步</div><div class="statlbl">綁定就能開始</div></div>
+      <div class="statcard"><div class="stat green">24 小時</div><div class="statlbl">自動顧倉不睡覺</div></div>
+      <div class="statcard"><div class="stat violet">模擬倉</div><div class="statlbl">先練手不花錢</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT -->
+<section class="block">
+  <div class="wrap">
+    <div class="eyebrow">先搞懂 <span class="en">/ what is it</span></div>
+    <h2>30 秒看懂它在做什麼</h2>
+    <p class="sub">簡單講：它是一個掛在 Telegram 裡的交易助手。市場出現機會（訊號）時，它幫你出手。你可以選「它全自動幫你做」或「它通知你、你自己決定」。</p>
+    <div class="split">
+      <div class="mode auto">
+        <div class="ico">🤖</div>
+        <h3>自動模式</h3>
+        <div class="who">適合沒空盯盤的人</div>
+        <p>訊號來了，機器人立刻幫你做完整套動作，你什麼都不用按：</p>
+        <ul>
+          <li>自動進場下單</li>
+          <li>自動掛好止損（保護你）</li>
+          <li>賺到目標自動鎖利、落袋</li>
+        </ul>
+      </div>
+      <div class="mode manual">
+        <div class="ico">✋</div>
+        <h3>手動模式</h3>
+        <div class="who">適合想自己掌控的人</div>
+        <p>訊號來了，機器人發通知給你，最後一步由你決定：</p>
+        <ul>
+          <li>收到訊號通知</li>
+          <li>你看一眼、覺得可以再出手</li>
+          <li>一鍵下單，之後一樣自動顧止損</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout"><span class="k">💡</span><div>兩個可以<b>同時開</b>。很多人自動、手動一起用：讓機器人自動抓大部分機會，遇到特別想自己判斷的再手動。</div></div>
+  </div>
+</section>
+
+<!-- STEPS -->
+<section class="block">
+  <div class="wrap">
+    <div class="eyebrow">開始使用 <span class="en">/ get started</span></div>
+    <h2>三步上手</h2>
+    <p class="sub">從零到開始，只有三步。全程在 Telegram 裡完成，不用另外裝任何東西。</p>
+    <div class="steps">
+      <div class="step">
+        <div class="n">01</div>
+        <div>
+          <h3>綁定你的交易所帳號</h3>
+          <p>在機器人裡輸入 <b>/start</b>，照指示把你的 BingX API 金鑰貼進去。這一步是讓機器人「有權限幫你下單」，但它<b>不能提領你的錢</b>，只能交易。</p>
+          <div class="hint">綁好後會送出審核，通過就開通</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="n">02</div>
+        <div>
+          <h3>選擇你的模式</h3>
+          <p>決定要「自動」、「手動」、還是「兩個都要」。不確定？<b>新手建議先開自動</b>，讓機器人幫你做，你在旁邊觀察它怎麼運作。</p>
+          <div class="hint">模式隨時可以改，不用怕選錯</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="n">03</div>
+        <div>
+          <h3>叫出儀表板，開始</h3>
+          <p>點一下「📊 叫出儀表板」，就能看到你的即時倉位、獲利、還有各種開關。之後訊號來，機器人就會照你的設定動作了。</p>
+          <div class="hint">面板被訊息洗掉時，隨時再點「叫出儀表板」叫回來</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="block">
+  <div class="wrap">
+    <div class="eyebrow">你會用到的 <span class="en">/ features</span></div>
+    <h2>核心功能，一句話看懂</h2>
+    <p class="sub">不用全部記起來，用到再回來看。這些都在你的儀表板上點得到。</p>
+    <div class="feat">
+      <div class="fcard"><div class="ico">📊</div><h3>即時儀表板</h3><p>你所有倉位、浮動獲利、開關集中一頁。隨時 call 出來看，一目了然。</p></div>
+      <div class="fcard"><div class="ico">🎯</div><h3>自動鎖利</h3><p>賺到你設的目標時，自動幫你把獲利保護起來或落袋，不用自己緊張地盯著平倉。</p></div>
+      <div class="fcard"><div class="ico">🛡️</div><h3>自動止損</h3><p>每筆單進場就先掛好止損。萬一看錯方向，虧損有上限、不會無限擴大。</p></div>
+      <div class="fcard"><div class="ico">🧪</div><h3>模擬倉練習</h3><p>用假錢跑真訊號。先在模擬倉看它怎麼運作、熟悉操作，再上真錢。</p></div>
+      <div class="fcard"><div class="ico">⏸️</div><h3>隨時暫停</h3><p>不想被自動下單時，一鍵暫停。想休息、想避開行情，主動權都在你手上。</p></div>
+      <div class="fcard"><div class="ico">🔔</div><h3>訊號通知</h3><p>每個進出場都有清楚的中文通知：為什麼進、賺賠多少、接下來可能怎樣。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CHOICE 1: RISK -->
+<section class="block">
+  <div class="wrap">
+    <div class="eyebrow">最重要的選擇 ① <span class="en">/ risk level</span></div>
+    <h2>風險檔：決定你「賭多大」，不是「賭得準」</h2>
+    <p class="sub">這是新手最容易誤會的地方。風險檔調的是<b>每一筆下多大</b>——賺的時候賺多少、賠的時候賠多少，一起放大或縮小。它<b>不會讓你變得更會賺</b>。</p>
+
+    <div class="pick">
+      <div class="pick-h"><span class="ico">⚖️</span><h3>三個檔位怎麼分</h3></div>
+      <p class="note">數字代表「單筆萬一被止損，最多虧掉多少保證金」。檔位越高，機器人用的槓桿越大、倉位越大。</p>
+      <div class="rtable">
+        <div class="risk low"><div class="lv">🟢 低風險</div><div class="big">15%</div><div class="cap">觸損最多虧 15% 保證金</div><div class="for">穩、心臟舒服<br>賺得慢但睡得著</div></div>
+        <div class="risk mid"><div class="lv">🟡 中風險</div><div class="big">50%</div><div class="cap">觸損最多虧 50% 保證金</div><div class="for">攻守折衷<br>熟悉後再考慮</div></div>
+        <div class="risk high"><div class="lv">🔴 高風險</div><div class="big">100%</div><div class="cap">觸損可能虧光整筆</div><div class="for">賺賠都放大<br>錯一次傷很重</div></div>
+      </div>
+      <div class="callout"><span class="k">⚠️</span><div><b>別被「高風險賺比較多」騙了。</b>高風險只是把倉位放大，賺的時候看起來爽，但方向錯的時候，一次大虧可能把前面賺的好幾次全吐回去。<b>新手一律從低風險開始。</b></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- YOUR STOP CAP -->
+<section class="block">
+  <div class="wrap">
+    <div class="eyebrow">多一層保護 <span class="en">/ your stop cap</span></div>
+    <h2>新人虧損上限：幫每筆單設一個「我最多虧這麼多」</h2>
+    <p class="sub">系統每筆單都會自己算一個止損點，但有時候它算出來的止損放得比較寬——可能要虧不少才會停。這個功能讓你自己壓一個天花板：設 10%，就算系統想放到虧 50% 才停，也會幫你把止損拉到「虧 10% 就先出場」。</p>
+    <div class="pick">
+      <div class="pick-h"><span class="ico">🛡️</span><h3>設定每筆單你最多忍受虧多少</h3></div>
+      <p class="note">下單後，機器人把止損移到「虧本金 X%」的位置（槓桿不變，只是把止損拉近）。如果系統原本算的止損<b>本來就更嚴</b>（虧更少就停），那就保留更嚴的那個——永遠幫你選對你比較有利的一邊。</p>
+      <div class="rtable">
+        <div class="risk" style="border-color:rgba(52,211,153,.45)"><div class="lv" style="color:var(--green)">🛡️ 10%</div><div class="big" style="font-size:26px;color:var(--green)">最緊</div><div class="cap">虧到 10% 就先出場</div><div class="for">新手建議<br>虧最少</div></div>
+        <div class="risk" style="border-color:rgba(251,191,36,.4)"><div class="lv" style="color:var(--amber)">🛡️ 15%</div><div class="big" style="font-size:26px;color:var(--amber)">適中</div><div class="cap">虧到 15% 才出場</div><div class="for">給多一點空間</div></div>
+        <div class="risk" style="border-color:rgba(248,113,113,.4)"><div class="lv" style="color:var(--red)">🛡️ 20%</div><div class="big" style="font-size:26px;color:var(--red)">較寬</div><div class="cap">虧到 20% 才出場</div><div class="for">波動容忍高</div></div>
+      </div>
+      <div class="callout"><span class="k">🎚️</span><div><b>把它想成你止損的「天花板」。</b>系統算它的止損、你設你的上限，兩個<b>取比較嚴的那個</b>。這樣就不會遇到「系統把止損放很寬、結果一筆虧一大截」的狀況。<b>新手很推薦開，先設 10% 保護自己。</b>（預設是關的，要自己打開）</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CHOICE 2: LOCK MODE -->
+<section class="block">
+  <div class="wrap">
+    <div class="eyebrow">最重要的選擇 ② <span class="en">/ take-profit</span></div>
+    <h2>鎖利模式：賺到之後，怎麼守住</h2>
+    <p class="sub">當一筆單開始賺錢，機器人要「馬上落袋」還是「賭它賺更多」？這就是鎖利模式在決定的事。沒有最好的，只有最適合你個性的。</p>
+    <div class="locks">
+      <div class="lock rec">
+        <div class="emo">🎯</div>
+        <div><h4>達標直接平<span style="color:var(--green);font-size:12px;font-weight:700">　· 新手推薦</span></h4><p>到目標就落袋，不貪後面。最穩、獲利最確定，不會賺到又吐回去。</p></div>
+        <span class="tag steady">最穩</span>
+      </div>
+      <div class="lock rec">
+        <div class="emo">🔐</div>
+        <div><h4>保本鎖底<span style="color:var(--cyan);font-size:12px;font-weight:700">　· 進階新手</span></h4><p>先把止損拉到成本價（保證不虧），再讓利潤繼續跑。最差打平，有機會吃大波段。</p></div>
+        <span class="tag balance">折衷</span>
+      </div>
+      <div class="lock">
+        <div class="emo">🚀</div>
+        <div><h4>追蹤止盈</h4><p>價格一直漲就跟著追，回檔一定幅度才平。適合想抓一整段趨勢的人。</p></div>
+        <span class="tag aggr">抓波段</span>
+      </div>
+      <div class="lock">
+        <div class="emo">⏫</div>
+        <div><h4>移動鎖利 / 追蹤+TP</h4><p>階梯式一段一段鎖住利潤，適合趨勢盤。等你熟悉了、想更細緻操作時再用。</p></div>
+        <span class="tag aggr">進階</span>
+      </div>
+    </div>
+    <div class="callout"><span class="k">🧭</span><div><b>不知道選哪個？</b>想「穩穩賺、心臟舒服」選 <b>🎯 達標直接平</b>；想「至少不虧、又想搏波段」選 <b>🔐 保本鎖底</b>。其他兩個等你上手後再玩。</div></div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="block">
+  <div class="wrap">
+    <div class="eyebrow">還在猶豫？ <span class="en">/ faq</span></div>
+    <h2>新手常見問題</h2>
+    <div class="faq">
+      <details open><summary><span><span class="q">Q.</span> 它會保證我賺錢嗎？</span><span class="plus">+</span></summary><p>不會，任何說「保證獲利」的都要小心。它做的是「幫你紀律地執行」——自動進場、自動止損、自動鎖利，減少你手忙腳亂、情緒化下單。市場有輸有贏，它幫你把每一筆管好。</p></details>
+      <details><summary><span><span class="q">Q.</span> 機器人會不會偷走我的錢？</span><span class="plus">+</span></summary><p>不會。你給的是「交易權限」的 API 金鑰，設定上<b>只能下單、不能提領</b>。你的錢一直在你自己的 BingX 帳戶裡。</p></details>
+      <details><summary><span><span class="q">Q.</span> 我完全不懂交易，能用嗎？</span><span class="plus">+</span></summary><p>可以。這正是它的用途——你不用會判斷進出場。先開「自動 + 低風險」，用模擬倉觀察它怎麼做，熟悉了再上真錢。</p></details>
+      <details><summary><span><span class="q">Q.</span> 要準備多少錢才能開始？</span><span class="plus">+</span></summary><p>先用<b>模擬倉</b>（假錢）練，零成本。要上真錢時，從你「賠光也不影響生活」的小額開始，先跑順、有信心了再加。</p></details>
+      <details><summary><span><span class="q">Q.</span> 我想停止或休息怎麼辦？</span><span class="plus">+</span></summary><p>隨時一鍵暫停自動下單，主動權在你。要完全停用也可以，設定和資料都會保留，之後想回來隨時恢復。</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- SAFETY -->
+<section class="block">
+  <div class="wrap">
+    <div class="safe">
+      <div class="eyebrow">新手先記這些 <span class="en">/ safety first</span></div>
+      <h2>四條保命守則</h2>
+      <div class="rules">
+        <div class="rule"><span class="chk">✓</span><div><b>先跑模擬倉</b>用假錢熟悉一切，看懂它怎麼運作再上真錢。</div></div>
+        <div class="rule"><span class="chk">✓</span><div><b>從低風險起步</b>先求穩、先活著。賺得慢沒關係，別一開始就重傷。</div></div>
+        <div class="rule"><span class="chk">✓</span><div><b>用小額開始</b>只投「賠光也沒差」的錢，跑順了、有信心了再慢慢加。</div></div>
+        <div class="rule"><span class="chk">✓</span><div><b>別追高風險的快錢</b>看到別人高風險賺很多，那是放大倉位的運氣，回撤時傷最重。</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="big">準備好了，就從 /start 開始 🚀</div>
+    <div>有問題隨時問客服，別自己瞎猜。</div>
+    <p class="warn">風險提示：加密貨幣合約交易具高度風險，可能導致本金全部損失。本工具協助執行交易策略，不構成任何投資建議、亦不保證獲利。請僅使用您可承受損失範圍內的資金，並自行為交易結果負責。</p>
+  </div>
+</footer>
+
+</body>
+</html>
