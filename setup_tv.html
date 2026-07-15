@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI_漲_跌 設定教學（菜鳥版）</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:#0b0e11;font-family:"PingFang TC","Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif;color:#e8eaed;display:flex;justify-content:center;padding:22px 14px;-webkit-font-smoothing:antialiased;}
+  .card{width:100%;max-width:500px;background:linear-gradient(180deg,#12161c 0%,#0d1116 100%);border:1px solid #232a33;border-radius:20px;padding:26px 22px 22px;box-shadow:0 12px 40px rgba(0,0,0,.5);}
+  .head{text-align:center;margin-bottom:6px;}
+  .head h1{font-size:22px;font-weight:800;letter-spacing:.5px;}
+  .head .sub{display:inline-block;margin-top:9px;font-size:13.5px;font-weight:700;color:#0b0e11;background:#f0b90b;padding:5px 15px;border-radius:20px;}
+  .step{margin-top:20px;}
+  .step-h{display:flex;align-items:center;gap:10px;margin-bottom:11px;}
+  .num{flex:none;width:28px;height:28px;border-radius:50%;background:#2f6df6;color:#fff;font-weight:800;font-size:15px;display:flex;align-items:center;justify-content:center;}
+  .step-h .t{font-size:16.5px;font-weight:800;}
+  .body{font-size:13.5px;line-height:1.75;color:#d3d9e0;padding-left:38px;}
+  .body b{color:#fff;}
+  .row{display:flex;gap:8px;padding:3px 0;}
+  .row .k{color:#8b95a1;min-width:96px;flex:none;}
+  .row .v{color:#e8eaed;}
+  .pill{display:inline-block;background:#1c2530;border:1px solid #2c3948;border-radius:6px;padding:1px 8px;font-size:12.5px;margin:1px 0;}
+  .buy{color:#00E676;font-weight:800;}
+  .sell{color:#FF5252;font-weight:800;}
+  .note{background:#0f141a;border:1px solid #212934;border-radius:10px;padding:11px 14px;margin-top:9px;font-size:12.5px;color:#aeb6c0;line-height:1.65;}
+  .note b{color:#f0b90b;}
+  .divider{height:1px;background:#1c222a;margin:20px 0 0;}
+  .read{background:#0f141a;border:1px solid #212934;border-radius:12px;padding:14px 16px;margin-top:12px;}
+  .read li{list-style:none;font-size:13.5px;line-height:1.95;}
+  .read li b{font-weight:800;}
+  .g{color:#00E676;} .r{color:#FF5252;} .gy{color:#90A4AE;}
+  .foot{text-align:center;font-size:11px;color:#5b6572;margin-top:18px;}
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="head">
+      <h1>🐦 AI_漲_跌 設定教學</h1>
+      <div class="sub">菜鳥照著做就會 · 買賣兩個警報</div>
+    </div>
+
+    <!-- 1 -->
+    <div class="step">
+      <div class="step-h"><div class="num">1</div><div class="t">加入指標</div></div>
+      <div class="body">
+        打開 TradingView → 進到圖表 → 把「AI_漲_跌」指標<b>加到圖表</b>上。<br>
+        看到綠紅趨勢線和「漲/跌」標籤就成功了。
+      </div>
+    </div>
+
+    <!-- 2 -->
+    <div class="step">
+      <div class="step-h"><div class="num">2</div><div class="t">確認設定（預設就很好）</div></div>
+      <div class="body">
+        點指標名稱旁的<b>齒輪⚙️</b>打開設定，建議：
+        <div class="row"><span class="k">介面語言</span><span class="v"><span class="pill">繁體中文</span></span></div>
+        <div class="row"><span class="k">出現哪些訊號</span><span class="v"><span class="pill">漲跌都要</span></span></div>
+        <div class="row"><span class="k">漲跌配色</span><span class="v"><span class="pill">🟢漲 🔴跌 (國際標準)</span></span></div>
+        <div class="row"><span class="k">顏色深淺力道</span><span class="v">想看強弱就<b>勾</b>，不想就不勾</span></div>
+        <div class="row"><span class="k">🔔 強勢反轉快訊</span><span class="v"><b>勾起來</b>（賣出提醒要用）</span></div>
+        <div class="row"><span class="k">收盤確認</span><span class="v"><b>勾</b>=穩定準；<b>取消</b>=即時快</span></div>
+      </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="step">
+      <div class="step-h"><div class="num">3</div><div class="t">設兩個警報（買 + 賣）</div></div>
+      <div class="body">
+        點右上角<b>鬧鐘🔔</b> → 新增警報，「條件」選 <b>AI_漲_跌</b>，做兩個：
+        <div class="note" style="border-color:rgba(0,230,118,.35);">
+          <b style="color:#00E676;">警報①　買進</b><br>
+          條件下拉選 <span class="pill">漲訊號 Buy alert</span><br>
+          → 出現「<span class="buy">漲</span>」時通知你，準備<span class="buy">買進</span>。
+        </div>
+        <div class="note" style="border-color:rgba(255,82,82,.35);margin-top:8px;">
+          <b style="color:#FF5252;">警報②　賣出</b><br>
+          條件下拉選 <span class="pill">強綠翻紅 賣出提醒</span><br>
+          → 綠色衝強後翻紅，通知你，準備<span class="sell">賣出</span>。
+        </div>
+        <div class="note">
+          <b>觸發頻率</b>要跟「收盤確認」對齊：<br>
+          收盤確認<b>勾</b> → 選「<b>每根收盤一次</b>」（穩定）<br>
+          收盤確認<b>取消</b> → 選「<b>每根一次</b>」（即時，但可能重繪）
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 讀圖 -->
+    <div class="step">
+      <div class="step-h"><div class="num">4</div><div class="t">怎麼看盤操作</div></div>
+      <div class="read">
+        <li>🟢 看到「<span class="g">漲</span>」標籤 = 進場<b class="g">買</b></li>
+        <li>🔔 收到「<span class="r">強綠翻紅賣出</span>」快訊 = 準備<b class="r">賣</b></li>
+        <li>✨ 顏色<b>越亮=力道越強</b>，越暗=越弱</li>
+        <li><b class="g">綠</b>=漲　<b class="r">紅</b>=跌　<b class="gy">灰</b>=盤整</li>
+      </div>
+    </div>
+
+    <div class="foot">AI_漲_跌　·　僅供教學參考，不構成投資建議，請自行判斷風險</div>
+  </div>
+</body>
+</html>
