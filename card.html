@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>菜鳥看盤小卡 · AI_漲_跌(Crab)</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body{
+    background:#0b0e11;
+    font-family:"PingFang TC","Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif;
+    color:#e8eaed;
+    display:flex; justify-content:center;
+    padding:22px 14px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .card{
+    width:100%; max-width:460px;
+    background:linear-gradient(180deg,#12161c 0%,#0d1116 100%);
+    border:1px solid #232a33;
+    border-radius:20px;
+    padding:24px 22px 20px;
+    box-shadow:0 12px 40px rgba(0,0,0,.5);
+  }
+  .head{ text-align:center; margin-bottom:4px; }
+  .head h1{ font-size:21px; font-weight:800; letter-spacing:.5px; }
+  .head .sub{
+    display:inline-block; margin-top:9px;
+    font-size:14px; font-weight:700; color:#0b0e11;
+    background:#f0b90b; padding:5px 14px; border-radius:20px;
+  }
+  .sec-title{
+    font-size:13px; font-weight:700; color:#8b95a1;
+    margin:22px 0 11px; letter-spacing:1px;
+  }
+  /* 漸層力道條 */
+  .bar-wrap{ margin-bottom:14px; }
+  .bar{ height:34px; border-radius:9px; position:relative; }
+  .bar.green{ background:linear-gradient(90deg,#2E6E5A 0%,#159a80 45%,#00E676 100%); }
+  .bar.red{ background:linear-gradient(90deg,#8A5250 0%,#d13b3b 45%,#FF5252 100%); }
+  .bar-lbl{ display:flex; justify-content:space-between; margin-top:6px;
+    font-size:12.5px; color:#aeb6c0; font-weight:600; }
+  .bar-lbl b{ color:#e8eaed; }
+  .bar-cap{ font-size:13px; font-weight:700; margin-bottom:7px; }
+  .bar-cap.g{ color:#00E676; }
+  .bar-cap.r{ color:#FF5252; }
+  /* 色塊列 */
+  .row{ display:flex; align-items:center; gap:12px; padding:9px 0;
+    border-top:1px solid #1c222a; }
+  .row:first-child{ border-top:none; }
+  .sw{ width:34px; height:22px; border-radius:6px; flex:none; }
+  .row .t{ font-size:14px; }
+  .row .t b{ font-weight:800; }
+  .row .t span{ color:#98a1ac; font-size:12.5px; }
+  /* 標籤 chip */
+  .chips{ display:flex; gap:12px; }
+  .chip{ flex:1; text-align:center; border-radius:12px; padding:12px 6px; }
+  .chip .badge{ display:inline-block; font-weight:800; color:#fff;
+    padding:4px 14px; border-radius:8px; font-size:16px; margin-bottom:8px; }
+  .chip .desc{ font-size:12.5px; color:#c3cad2; line-height:1.5; }
+  .chip.up{ background:rgba(76,175,80,.10); border:1px solid rgba(76,175,80,.35); }
+  .chip.dn{ background:rgba(242,54,69,.10); border:1px solid rgba(242,54,69,.35); }
+  .chip.up .badge{ background:#4CAF50; }
+  .chip.dn .badge{ background:#F23645; }
+  /* 口訣 */
+  .rules{ background:#0f141a; border:1px solid #212934; border-radius:12px;
+    padding:14px 16px; margin-top:8px; }
+  .rules li{ list-style:none; font-size:13.5px; line-height:1.9; }
+  .rules li b{ color:#f0b90b; }
+  .foot{ text-align:center; font-size:11px; color:#5b6572; margin-top:16px; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="head">
+      <h1>🐦 菜鳥看盤小卡</h1>
+      <div class="sub">顏色 = 方向　·　亮度 = 力道</div>
+    </div>
+
+    <div class="sec-title">① 趨勢線 / K棒的顏色</div>
+
+    <div class="bar-wrap">
+      <div class="bar-cap g">綠色 = 漲</div>
+      <div class="bar green"></div>
+      <div class="bar-lbl"><span>暗綠 <b>力道弱</b>（快沒力）</span><span><b>力道強</b> 亮綠（很有勁）</span></div>
+    </div>
+
+    <div class="bar-wrap">
+      <div class="bar-cap r">紅色 = 跌</div>
+      <div class="bar red"></div>
+      <div class="bar-lbl"><span>暗紅 <b>力道弱</b>（跌趨緩）</span><span><b>力道強</b> 亮紅（跌得兇）</span></div>
+    </div>
+
+    <div class="row">
+      <div class="sw" style="background:#90A4AE;"></div>
+      <div class="t"><b>灰色</b>　<span>盤整、沒方向，多空拉鋸觀望</span></div>
+    </div>
+    <div class="row">
+      <div class="sw" style="background:#ffffff;"></div>
+      <div class="t"><b>亮白</b>（黑底限定）　<span>最強勢的多，衝勁最猛</span></div>
+    </div>
+
+    <div class="sec-title">② 漲 / 跌 標籤（翻轉訊號點）</div>
+    <div class="chips">
+      <div class="chip up">
+        <div class="badge">漲</div>
+        <div class="desc">由空翻多的<br>那一刻買點</div>
+      </div>
+      <div class="chip dn">
+        <div class="badge">跌</div>
+        <div class="desc">由多翻空的<br>那一刻賣點</div>
+      </div>
+    </div>
+
+    <div class="sec-title">③ 一句話口訣</div>
+    <div class="rules">
+      <li>🟢 <b>綠</b>=漲　🔴 <b>紅</b>=跌　⚪ <b>灰</b>=盤整</li>
+      <li>✨ 顏色<b>越亮</b> = 力道<b>越強</b>；越暗 = 越弱</li>
+      <li>🏷️ 看到 <b>漲/跌 標籤</b> = 方向剛翻轉，最該留意</li>
+      <li>⚠️ 綠色<b>轉暗</b> = 漲勢在減弱，準備可能要轉</li>
+    </div>
+
+    <div class="foot">AI_漲_跌(Crab) 2in1　·　僅供教學參考，不構成投資建議</div>
+  </div>
+</body>
+</html>
