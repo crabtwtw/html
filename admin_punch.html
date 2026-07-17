@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BingX Bot 管理員指令手冊</title>
+<style>
+:root{
+  --bg:#0B0F14; --panel:#121924; --panel2:#0E141D;
+  --line:#1E2936; --txt:#D7E0EA; --mut:#7C8B9C;
+  --cmd:#7EE8A2; --amber:#F0B429; --red:#FF6B6B; --blue:#6CB8FF;
+  --mono:"JetBrains Mono","Cascadia Code",ui-monospace,Menlo,monospace;
+  --sans:"Noto Sans TC",system-ui,-apple-system,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--txt);font-family:var(--sans);line-height:1.55;padding-bottom:70px}
+header{padding:26px 18px 14px;border-bottom:1px solid var(--line)}
+header h1{font-family:var(--mono);font-size:19px;letter-spacing:.5px;color:var(--txt)}
+header h1 .dollar{color:var(--cmd)}
+header p{color:var(--mut);font-size:12.5px;margin-top:5px}
+.searchwrap{position:sticky;top:0;z-index:9;background:linear-gradient(var(--bg) 82%,transparent);padding:12px 14px 10px}
+#q{width:100%;background:var(--panel);border:1px solid var(--line);border-radius:10px;
+   color:var(--txt);font-family:var(--mono);font-size:15px;padding:11px 14px;outline:none}
+#q:focus{border-color:var(--cmd)}
+#q::placeholder{color:#54626F}
+section{margin:20px 14px 0}
+.sec-h{display:flex;align-items:baseline;gap:8px;margin-bottom:8px;padding-left:2px}
+.sec-h h2{font-size:14.5px;font-weight:700;letter-spacing:.3px}
+.sec-h .n{font-family:var(--mono);font-size:11px;color:var(--mut)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.row{display:block;width:100%;text-align:left;background:none;border:none;border-bottom:1px solid var(--line);
+     padding:11px 14px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.row:last-child{border-bottom:none}
+.row:active{background:var(--panel2)}
+.cmd{font-family:var(--mono);font-size:14px;color:var(--cmd);word-break:break-all}
+.cmd .arg{color:var(--blue)}
+.desc{color:var(--mut);font-size:12.5px;margin-top:3px}
+.badge{display:inline-block;font-size:10px;font-family:var(--mono);border-radius:4px;
+       padding:1px 6px;margin-left:7px;vertical-align:2px}
+.b-new{background:#12331F;color:var(--cmd);border:1px solid #1E4A2E}
+.b-hot{background:#3A2A10;color:var(--amber);border:1px solid #57400F}
+.b-danger{background:#3A1416;color:var(--red);border:1px solid #572125}
+.note{color:#5E6E7E;font-size:11.5px;margin:8px 4px 0;line-height:1.6}
+.hidden{display:none}
+#toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(70px);
+  background:var(--cmd);color:#08130C;font-family:var(--mono);font-weight:700;font-size:13px;
+  padding:9px 18px;border-radius:99px;transition:transform .22s ease;pointer-events:none;z-index:99}
+#toast.show{transform:translateX(-50%) translateY(0)}
+#empty{display:none;color:var(--mut);text-align:center;padding:40px 0;font-size:13px}
+footer{color:#48576605;color:#485766;font-size:11px;text-align:center;margin-top:34px;font-family:var(--mono)}
+@media (prefers-reduced-motion: reduce){#toast{transition:none}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<header>
+  <h1><span class="dollar">$</span> BingX Bot 管理員指令手冊</h1>
+  <p>v157 · 2026-07-17 · 點任何指令 → 複製 → 貼到 Telegram 管理員機器人</p>
+</header>
+
+<div class="searchwrap"><input id="q" type="search" placeholder="搜尋指令或功能…(例:全體、pnl、關閉)" autocomplete="off"></div>
+
+<div id="list">
+
+<section>
+  <div class="sec-h"><h2>🚨 緊急總開關</h2><span class="n">出事先看這區</span></div>
+  <div class="card">
+    <button class="row" data-copy="/punch all off"><span class="cmd">/punch all off<span class="badge b-new">新</span><span class="badge b-hot">全體</span></span><div class="desc">一鍵關閉全體自動下單(靜默,客戶不收通知,自己去進階設定重開;不動既有持倉/SL)</div></button>
+    <button class="row" data-copy="/punch all vst"><span class="cmd">/punch all vst<span class="badge b-new">新</span><span class="badge b-hot">全體</span></span><div class="desc">一鍵切全體到模擬倉(不提供 all live:真實倉必須客戶自己開)</div></button>
+    <button class="row" data-copy="/進場 市價 all"><span class="cmd">/進場 市價 all</span><div class="desc">全體改市價單:漏單太多時秒切「每單都進」(會清個別名單)</div></button>
+    <button class="row" data-copy="/進場 限價 all"><span class="cmd">/進場 限價 all</span><div class="desc">全體改限價 IOC(現行):鎖死進場滑點 ≤0.5%,追不到就不進</div></button>
+    <button class="row" data-copy="/進場"><span class="cmd">/進場</span><div class="desc">看目前全體進場模式現況(含個別覆寫名單)</div></button>
+    <button class="row" data-copy="/maint"><span class="cmd">/maint</span><div class="desc">系統維護模式(暫停廣播+公告)</div></button>
+  </div>
+</section>
+
+<section>
+  <div class="sec-h"><h2>🥊 Punch 自動打點</h2></div>
+  <div class="card">
+    <button class="row" data-copy="/punch list"><span class="cmd">/punch list</span><div class="desc">查全體用戶模式:💰真實 / 🌐模擬 / ❌關閉 — 誰在實倉一眼看完</div></button>
+    <button class="row" data-copy="/punch pos "><span class="cmd">/punch pos <span class="arg">&lt;幣&gt;</span></span><div class="desc">查某幣誰在倉(方向/槓桿/保證金/真模),例:/punch pos BTC</div></button>
+    <button class="row" data-copy="/punch status"><span class="cmd">/punch status</span><div class="desc">查自己的打點狀態</div></button>
+    <button class="row" data-copy="/punch all check"><span class="cmd">/punch all check</span><div class="desc">查全體三保護設定(時段/逆勢/RR)</div></button>
+    <button class="row" data-copy="/punch all rr "><span class="cmd">/punch all rr <span class="arg">1.5</span></span><div class="desc">設全體 RR 門檻(1.0–2.5);/punch all rr on|off 開關過濾</div></button>
+    <button class="row" data-copy="/punch vst"><span class="cmd">/punch vst · live · off</span><div class="desc">切換自己的模式:模擬 / 真實 / 關閉</div></button>
+    <button class="row" data-copy="/punch risk "><span class="cmd">/punch risk <span class="arg">low|mid|high</span></span><div class="desc">風險檔=槓桿大小(打到訊號SL約 -15/-50/-100%)</div></button>
+    <button class="row" data-copy="/punch amount "><span class="cmd">/punch amount <span class="arg">&lt;金額&gt;</span></span><div class="desc">每筆保證金 USDT</div></button>
+    <button class="row" data-copy="/punch cd "><span class="cmd">/punch cd <span class="arg">&lt;分鐘&gt;</span></span><div class="desc">同幣冷卻時間(預設 15)</div></button>
+    <button class="row" data-copy="/punch limit "><span class="cmd">/punch limit <span class="arg">&lt;筆數&gt;</span></span><div class="desc">每日下單上限</div></button>
+    <button class="row" data-copy="/punch rev"><span class="cmd">/punch trend · rev · skip · raw</span><div class="desc">逆勢處理:看設定 / 翻轉反向 / 跳過(預設) / 下原方向</div></button>
+    <button class="row" data-copy="/punch reset"><span class="cmd">/punch reset</span><div class="desc">重置今日下單計數</div></button>
+    <button class="row" data-copy="/punch deadkey"><span class="cmd">/punch deadkey</span><div class="desc">查 API 失效黑名單(加 clear 清空)</div></button>
+    <button class="row" data-copy="/punch debug "><span class="cmd">/punch debug <span class="arg">[幣] [筆數] [user:id]</span></span><div class="desc">槓桿計算明細,例:/punch debug user:1234 STX 10</div></button>
+    <button class="row" data-copy="/punch rr on"><span class="cmd">/punch rr <span class="arg">on|off</span></span><div class="desc">自己的 RR 門檻過濾開關(門檻值看 /ds)</div></button>
+    <button class="row" data-copy="/punch tpt on"><span class="cmd">/punch tpt <span class="arg">on|off</span></span><div class="desc">TP 掛點:on=半TP中點(早落袋) / off=完整TP1(跑滿約2倍)</div></button>
+    <button class="row" data-copy="/punch all tpt on"><span class="cmd">/punch all tpt <span class="arg">on|off</span><span class="badge b-hot">全體</span></span><div class="desc">全體統一 TP 半/全(含沒設定過的人,真全體)</div></button>
+    <button class="row" data-copy="/punch all lockmode "><span class="cmd">/punch all lockmode <span class="arg">&lt;模式&gt;</span><span class="badge b-hot">全體</span></span><div class="desc">全體切鎖利模式:trailing / trail_pct / tp_fixed / trail_pct_tp(捷徑 /lm)</div></button>
+    <button class="row" data-copy="/buf "><span class="cmd">/buf <span class="arg">&lt;1-30&gt;</span><span class="badge b-hot">全體</span></span><div class="desc">追蹤止盈回撤緩衝%,例 /buf 8 = 回撤8%就平(全域+全體用戶)</div></button>
+  </div>
+</section>
+
+<section>
+  <div class="sec-h"><h2>👥 用戶管理</h2></div>
+  <div class="card">
+    <button class="row" data-copy="/users"><span class="cmd">/users</span><div class="desc">列出所有用戶(= /list)</div></button>
+    <button class="row" data-copy="/user "><span class="cmd">/user <span class="arg">&lt;chat_id&gt;</span></span><div class="desc">查單一用戶卡片(可按鈕:刪API/暫停/恢復/移除)</div></button>
+    <button class="row" data-copy="/uid "><span class="cmd">/uid <span class="arg">&lt;BingX UID&gt;</span></span><div class="desc">用 BingX UID 反查用戶</div></button>
+    <button class="row" data-copy="/cap"><span class="cmd">/cap <span class="arg">[n]</span></span><div class="desc">用戶開通上限:查詢/設定(8GB 主機安全承載,超標要 confirm)</div></button>
+    <button class="row" data-copy="/promote "><span class="cmd">/promote · /demote <span class="arg">&lt;id&gt;</span></span><div class="desc">升/降代理</div></button>
+    <button class="row" data-copy="/assign "><span class="cmd">/assign · /agents · /downline</span><div class="desc">代理指派 / 代理列表 / 查下線</div></button>
+    <button class="row" data-copy="/setcontact "><span class="cmd">/setcontact</span><div class="desc">設定客服聯絡資訊</div></button>
+  </div>
+</section>
+
+<section>
+  <div class="sec-h"><h2>💰 損益查詢</h2></div>
+  <div class="card">
+    <button class="row" data-copy="/stats"><span class="cmd">/stats</span><div class="desc">所有用戶本月損益摘要</div></button>
+    <button class="row" data-copy="/today"><span class="cmd">/today</span><div class="desc">所有用戶今日損益摘要</div></button>
+    <button class="row" data-copy="/losers"><span class="cmd">/losers</span><div class="desc">今日虧損 Top 5</div></button>
+    <button class="row" data-copy="/pnl "><span class="cmd">/pnl <span class="arg">&lt;chat_id&gt;</span></span><div class="desc">查單一用戶損益</div></button>
+  </div>
+</section>
+
+<section>
+  <div class="sec-h"><h2>📂 訂單管理</h2></div>
+  <div class="card">
+    <button class="row" data-copy="/orders"><span class="cmd">/orders <span class="arg">[chat_id]</span></span><div class="desc">列持倉訂單(自己/指定人)</div></button>
+    <button class="row" data-copy="/order "><span class="cmd">/order <span class="arg">&lt;symbol&gt;</span></span><div class="desc">查單筆訂單詳細(含強平距離)</div></button>
+    <button class="row" data-copy="/resettle"><span class="cmd">/resettle</span><div class="desc">手動觸發結算所有 pending 訂單</div></button>
+    <button class="row" data-copy="/clearpending "><span class="cmd">/clearpending <span class="arg">[天數]</span><span class="badge b-danger">危險</span></span><div class="desc">清空待結算訂單</div></button>
+    <button class="row" data-copy="/clearuser "><span class="cmd">/clearuser <span class="arg">&lt;id&gt; [symbol]</span><span class="badge b-danger">危險</span></span><div class="desc">清指定用戶 pending</div></button>
+    <button class="row" data-copy="/clearpnl "><span class="cmd">/clearpnl <span class="arg">me|id|all confirm</span><span class="badge b-danger">危險</span></span><div class="desc">清空 PnL 累積統計(要 confirm)</div></button>
+    <button class="row" data-copy="/fixpending confirm"><span class="cmd">/fixpending <span class="arg">[confirm]</span></span><div class="desc">修復 pending 缺漏欄位</div></button>
+    <button class="row" data-copy="/debugorders"><span class="cmd">/debugorders</span><div class="desc">查最近 5 筆訂單 DB 原始資料</div></button>
+    <button class="row" data-copy="/clearpunch "><span class="cmd">/clearpunch <span class="arg">me|id|all</span><span class="badge b-danger">危險</span></span><div class="desc">清 Punch 累積統計(已平倉紀錄)</div></button>
+  </div>
+</section>
+
+<section>
+  <div class="sec-h"><h2>🤖 全自動 /auto</h2></div>
+  <div class="card">
+    <button class="row" data-copy="/auto status"><span class="cmd">/auto status</span><div class="desc">查狀態</div></button>
+    <button class="row" data-copy="/auto vst"><span class="cmd">/auto <span class="arg">vst|live|both|off</span></span><div class="desc">切換下單環境</div></button>
+    <button class="row" data-copy="/auto skip"><span class="cmd">/auto <span class="arg">rev|skip|raw</span></span><div class="desc">逆勢處理</div></button>
+    <button class="row" data-copy="/auto summary"><span class="cmd">/auto summary · verify · debug</span><div class="desc">推昨日總結 / 對帳檢查 / 昨日訂單明細</div></button>
+    <button class="row" data-copy="/auto blocklist"><span class="cmd">/auto blocklist</span><div class="desc">看幣黑名單</div></button>
+  </div>
+</section>
+
+<section>
+  <div class="sec-h"><h2>📢 系統 / 廣播</h2></div>
+  <div class="card">
+    <button class="row" data-copy="/bc "><span class="cmd">/bc <span class="arg">&lt;內容&gt;</span><span class="badge b-danger">全體</span></span><div class="desc">廣播公告給 active 用戶(有確認步驟)</div></button>
+    <button class="row" data-copy="/board"><span class="cmd">/board</span><div class="desc">取得網頁控制台連結</div></button>
+    <button class="row" data-copy="/sym "><span class="cmd">/sym <span class="arg">&lt;關鍵字&gt;</span></span><div class="desc">搜 BingX 合約 symbol,例:/sym OIL</div></button>
+    <button class="row" data-copy="/gd on"><span class="cmd">/gd <span class="arg">on|off</span></span><div class="desc">訊號群顯示控制</div></button>
+    <button class="row" data-copy="/regflow on"><span class="cmd">/regflow <span class="arg">on|off</span></span><div class="desc">切換註冊流程</div></button>
+    <button class="row" data-copy="/ch"><span class="cmd">/ch</span><div class="desc">訊號頻道路由 A/B/C 切換</div></button>
+  </div>
+</section>
+
+<section>
+  <div class="sec-h"><h2>⚙️ 全局設定</h2></div>
+  <div class="card">
+    <button class="row" data-copy="/ds"><span class="cmd">/ds</span><div class="desc">全局預設值設定面板</div></button>
+    <button class="row" data-copy="/pf"><span class="cmd">/pf</span><div class="desc">一鍵推送全局預設給所有用戶</div></button>
+    <button class="row" data-copy="/ts"><span class="cmd">/ts</span><div class="desc">逆勢提示開關(中文 /逆勢)</div></button>
+    <button class="row" data-copy="/tm"><span class="cmd">/tm</span><div class="desc">全體接收時段設定(中文 /分鐘)</div></button>
+  </div>
+</section>
+
+<section>
+  <div class="sec-h"><h2>🔬 診斷 / WebSocket</h2></div>
+  <div class="card">
+    <button class="row" data-copy="/wsstats"><span class="cmd">/wsstats</span><div class="desc">WS 連線統計(價格斷流時先看這個)</div></button>
+    <button class="row" data-copy="/wsevents"><span class="cmd">/wsevents · /wstest</span><div class="desc">WS 事件紀錄 / 測試</div></button>
+    <button class="row" data-copy="/mpstats"><span class="cmd">/mpstats · /mpevents</span><div class="desc">標記價格串流統計 / 事件</div></button>
+    <button class="row" data-copy="/help"><span class="cmd">/help</span><div class="desc">機器人內建管理員指令總表</div></button>
+  </div>
+  <p class="note">控制台 log 關鍵字速查:<b>[SLOW-COIN]</b> 慢幣降門檻 · <b>[SL-STACK]</b> 撤舊失敗暫時疊單(有保護) · <b>[SL-SWEEP]</b> 清道夫清殘單 · <b>移動保本失敗</b> 有資料才需要緊張 · <b>110412/100410</b> 撞限頻</p>
+</section>
+
+</div>
+<p id="empty">找不到符合的指令</p>
+<div id="toast">已複製</div>
+<footer>v157 · 先掛後拆 + 60s 清道夫 + 慢幣 0.3%/0.15% · bot.chaho.com.tw</footer>
+
+<script>
+const q=document.getElementById('q'),secs=[...document.querySelectorAll('section')],empty=document.getElementById('empty');
+q.addEventListener('input',()=>{
+  const k=q.value.trim().toLowerCase();let any=false;
+  secs.forEach(s=>{
+    let vis=0;
+    s.querySelectorAll('.row').forEach(r=>{
+      const hit=!k||r.textContent.toLowerCase().includes(k);
+      r.classList.toggle('hidden',!hit);if(hit)vis++;
+    });
+    s.classList.toggle('hidden',vis===0);if(vis)any=true;
+  });
+  empty.style.display=any?'none':'block';
+});
+const toast=document.getElementById('toast');let tmr;
+document.querySelectorAll('.row').forEach(r=>{
+  r.addEventListener('click',async()=>{
+    const t=r.dataset.copy;
+    try{await navigator.clipboard.writeText(t);}
+    catch(e){const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();}
+    toast.textContent='已複製  '+t;toast.classList.add('show');
+    clearTimeout(tmr);tmr=setTimeout(()=>toast.classList.remove('show'),1400);
+  });
+});
+</script>
+</body>
+</html>
