@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BingX TGT 交易機器人 — 新手圖解使用說明</title>
+<style>
+  :root{
+    --ink:#0B1E33;        /* 深藍墨 — 主文字 */
+    --navy:#0E2A47;       /* 盤面深藍 */
+    --navy2:#143756;
+    --paper:#F5F7FA;      /* 淺灰紙 — 底色 */
+    --card:#FFFFFF;
+    --up:#12A66A;         /* 漲綠 */
+    --up-soft:#E4F5EC;
+    --down:#E24C4C;       /* 跌紅 */
+    --down-soft:#FBE9E9;
+    --gold:#E2A73B;       /* 金 — 品牌強調 */
+    --gold-soft:#FBF1DC;
+    --line:#DCE3EC;
+    --muted:#5C6B7E;
+    --shadow:0 2px 10px rgba(11,30,51,.06);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:"PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;
+    background:var(--paper); color:var(--ink); line-height:1.75;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:680px;margin:0 auto;background:var(--paper)}
+
+  /* ---------- 頂部品牌區 ---------- */
+  .hero{
+    background:linear-gradient(160deg,#0E2A47 0%,#13375C 55%,#0B1E33 100%);
+    color:#fff;padding:36px 24px 30px;text-align:center;position:relative;overflow:hidden;
+  }
+  .hero::after{ /* 背景 K 線紋理 */
+    content:"";position:absolute;inset:0;opacity:.10;
+    background-image:
+      linear-gradient(90deg,transparent 46%,#12A66A 46%,#12A66A 54%,transparent 54%),
+      linear-gradient(90deg,transparent 46%,#E24C4C 46%,#E24C4C 54%,transparent 54%);
+    background-size:26px 60px,26px 44px;
+    background-position:0 20px,13px 90px;
+    background-repeat:repeat-x;pointer-events:none;
+  }
+  .hero .badge{
+    display:inline-block;font-size:13px;letter-spacing:.18em;font-weight:700;
+    color:var(--gold);border:1px solid rgba(226,167,59,.5);border-radius:99px;
+    padding:4px 14px;margin-bottom:16px;position:relative;z-index:1;
+  }
+  .hero h1{font-size:27px;font-weight:800;letter-spacing:.01em;position:relative;z-index:1}
+  .hero h1 .tgt{color:var(--gold)}
+  .hero p{margin-top:12px;font-size:16px;color:#CBD8E6;position:relative;z-index:1}
+  .hero .ribbon{
+    display:inline-block;margin-top:18px;background:var(--gold);color:#3A2A08;
+    font-weight:800;font-size:15px;border-radius:99px;padding:9px 20px;position:relative;z-index:1;
+    box-shadow:0 4px 14px rgba(226,167,59,.35);
+  }
+
+  /* ---------- 功能選擇鈕 ---------- */
+  .menu{background:var(--navy);padding:6px 16px 24px}
+  .menu-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .chip{
+    appearance:none;border:none;cursor:pointer;font-family:inherit;
+    background:rgba(255,255,255,.08);color:#EAF1F8;font-size:15px;font-weight:600;
+    border:1px solid rgba(255,255,255,.10);border-radius:12px;padding:13px 6px;
+    transition:.15s;line-height:1.3;
+  }
+  .chip:hover,.chip:focus-visible{background:var(--gold);color:#2A1E05;border-color:var(--gold);outline:none}
+  .chip .ic{display:block;font-size:20px;margin-bottom:3px}
+
+  /* ---------- 內文區 ---------- */
+  .intro{padding:26px 22px 6px;color:var(--ink);font-size:16px}
+  .intro b{color:var(--navy)}
+  .intro .note{
+    background:var(--gold-soft);border-left:4px solid var(--gold);border-radius:0 10px 10px 0;
+    padding:12px 16px;margin-top:16px;font-size:15px;color:#5A481F;
+  }
+
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:16px;
+    margin:18px 16px;box-shadow:var(--shadow);overflow:hidden;scroll-margin-top:14px;
+  }
+  .card-head{display:flex;align-items:center;gap:12px;padding:20px 20px 6px}
+  .card-num{
+    flex:none;width:34px;height:34px;border-radius:9px;background:var(--navy);color:#fff;
+    font-weight:800;font-size:16px;display:flex;align-items:center;justify-content:center;
+  }
+  .card-head h2{font-size:20px;font-weight:800;color:var(--ink);line-height:1.35}
+  .card-body{padding:6px 20px 22px}
+  .card-body p{margin-top:10px;color:#2E3E50}
+  .lead{font-size:16px}
+  .card-body b{color:var(--navy)}
+
+  /* 步驟 */
+  .steps{margin-top:16px;border-top:1px dashed var(--line);padding-top:14px}
+  .step{display:flex;gap:12px;margin-top:14px}
+  .step .n{
+    flex:none;width:26px;height:26px;border-radius:50%;background:var(--gold-soft);color:#8A6A1B;
+    font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;margin-top:2px;
+  }
+  .step .t{font-size:15.5px;color:#2E3E50}
+  .step .t b{color:var(--navy)}
+
+  /* 提醒框 */
+  .warn{
+    background:var(--down-soft);border-left:4px solid var(--down);border-radius:0 10px 10px 0;
+    padding:12px 15px;margin-top:16px;font-size:15px;color:#8A2A2A;
+  }
+  .ok{
+    background:var(--up-soft);border-left:4px solid var(--up);border-radius:0 10px 10px 0;
+    padding:12px 15px;margin-top:16px;font-size:15px;color:#0E5E3D;
+  }
+  .fig{margin:16px 0 4px;text-align:center}
+  .fig svg{max-width:100%;height:auto;border:1px solid var(--line);border-radius:12px;background:#fff}
+  .fig .cap{font-size:13px;color:var(--muted);margin-top:7px}
+
+  /* 對照表 */
+  table.mini{width:100%;border-collapse:collapse;margin-top:16px;font-size:14.5px}
+  table.mini th,table.mini td{border:1px solid var(--line);padding:9px 10px;text-align:center}
+  table.mini th{background:var(--navy);color:#fff;font-weight:700}
+  table.mini td.k{background:#F0F4F9;font-weight:700;color:var(--navy)}
+
+  .section-label{
+    font-size:13px;letter-spacing:.16em;font-weight:800;color:var(--gold);
+    text-align:center;margin:34px 0 2px;text-transform:uppercase;
+  }
+
+  /* FAQ */
+  details.faq{background:var(--card);border:1px solid var(--line);border-radius:12px;margin:12px 16px;box-shadow:var(--shadow)}
+  details.faq summary{
+    cursor:pointer;list-style:none;padding:16px 18px;font-weight:700;font-size:16px;color:var(--navy);
+    display:flex;align-items:center;gap:10px;
+  }
+  details.faq summary::-webkit-details-marker{display:none}
+  details.faq summary .q{flex:none;width:24px;height:24px;border-radius:6px;background:var(--down-soft);color:var(--down);font-weight:800;display:flex;align-items:center;justify-content:center;font-size:14px}
+  details.faq[open] summary{border-bottom:1px dashed var(--line)}
+  details.faq .a{padding:14px 18px 18px;color:#2E3E50;font-size:15.5px}
+  details.faq .a b{color:var(--navy)}
+
+  footer{background:var(--navy);color:#AEC0D4;text-align:center;padding:26px 20px 34px;margin-top:30px;font-size:13.5px}
+  footer .brand{color:#fff;font-weight:800;font-size:16px;margin-bottom:6px}
+  footer .gold{color:var(--gold)}
+
+  .back{position:fixed;right:16px;bottom:16px;background:var(--gold);color:#2A1E05;font-weight:800;
+    border:none;border-radius:99px;padding:11px 16px;box-shadow:0 6px 18px rgba(0,0,0,.2);cursor:pointer;
+    font-size:14px;opacity:0;pointer-events:none;transition:.2s;z-index:50}
+  .back.show{opacity:1;pointer-events:auto}
+
+  @media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ===== HERO ===== -->
+  <div class="hero">
+    <span class="badge">新手圖解 · 看圖說故事</span>
+    <h1>BingX <span class="tgt">TGT</span> 交易機器人</h1>
+    <p>訊號進來自動下單、幫你移止損鎖利，<br>你只要設定好，剩下交給它。</p>
+    <span class="ribbon">📘 點下面的功能，只看你想看的</span>
+  </div>
+
+  <!-- ===== 功能選擇鈕 ===== -->
+  <nav class="menu">
+    <div class="menu-grid">
+      <button class="chip" onclick="jump('c-start')"><span class="ic">⚡</span>30秒上手</button>
+      <button class="chip" onclick="jump('c-order')"><span class="ic">📩</span>看懂通知</button>
+      <button class="chip" onclick="jump('c-target')"><span class="ic">🎯</span>目標獲利%</button>
+      <button class="chip" onclick="jump('c-mode')"><span class="ic">🔒</span>鎖利模式</button>
+      <button class="chip" onclick="jump('c-be')"><span class="ic">🛡️</span>保本鎖底</button>
+      <button class="chip" onclick="jump('c-trail')"><span class="ic">🚀</span>追蹤止盈</button>
+      <button class="chip" onclick="jump('c-ladder')"><span class="ic">⏫</span>移動鎖利</button>
+      <button class="chip" onclick="jump('c-risk')"><span class="ic">⚙️</span>風險檔</button>
+      <button class="chip" onclick="jump('c-faq')"><span class="ic">❓</span>常見問題</button>
+    </div>
+  </nav>
+
+  <!-- ===== 前言 ===== -->
+  <div class="intro">
+    這份說明是給<b>第一次用</b>的朋友看的。每個功能都配一張示意圖，你不用先懂一堆術語，照著圖看、照著步驟做就會用。
+    <div class="note">📌 下面所有圖都是<b>示意圖(手繪模擬，不是真實截圖)</b>，目的是讓你知道「東西大概長這樣、會出現在哪」。</div>
+  </div>
+
+  <!-- ===== 0. 30秒上手 ===== -->
+  <section class="card" id="c-start">
+    <div class="card-head"><div class="card-num">⚡</div><h2>30 秒上手：它在幫我做什麼？</h2></div>
+    <div class="card-body">
+      <p class="lead">簡單講三句話：<b>訊號來 → 機器人自動下單 → 之後自動幫你移止損、鎖住獲利。</b>你不用盯盤、不用手動下單。</p>
+      <div class="fig">
+        <svg viewBox="0 0 600 230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="訊號到自動交易的流程圖">
+          <rect x="16" y="80" width="150" height="70" rx="12" fill="#E4F5EC" stroke="#12A66A"/>
+          <text x="91" y="110" text-anchor="middle" font-size="15" font-weight="700" fill="#0E5E3D">① 訊號進來</text>
+          <text x="91" y="132" text-anchor="middle" font-size="12" fill="#0E5E3D">系統偵測到機會</text>
+          <rect x="225" y="80" width="150" height="70" rx="12" fill="#FBF1DC" stroke="#E2A73B"/>
+          <text x="300" y="110" text-anchor="middle" font-size="15" font-weight="700" fill="#8A6A1B">② 自動下單</text>
+          <text x="300" y="132" text-anchor="middle" font-size="12" fill="#8A6A1B">照你的設定買</text>
+          <rect x="434" y="80" width="150" height="70" rx="12" fill="#E7EEF6" stroke="#13375C"/>
+          <text x="509" y="106" text-anchor="middle" font-size="15" font-weight="700" fill="#13375C">③ 自動顧單</text>
+          <text x="509" y="127" text-anchor="middle" font-size="12" fill="#13375C">移止損·鎖獲利</text>
+          <path d="M170 115 L221 115" stroke="#9AAEC2" stroke-width="2.5" marker-end="url(#ah)"/>
+          <path d="M379 115 L430 115" stroke="#9AAEC2" stroke-width="2.5" marker-end="url(#ah)"/>
+          <text x="300" y="40" text-anchor="middle" font-size="14" fill="#5C6B7E">你只要做一件事：把設定調好 👇</text>
+          <defs><marker id="ah" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 z" fill="#9AAEC2"/></marker></defs>
+        </svg>
+        <div class="cap">訊號 → 下單 → 顧單，全自動</div>
+      </div>
+      <div class="steps">
+        <div class="step"><div class="n">1</div><div class="t"><b>選風險檔</b>(低 / 中 / 高)— 決定每單的槓桿大小。新手建議從<b>低或中</b>開始。</div></div>
+        <div class="step"><div class="n">2</div><div class="t"><b>設目標獲利% 和鎖利模式</b>— 決定機器人怎麼幫你鎖住賺到的錢(下面各功能會細講)。</div></div>
+        <div class="step"><div class="n">3</div><div class="t"><b>開啟自動</b>— 之後訊號進來它就自動跑，通知會發到這個 Telegram。</div></div>
+      </div>
+      <div class="ok">✅ 看不懂其他功能沒關係，<b>先用預設值跑</b>也可以。想懂細節再點上面的功能鈕。</div>
+    </div>
+  </section>
+
+  <!-- ===== 1. 看懂通知 ===== -->
+  <section class="card" id="c-order">
+    <div class="card-head"><div class="card-num">📩</div><h2>看懂機器人的通知</h2></div>
+    <div class="card-body">
+      <p class="lead">下單和鎖利時，機器人會發一張<b>通知卡</b>到 Telegram。看懂它，就知道你的單現在怎麼了。</p>
+      <div class="fig">
+        <svg viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="通知卡示意">
+          <rect x="30" y="20" width="540" height="260" rx="14" fill="#FCEEF0" stroke="#E9C4CB"/>
+          <text x="52" y="55" font-size="16" font-weight="800" fill="#13375C">⏫ [自動-真實] AVAX 移動鎖利啟動(第1段)</text>
+          <text x="52" y="90" font-size="14" fill="#2E3E50">💰 目前漲 <tspan font-weight="700" fill="#12A66A">+10%</tspan> = 浮動獲利 +1.01 USDT(還沒落袋)</text>
+          <text x="52" y="120" font-size="14" fill="#2E3E50">✅ SL 已移到 6.272(進場 6.266 + 0.1%)</text>
+          <text x="52" y="146" font-size="14" fill="#2E3E50">🔒 此位已鎖 <tspan font-weight="700" fill="#12A66A">+1% 獲利</tspan></text>
+          <line x1="52" y1="166" x2="548" y2="166" stroke="#E9C4CB" stroke-dasharray="4 4"/>
+          <text x="52" y="192" font-size="13.5" fill="#5C6B7E">從現在起 3 種可能：</text>
+          <text x="52" y="216" font-size="13.5" fill="#2E3E50">1️⃣ 繼續漲 → 機器人鎖更多</text>
+          <text x="52" y="238" font-size="13.5" fill="#2E3E50">2️⃣ 回跌觸 SL → 入袋(已扣手續費+滑點)</text>
+          <text x="52" y="260" font-size="13.5" fill="#2E3E50">3️⃣ 隨時可自己去 App 手動平倉</text>
+        </svg>
+        <div class="cap">通知卡示意 — 標題、獲利、SL 位置、接下來會怎樣</div>
+      </div>
+      <div class="steps">
+        <div class="step"><div class="n">✅</div><div class="t"><b>「SL 已移到 …」</b>= 機器人幫你把止損往上移了，這行出現代表你的獲利被鎖住一部分。</div></div>
+        <div class="step"><div class="n">✅</div><div class="t"><b>「交易所已掛 SL …(單號)」</b>= 交易所真的收到止損單了。<b>以這行為準</b>，不要只看 App(App 有時會延遲)。</div></div>
+        <div class="step"><div class="n">💰</div><div class="t"><b>「還沒落袋」</b>= 這是浮動獲利，還沒真的進口袋，要等平倉才算數。</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 2. 目標獲利% ===== -->
+  <section class="card" id="c-target">
+    <div class="card-head"><div class="card-num">🎯</div><h2>目標獲利%(鎖獲利觸發點)</h2></div>
+    <div class="card-body">
+      <p class="lead">這是「<b>漲到多少，機器人才開始動作</b>」的門檻。不同鎖利模式下意思略有不同，但核心都是<b>觸發點</b>。</p>
+      <div class="fig">
+        <svg viewBox="0 0 600 210" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="目標獲利觸發示意">
+          <line x1="40" y1="170" x2="560" y2="170" stroke="#DCE3EC" stroke-width="2"/>
+          <text x="40" y="192" font-size="12" fill="#5C6B7E">進場</text>
+          <line x1="40" y1="60" x2="560" y2="60" stroke="#E2A73B" stroke-width="2" stroke-dasharray="6 4"/>
+          <text x="560" y="55" text-anchor="end" font-size="13" font-weight="700" fill="#8A6A1B">目標 10% ← 觸發線</text>
+          <path d="M40 170 Q170 168 250 120 T460 66 L520 62" fill="none" stroke="#12A66A" stroke-width="3"/>
+          <circle cx="452" cy="66" r="7" fill="#E2A73B" stroke="#fff" stroke-width="2"/>
+          <text x="300" y="150" text-anchor="middle" font-size="13" fill="#5C6B7E">價格漲上來…</text>
+          <text x="452" y="42" text-anchor="middle" font-size="12.5" font-weight="700" fill="#8A6A1B">碰到就啟動</text>
+        </svg>
+        <div class="cap">漲到「目標%」這條線，機器人才開始鎖利/追蹤</div>
+      </div>
+      <div class="warn">⚠️ 有個「🚫關閉」選項：在<b>追蹤止盈</b>模式下，關閉代表「一進場就開始管理」(見「追蹤止盈」那段);在其他模式代表「放飛，照訊號原本的 TP/SL」。按下去會跳說明，看完再確認。</div>
+    </div>
+  </section>
+
+  <!-- ===== 3. 鎖利模式 ===== -->
+  <section class="card" id="c-mode">
+    <div class="card-head"><div class="card-num">🔒</div><h2>鎖利模式：四種選一種</h2></div>
+    <div class="card-body">
+      <p class="lead">決定機器人<b>用哪種方式</b>幫你顧單。挑一種就好，不確定就先用預設。</p>
+      <table class="mini">
+        <tr><th>模式</th><th>白話解釋</th><th>適合</th></tr>
+        <tr><td class="k">⏫ 移動鎖利<br>+TP1</td><td>一段一段往上鎖，有個止盈天花板</td><td>穩健</td></tr>
+        <tr><td class="k">⏫ 移動鎖利<br>(一直衝)</td><td>一段一段往上鎖，不設天花板，衝越高鎖越多</td><td>抓趨勢</td></tr>
+        <tr><td class="k">🚀 追蹤止盈</td><td>貼著最高點跟，回跌一定%就出場</td><td>抓大波段</td></tr>
+        <tr><td class="k">🎯 達標直接平</td><td>漲到目標%直接平倉了結</td><td>落袋為安</td></tr>
+      </table>
+      <div class="ok">✅ 下面「保本鎖底 / 追蹤止盈 / 移動鎖利」會各自細講，點上面的鈕跳過去看。</div>
+    </div>
+  </section>
+
+  <!-- ===== 4. 保本鎖底 ===== -->
+  <section class="card" id="c-be">
+    <div class="card-head"><div class="card-num">🛡️</div><h2>保本鎖底</h2></div>
+    <div class="card-body">
+      <p class="lead">開啟後，只要價格漲一點點，機器人就先把止損拉到<b>進場價附近</b>，讓你「<b>最差也不倒賠</b>」。</p>
+      <div class="fig">
+        <svg viewBox="0 0 600 210" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="保本鎖底示意">
+          <line x1="40" y1="120" x2="560" y2="120" stroke="#143756" stroke-width="2"/>
+          <text x="44" y="112" font-size="12" fill="#13375C">進場價</text>
+          <line x1="300" y1="108" x2="560" y2="108" stroke="#12A66A" stroke-width="2.5"/>
+          <text x="560" y="100" text-anchor="end" font-size="12.5" font-weight="700" fill="#0E5E3D">止損拉到這(進場+0.1%)</text>
+          <path d="M40 120 Q160 118 240 96 T520 60" fill="none" stroke="#12A66A" stroke-width="3"/>
+          <line x1="40" y1="170" x2="300" y2="170" stroke="#E24C4C" stroke-width="2" stroke-dasharray="5 4"/>
+          <text x="44" y="190" font-size="12" fill="#8A2A2A">原本止損在下面(較危險)</text>
+          <path d="M300 168 L300 112" stroke="#9AAEC2" stroke-width="2" marker-end="url(#ah2)"/>
+          <defs><marker id="ah2" markerWidth="9" markerHeight="9" refX="4.5" refY="7" orient="auto"><path d="M0 9 L4.5 0 L9 9 z" fill="#9AAEC2"/></marker></defs>
+        </svg>
+        <div class="cap">漲一點 → 止損從下面(紅)拉到進場價上方(綠)，不再倒賠</div>
+      </div>
+      <div class="warn">⚠️ 預設緩衝是 <b>0.1%</b>(漲一點點就鎖)。好處是<b>鎖得早、抗回撤</b>；代價是那一鎖扣掉手續費+滑點，大約打平、賺不多。真正賺是後面幾段。</div>
+    </div>
+  </section>
+
+  <!-- ===== 5. 追蹤止盈 ===== -->
+  <section class="card" id="c-trail">
+    <div class="card-head"><div class="card-num">🚀</div><h2>追蹤止盈：像影子跟著最高點</h2></div>
+    <div class="card-body">
+      <p class="lead">漲到<b>啟動門檻</b>後，止損就<b>貼著最高點</b>往上跟。只要不從最高點回跌超過你設的「<b>回撤%</b>」，它就一直抱著，衝越高鎖越多。</p>
+      <div class="fig">
+        <svg viewBox="0 0 600 230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="追蹤止盈示意">
+          <line x1="40" y1="190" x2="560" y2="190" stroke="#DCE3EC" stroke-width="2"/>
+          <text x="40" y="208" font-size="12" fill="#5C6B7E">進場</text>
+          <line x1="40" y1="150" x2="560" y2="150" stroke="#E2A73B" stroke-width="1.6" stroke-dasharray="6 4"/>
+          <text x="44" y="144" font-size="11.5" fill="#8A6A1B">啟動門檻(目標%)</text>
+          <path d="M40 190 Q140 186 200 150 T340 70 Q400 40 430 46 Q470 54 520 110"
+                fill="none" stroke="#12A66A" stroke-width="3"/>
+          <path d="M200 175 Q300 130 340 95 T430 71" fill="none" stroke="#12A66A" stroke-width="1.6" stroke-dasharray="4 3" opacity=".6"/>
+          <circle cx="404" cy="42" r="7" fill="#E2A73B" stroke="#fff" stroke-width="2"/>
+          <text x="404" y="30" text-anchor="middle" font-size="11.5" font-weight="700" fill="#8A6A1B">最高點</text>
+          <circle cx="520" cy="110" r="7" fill="#E24C4C" stroke="#fff" stroke-width="2"/>
+          <text x="520" y="128" text-anchor="middle" font-size="11.5" font-weight="700" fill="#8A2A2A">回跌X%→出場</text>
+        </svg>
+        <div class="cap">綠實線=價格，止損貼在最高點下方「回撤%」處，回跌到就結單</div>
+      </div>
+      <div class="steps">
+        <div class="step"><div class="n">1</div><div class="t"><b>啟動門檻(目標%)</b>= 漲到多少才開始追。例:設 20% → 漲到 +20% 才啟動。</div></div>
+        <div class="step"><div class="n">2</div><div class="t"><b>回撤%</b>= 從最高點回跌多少就出場。設大一點(如 15%)給行情喘息空間，較能抱住連續衝。</div></div>
+      </div>
+      <div class="warn">⚠️ <b>回撤% 不要大於門檻%</b>。例如「門檻 5% + 回撤 15%」→ 追蹤一啟動，止損就掉到進場價下方 -10%，變成倒賠。設定畫面會跳 ⚠️ 提醒你。</div>
+      <div class="ok">✅ 進階玩法:門檻設「🚫關閉」= 一進場就用回撤% 對稱管理(漲跟著跑、跌 X% 停損)。適合想從頭就管理的人。</div>
+    </div>
+  </section>
+
+  <!-- ===== 6. 移動鎖利 ===== -->
+  <section class="card" id="c-ladder">
+    <div class="card-head"><div class="card-num">⏫</div><h2>移動鎖利：一段一段往上鎖</h2></div>
+    <div class="card-body">
+      <p class="lead">價格每漲一「段」(段距 = 目標%)，就把止損往上鎖一階。像爬樓梯，越爬越高，鎖住的獲利越多。</p>
+      <div class="fig">
+        <svg viewBox="0 0 600 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="移動鎖利階梯示意">
+          <line x1="40" y1="185" x2="560" y2="185" stroke="#DCE3EC" stroke-width="2"/>
+          <text x="40" y="205" font-size="12" fill="#5C6B7E">進場</text>
+          <!-- 階梯 -->
+          <path d="M60 160 H180 V120 H300 V80 H420 V45 H540" fill="none" stroke="#12A66A" stroke-width="3"/>
+          <text x="120" y="150" text-anchor="middle" font-size="12" fill="#0E5E3D">漲10%→鎖5%</text>
+          <text x="240" y="110" text-anchor="middle" font-size="12" fill="#0E5E3D">漲20%→鎖10%</text>
+          <text x="360" y="70" text-anchor="middle" font-size="12" fill="#0E5E3D">漲30%→鎖20%</text>
+          <text x="480" y="36" text-anchor="middle" font-size="12" fill="#0E5E3D">繼續往上…</text>
+        </svg>
+        <div class="cap">每漲一段，止損跟著跳上一階(數字為示意)</div>
+      </div>
+      <table class="mini">
+        <tr><th>版本</th><th>差別</th></tr>
+        <tr><td class="k">+TP1</td><td>有止盈天花板，到頂就了結(較穩)</td></tr>
+        <tr><td class="k">一直衝</td><td>不設天花板，暴漲一路跟到底(吃大行情)</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- ===== 7. 風險檔 ===== -->
+  <section class="card" id="c-risk">
+    <div class="card-head"><div class="card-num">⚙️</div><h2>風險檔：決定槓桿大小</h2></div>
+    <div class="card-body">
+      <p class="lead">同一個訊號，機器人會依你的<b>風險檔</b>算出<b>不同槓桿</b>。檔位越高、槓桿越大、賺賠都放大。</p>
+      <table class="mini">
+        <tr><th>風險檔</th><th>槓桿</th><th>特性</th></tr>
+        <tr><td class="k">🟢 低</td><td>小</td><td>穩，被掃機率低，適合新手</td></tr>
+        <tr><td class="k">🟡 中</td><td>中</td><td>平衡</td></tr>
+        <tr><td class="k">🔴 高</td><td>大</td><td>賺快，但止損被掃時虧也大</td></tr>
+      </table>
+      <div class="warn">⚠️ 高槓桿在小幣、震盪盤容易「一進場就被止損掃掉」。新手<b>建議低或中</b>，熟悉後再考慮高。</div>
+      <div class="ok">✅ 同一訊號每個人槓桿不同是<b>正常的</b>——那是各自風險檔算出來的，不是故障。</div>
+    </div>
+  </section>
+
+  <!-- ===== FAQ ===== -->
+  <div class="section-label" id="c-faq">常見問題 · FAQ</div>
+
+  <details class="faq"><summary><span class="q">Q</span>為什麼我沒買到這一單？</summary>
+    <div class="a">最常見三個原因:<br>① <b>可用保證金不足</b>——餘額不夠下這單。<br>② <b>未平倉已達上限</b>——你設的同時持倉數滿了，要等舊單平掉。<br>③ <b>槓桿算出來太低</b>——這個訊號止損太寬，系統判斷風報比差，寧可不下。<br>這些都是<b>保護機制</b>，不是故障。</div>
+  </details>
+
+  <details class="faq"><summary><span class="q">Q</span>為什麼一進場就被止損？</summary>
+    <div class="a">通常是<b>高槓桿 + 止損較寬</b>的組合。高槓桿下，止損距離會被壓得很貼近進場價，小幣正常的波動就可能掃到。解法:<b>把風險檔調中或低</b>，止損就有更多空間。</div>
+  </details>
+
+  <details class="faq"><summary><span class="q">Q</span>同一個訊號，為什麼每個人槓桿不一樣？</summary>
+    <div class="a">因為每個人的<b>風險檔不同</b>。機器人用「風險檔 ÷ 止損成本」算出各自的槓桿，所以低風險的人槓桿小、高風險的人槓桿大。<b>這是設計，不是 bug。</b></div>
+  </details>
+
+  <details class="faq"><summary><span class="q">Q</span>鎖利通知說 +10%，但 App 顯示不一樣？</summary>
+    <div class="a">以<b>通知卡</b>和交易所<b>實際掛單</b>為準。BingX App 前端有時會<b>延遲</b>，數字暫時對不上是正常的，系統實際是對的。通知裡「交易所已掛 SL(單號)」那行就是真實狀態。</div>
+  </details>
+
+  <details class="faq"><summary><span class="q">Q</span>「還沒落袋」是什麼意思？</summary>
+    <div class="a">那是<b>浮動獲利</b>——帳面上賺的，但還沒平倉，所以還沒真的進口袋。價格回跌可能變少或變虧。要等真的平倉，才是實際入袋的錢。</div>
+  </details>
+
+  <details class="faq"><summary><span class="q">Q</span>我什麼都不懂，可以直接用嗎？</summary>
+    <div class="a">可以。<b>選低或中風險 + 用預設鎖利設定</b>就能跑。等你熟悉了、看得懂通知了，再回來點各功能細調。不用一次搞懂全部。</div>
+  </details>
+
+  <footer>
+    <div class="brand">BingX <span class="gold">TGT</span> 交易機器人</div>
+    新手圖解使用說明 · 看圖說故事<br>
+    <span style="opacity:.7">所有圖為示意，實際畫面以機器人為準</span>
+  </footer>
+
+</div>
+
+<button class="back" id="backBtn" onclick="window.scrollTo({top:0})">↑ 回選單</button>
+
+<script>
+  function jump(id){
+    var el=document.getElementById(id);
+    if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+  var bb=document.getElementById('backBtn');
+  window.addEventListener('scroll',function(){
+    if(window.scrollY>500){bb.classList.add('show')}else{bb.classList.remove('show')}
+  },{passive:true});
+</script>
+</body>
+</html>
