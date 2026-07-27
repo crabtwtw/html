@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 趨勢買賣訊號 + 高低點反轉 — 新手圖解使用說明</title>
+<style>
+  :root{
+    --buy:#10b981; --sell:#ef4444; --entry:#94a3b8; --tp:#14b8a6; --gold:#f59e0b;
+    --up:#26a69a; --down:#ef5350;
+    --ink:#1f2937; --ink2:#4b5563; --muted:#6b7280; --line:#e5e7eb;
+    --bg:#f7f8fa; --card:#ffffff; --chartbg:#131722; --chartgrid:#2a2e39;
+    --accent:#2563eb;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0; background:var(--bg); color:var(--ink);
+    font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    line-height:1.75; -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:920px; margin:0 auto; padding:0 20px 80px}
+  header.hero{background:linear-gradient(135deg,#0f172a 0%,#1e293b 55%,#14532d 100%); color:#fff; padding:56px 20px 46px; text-align:center;}
+  header.hero h1{font-size:32px; margin:0 0 10px; font-weight:800; letter-spacing:.3px}
+  header.hero .sub{font-size:17px; opacity:.92; margin:0 auto; max-width:600px}
+  .tags{font-size:24px; letter-spacing:8px; margin:14px 0 4px}
+  .badge-newbie{display:inline-block; background:#fbbf24; color:#78350f; font-weight:700; padding:4px 14px; border-radius:999px; font-size:14px; margin-top:14px}
+  h2{font-size:24px; margin:52px 0 6px; font-weight:800; display:flex; align-items:center; gap:10px}
+  h2 .num{display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; background:var(--accent); color:#fff; border-radius:10px; font-size:17px; flex:none}
+  h3{font-size:18px; margin:24px 0 4px; font-weight:700}
+  p{margin:8px 0}
+  .lead{color:var(--ink2); font-size:16px}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:22px 24px; margin:16px 0; box-shadow:0 1px 2px rgba(0,0,0,.04)}
+  .chartcard{background:var(--chartbg); border:1px solid #2a2e39; border-radius:16px; padding:14px; margin:18px 0; box-shadow:0 6px 24px rgba(15,23,42,.14)}
+  .chartcard .cap{color:#9aa4b2; font-size:13px; text-align:center; margin:8px 4px 2px}
+  .schematic{color:#64748b; font-size:12.5px; text-align:center; margin-top:6px}
+  svg{display:block; width:100%; height:auto}
+  .legend-list{list-style:none; padding:0; margin:14px 0 0}
+  .legend-list li{display:flex; gap:12px; align-items:flex-start; padding:10px 0; border-top:1px dashed var(--line)}
+  .legend-list li:first-child{border-top:none}
+  .dot{flex:none; width:26px; height:26px; border-radius:50%; background:var(--accent); color:#fff; font-weight:700; font-size:14px; display:flex; align-items:center; justify-content:center; margin-top:2px}
+  .chip{display:inline-block; padding:2px 10px; border-radius:999px; font-size:13px; font-weight:600; color:#fff}
+  .c-buy{background:var(--buy)} .c-sell{background:var(--sell)} .c-entry{background:var(--entry)} .c-tp{background:var(--tp)}
+  .grid3{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:14px}
+  .two{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+  @media(max-width:640px){.grid3,.two{grid-template-columns:1fr} header.hero h1{font-size:25px}}
+  .mode{border:1px solid var(--line); border-radius:14px; padding:16px; background:#fff}
+  .mode h4{margin:0 0 6px; font-size:16px}
+  .mode .who{color:var(--muted); font-size:13.5px}
+  .steps{counter-reset:s; list-style:none; padding:0; margin:14px 0 0}
+  .steps li{position:relative; padding:4px 0 20px 52px; counter-increment:s}
+  .steps li::before{content:counter(s); position:absolute; left:0; top:0; width:34px; height:34px; background:var(--accent); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700}
+  .steps li::after{content:""; position:absolute; left:16px; top:36px; bottom:2px; width:2px; background:var(--line)}
+  .steps li:last-child::after{display:none}
+  .callout{background:#eff6ff; border-left:4px solid var(--accent); border-radius:8px; padding:12px 16px; margin:14px 0; font-size:15px}
+  .warn{background:#fffbeb; border-left-color:#f59e0b}
+  .warn b{color:#b45309}
+  .danger{background:#fef2f2; border-left-color:#ef4444}
+  .danger b{color:#b91c1c}
+  .panelmock{display:inline-block; background:#1c2230; color:#e5e7eb; border:1px solid #2a2e39; border-radius:10px; padding:12px 18px; font-size:14px; line-height:2; text-align:left}
+  .panelmock .k{color:#9aa4b2}
+  .toc{display:flex; flex-wrap:wrap; gap:8px; margin-top:22px; justify-content:center}
+  .toc a{background:rgba(255,255,255,.12); color:#fff; text-decoration:none; padding:6px 14px; border-radius:999px; font-size:14px}
+  .toc a:hover{background:rgba(255,255,255,.24)}
+  .faq q{display:block; font-weight:700; color:var(--ink); margin-top:16px}
+  .faq q::before{content:"Q  "; color:var(--accent)}
+  .faq p{color:var(--ink2)}
+  .cheat{width:100%; border-collapse:collapse; margin:14px 0; font-size:14px}
+  .cheat th,.cheat td{border:1px solid var(--line); padding:8px 11px; text-align:left; vertical-align:top}
+  .cheat th{background:#f1f5f9; font-weight:700}
+  .cheat tr:nth-child(even) td{background:#fafbfc}
+  .cheat .grp td{background:#ecfdf5; font-weight:800; color:#065f46}
+  .cheat .def{white-space:nowrap; color:#b45309; font-weight:700}
+  .cheat .opt{font-weight:600}
+  footer{color:var(--muted); font-size:13px; text-align:center; margin-top:60px; padding-top:20px; border-top:1px solid var(--line)}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="tags">📈 🎯 🛡️</div>
+  <h1>AI 趨勢買賣訊號 ＋ 高低點反轉</h1>
+  <p class="sub">自動幫你抓多空訊號、算好進場／止損／止盈／建議槓桿，直接畫在圖上——紅框是風險、綠框是獲利。</p>
+  <div class="badge-newbie">📘 新手圖解版使用說明 · 看圖說故事</div>
+  <nav class="toc">
+    <a href="#install">加入指標</a>
+    <a href="#bigpic">看圖說故事</a>
+    <a href="#what">會幫你做什麼</a>
+    <a href="#source">訊號來源</a>
+    <a href="#trade">一筆交易</a>
+    <a href="#marker">策略標記</a>
+    <a href="#dash">儀表板</a>
+    <a href="#risk">風險設定</a>
+    <a href="#tg">Telegram</a>
+    <a href="#note">新手注意</a>
+    <a href="#cheat">速查表</a>
+    <a href="#faq">常見問題</a>
+  </nav>
+</header>
+
+<div class="wrap">
+
+  <div class="danger callout" style="margin-top:30px">
+    <b>先讀這一句：</b>這是輔助工具，不是穩賺保證，更不是投資建議。訊號會出錯、反轉單勝率本來就低，槓桿會放大虧損。<b>請務必先用歷史回放練習、用小資金或模擬測試</b>，自己確認可行再動真錢。
+  </div>
+
+  <p class="lead">
+    這份說明給<strong>第一次用</strong>的朋友。每個功能都配示意圖，照著看、照著設定就能上手。
+    下面所有圖都是<strong>示意圖（手繪模擬，不是真實截圖）</strong>，用來讓你知道「東西長怎樣、會出現在哪」。
+  </p>
+
+  <!-- 加入指標 -->
+  <h2 id="install"><span class="num">0</span>怎麼把指標加到圖表上（僅限邀請）</h2>
+  <p class="lead">這是<strong>僅限邀請（Invite-only）</strong>的指標，作者授權你的帳號後就會出現在你的清單裡，不用貼程式碼。</p>
+  <div class="card">
+    <ol class="steps">
+      <li><b>先確認已被作者授權。</b>授權完成後這個指標才會出現在你的清單；找不到就先聯絡作者。</li>
+      <li>打開 TradingView 圖表，點上方工具列 <b>「指標 Indicators（fx）」</b>。</li>
+      <li>左側點 <b>「僅限邀請的腳本 / Invite-only scripts」</b>分頁。</li>
+      <li>找到這個指標，點它就加到圖表上。要調整就點名稱旁的 <b>齒輪 ⚙️</b>。</li>
+    </ol>
+    <div class="callout">💡 這是<strong>當沖／短線</strong>取向的工具，建議在 <b>1～15 分鐘</b>週期看。搭配你的「世界開盤時間」一起用，抓大波段時段更有方向。</div>
+  </div>
+
+  <!-- 看圖說故事 -->
+  <h2 id="bigpic"><span class="num">1</span>看圖說故事：一張圖看懂一筆交易</h2>
+  <p class="lead">先給你一張「全都有」的示意圖（以一筆<strong>空單</strong>為例）。圖上 <b>①～⑤</b> 對應下方說明。</p>
+  <div class="chartcard">
+    <div id="hero"></div>
+    <div class="cap">示意圖：出現「跌」訊號 → 空單進場 → 上方紅框是風險(到止損)、下方綠框是獲利(到止盈)</div>
+  </div>
+  <ul class="legend-list">
+    <li><span class="dot">1</span><div><b>買賣訊號標記</b>：<span class="chip c-buy">漲</span> 是做多訊號、<span class="chip c-sell">跌</span> 是做空訊號。這張圖是「跌」→ 做空。</div></li>
+    <li><span class="dot">2</span><div><b>進場線</b>：訊號成立的進場價（例圖 空單 4100.70）。指標會幫你把這個價位標出來。</div></li>
+    <li><span class="dot">3</span><div><b>紅框＝風險區</b>：從進場價到<b>止損</b>的範圍。做空時止損在上面，價格漲到紅框頂就該認賠出場。</div></li>
+    <li><span class="dot">4</span><div><b>綠框＝獲利區</b>：從進場價到<b>止盈</b>的範圍。做空時止盈在下面，價格跌進綠框就是往你賺錢的方向走。</div></li>
+    <li><span class="dot">5</span><div><b>兩個止盈目標</b>：止盈1（RR1.5）、止盈2（RR2.5）。RR＝風險報酬比，RR2.5 代表賺的是賠的 2.5 倍。</div></li>
+  </ul>
+
+  <!-- 會幫你做什麼 -->
+  <h2 id="what"><span class="num">2</span>這個指標會幫你做什麼</h2>
+  <div class="grid3">
+    <div class="mode"><h4>① 自動找訊號</h4><div class="who">用 AI 趨勢偵測，幫你標出可能的多／空（漲／跌）進場點。</div></div>
+    <div class="mode"><h4>② 算好數字</h4><div class="who">自動算進場、止損、兩個止盈，還給你<strong>建議槓桿</strong>。</div></div>
+    <div class="mode"><h4>③ 畫在圖上</h4><div class="who">紅框＝風險、綠框＝獲利，一眼看懂這筆的賺賠範圍。</div></div>
+    <div class="mode"><h4>④ 推播提醒</h4><div class="who">可把訊號推到 <strong>Telegram</strong>，不用一直盯盤。</div></div>
+  </div>
+
+  <!-- 訊號來源 -->
+  <h2 id="source"><span class="num">3</span>最重要的一步：選「訊號來源」</h2>
+  <p class="lead">這是全指標<strong>最關鍵</strong>的設定，決定它用哪種邏輯抓訊號。新手先選<strong>順勢</strong>就好。</p>
+  <div class="grid3">
+    <div class="mode"><h4>🟢 順勢（新手推薦）</h4><div class="who">跟著趨勢方向做，訊號較穩、勝率較高。標記是<b>實線</b>。不知道選哪個就選這個。</div></div>
+    <div class="mode"><h4>🔴 反轉</h4><div class="who">在轉折處逆勢搶反彈／回落，賺得快但<b>勝率天生較低</b>。標記是<b>虛線</b>。進階再用。</div></div>
+    <div class="mode"><h4>⭐ 只看強高低點</h4><div class="who">只標出特別強的高低轉折點，訊號少而精，當參考位很好用。</div></div>
+  </div>
+  <div class="callout">相關細節設定：<b>樞紐強度</b>（預設 20，越大越嚴格、訊號越少）、<b>反轉確認根數</b>（預設 5，多等幾根確認更穩）、<b>趨勢方向濾網</b>（只做順著大方向的單）。新手照預設即可。</div>
+
+  <!-- 一筆交易 -->
+  <h2 id="trade"><span class="num">4</span>一筆交易怎麼看：多單 vs 空單</h2>
+  <p class="lead">多單和空單的紅框綠框位置是<strong>上下相反</strong>的，記住一個原則就好：<b>綠框永遠在你賺錢的方向、紅框永遠在你賠錢的方向</b>。</p>
+  <div class="two">
+    <div class="chartcard"><div id="mlong"></div><div class="cap">做多（漲）：綠框在上（止盈）、紅框在下（止損）</div></div>
+    <div class="chartcard"><div id="mshort"></div><div class="cap">做空（跌）：紅框在上（止損）、綠框在下（止盈）</div></div>
+  </div>
+  <p><b>RR（風險報酬比）怎麼看：</b>止盈1 RR1.5＝這段賺的是你願意賠的 1.5 倍；止盈2 RR2.5＝2.5 倍。常見做法是<b>到止盈1 先出一半、剩下抱到止盈2</b>，並把止損往進場價移動（減少風險）。</p>
+
+  <!-- 策略標記 -->
+  <h2 id="marker"><span class="num">5</span>策略標記：順 / 逆 / 強，實線 vs 虛線</h2>
+  <p class="lead">每個訊號旁會有一個小標記，告訴你這個訊號是<strong>哪種策略</strong>產生的，讓你知道它的「性格」。</p>
+  <div class="grid3">
+    <div class="mode"><h4>順</h4><div class="who">順勢訊號，<b>實線</b>框。相對穩健。</div></div>
+    <div class="mode"><h4>逆</h4><div class="who">反轉訊號，<b>虛線</b>框。搶轉折、風險較高。</div></div>
+    <div class="mode"><h4>強</h4><div class="who">強高／低點，重要的轉折參考位。</div></div>
+  </div>
+  <div class="callout">口訣：<b>實線＝順勢（穩）、虛線＝反轉（險）</b>。看到虛線框就知道這是搶反轉，要更小心、部位放小。另外圖上還有「強高／弱低參考線」，那只是<b>資訊參考</b>，不是進場訊號。</div>
+
+  <!-- 儀表板 -->
+  <h2 id="dash"><span class="num">6</span>儀表板：一眼看完這筆的重點</h2>
+  <p class="lead">角落的小面板把這筆交易的重點濃縮成幾行，不用自己在圖上找。</p>
+  <div class="card" style="text-align:center">
+    <div class="panelmock">
+      <span class="k">方向：</span><span style="color:#ef4444;font-weight:700">空 (SHORT)</span><br>
+      <span class="k">進場：</span>4100.70<br>
+      <span class="k">止損：</span><span style="color:#ef4444">4106.20　(0.13%)</span><br>
+      <span class="k">止盈1：</span><span style="color:#14b8a6">4092.44　(RR1.5)</span><br>
+      <span class="k">止盈2：</span><span style="color:#10b981">4086.94　(RR2.5)</span><br>
+      <span class="k">建議槓桿：</span><b>5x</b>
+    </div>
+    <p class="schematic">示意圖：方向、進場、止損、兩個止盈、建議槓桿一次看完</p>
+  </div>
+  <div class="callout warn"><b>建議槓桿只是「緩衝後的參考值」。</b>新手請更保守，抓 <b>3～8 倍</b>就好；槓桿越高，一個止損就傷越重。</div>
+
+  <!-- 風險設定 -->
+  <h2 id="risk"><span class="num">7</span>風險管理設定（進階，先照預設）</h2>
+  <p class="lead">這些決定止損／止盈畫多遠、槓桿怎麼建議。新手照預設就好，等熟了再微調。</p>
+  <div class="two">
+    <div class="card"><h3>止損（ATR）</h3><p>用 ATR（波動度）算止損距離，預設 <b>14 / 1.5 / 2.5%</b>。波動大時止損會自動放寬，避免被雜訊掃出場。</p></div>
+    <div class="card"><h3>止盈目標（RR）</h3><p>兩個止盈用風險報酬比設定，預設約 <b>RR 1.5 / 2.5</b>。想更快落袋就把 RR 調小、想搏大就調大。</p></div>
+    <div class="card"><h3>槓桿緩衝</h3><p>預設 <b>50 / 0.7</b>：先算出理論槓桿，再乘上緩衝係數變保守，給你一個較安全的建議值。</p></div>
+    <div class="card"><h3>只顯示最新框</h3><p>預設 <b>開</b>。只畫最近一個訊號框，畫面乾淨。想回顧歷史訊號再關掉。</p></div>
+  </div>
+
+  <!-- Telegram -->
+  <h2 id="tg"><span class="num">8</span>把訊號推到 Telegram</h2>
+  <p class="lead">不想一直盯盤？讓它在出訊號時主動推到你的 Telegram。</p>
+  <div class="card">
+    <ol class="steps">
+      <li>設定裡把<b>警報格式</b>選成 <b>Telegram</b>（或 JSON，看你的機器人要吃哪種），需要時填<b>訊息前綴</b>讓機器人辨識。</li>
+      <li>點圖表右上角<b>鬧鐘 ⏰</b>建立警報，條件選<b>這個指標</b>、觸發選 <b>「任何 alert() 函式呼叫」</b>。</li>
+      <li>把警報的<b>Webhook</b>接到你的 Telegram 機器人（依你機器人的說明設定）。</li>
+      <li>之後一出訊號，方向／進場／止損／止盈就會自動送到你的 Telegram。</li>
+    </ol>
+    <div class="callout">和「開盤前提醒」一樣，Pine 只負責發訊號，真正送出要靠 TradingView 的<b>警報</b>；沒建警報就不會推。</div>
+  </div>
+
+  <!-- 新手注意 -->
+  <h2 id="note"><span class="num">9</span>新手一定要知道的幾件事</h2>
+  <div class="card">
+    <ol class="steps">
+      <li><b>框會晚幾根K棒才出現。</b>為了可靠，指標會等訊號確認才畫，所以<b>不會</b>剛好標在最高／最低點——這是刻意的，不是誤差。</li>
+      <li><b>反轉（虛線）勝率天生較低。</b>搶轉折偶爾很甜，但錯的次數也多，部位要放小。</li>
+      <li><b>先回測再實戰。</b>用 TradingView 的歷史回放（K棒重播）走幾十筆，確認你能接受它的節奏再上場。</li>
+      <li><b>槓桿保守。</b>新手 3～8 倍，寧可少賺，先活下來。</li>
+      <li><b>訊號是輔助不是命令。</b>它幫你找位置、算數字，最後下不下單、下多少，是你的決定。</li>
+    </ol>
+  </div>
+
+  <!-- 30秒上手 -->
+  <h2 id="quick"><span class="num">✓</span>30 秒上手清單</h2>
+  <div class="card">
+    <ol class="steps">
+      <li>「訊號來源」選 <b>順勢</b>。</li>
+      <li>「只顯示最新框」保持 <b>開</b>，畫面乾淨。</li>
+      <li>週期切 <b>5 或 15 分</b>。</li>
+      <li>看儀表板的方向／止損／止盈，槓桿先抓 <b>3～8x</b>。</li>
+      <li>要推播就依第 8 步<b>建立警報</b>接 Telegram。</li>
+      <li>先<b>歷史回放</b>練習，再用小資金實戰。</li>
+    </ol>
+  </div>
+
+  <!-- 速查表 -->
+  <h2 id="cheat"><span class="num">📋</span>設定速查表</h2>
+  <p class="lead">每個選項的<strong>預設值</strong>與一句話建議。標 <b>⭐</b> 的是新手最常動的。</p>
+  <table class="cheat">
+    <tr><th>設定項目</th><th>預設</th><th>說明／建議</th></tr>
+    <tr class="grp"><td colspan="3">🎯 訊號（最重要）</td></tr>
+    <tr><td class="opt">⭐ 訊號來源</td><td class="def">順勢</td><td>順勢（新手）/ 反轉（進階、勝率低）/ 只看強高低點。新手選順勢。</td></tr>
+    <tr><td class="opt">樞紐強度</td><td class="def">20</td><td>越大越嚴格、訊號越少越精。</td></tr>
+    <tr><td class="opt">反轉確認根數</td><td class="def">5</td><td>多等幾根K棒確認，訊號更穩但更慢。</td></tr>
+    <tr><td class="opt">趨勢方向濾網</td><td class="def">開</td><td>只做順著大趨勢的單，過濾逆勢雜訊。</td></tr>
+    <tr class="grp"><td colspan="3">🛡️ 風險管理</td></tr>
+    <tr><td class="opt">ATR 止損</td><td class="def">14 / 1.5 / 2.5%</td><td>用波動度算止損距離，波動大自動放寬。</td></tr>
+    <tr><td class="opt">止盈目標（RR）</td><td class="def">約 1.5 / 2.5</td><td>兩個止盈的風險報酬比；想快落袋調小。</td></tr>
+    <tr><td class="opt">⭐ 槓桿緩衝</td><td class="def">50 / 0.7</td><td>給保守的建議槓桿；新手實際用 3–8x 就好。</td></tr>
+    <tr class="grp"><td colspan="3">🎨 顯示</td></tr>
+    <tr><td class="opt">⭐ 只顯示最新框</td><td class="def">開</td><td>只畫最近一個訊號框，畫面乾淨；回顧歷史再關。</td></tr>
+    <tr><td class="opt">趨勢帶 / 圖表配色</td><td class="def">開</td><td>價格旁的趨勢帶顏色，可關。</td></tr>
+    <tr><td class="opt">儀表板</td><td class="def">開</td><td>角落的方向／止損／止盈／槓桿面板。</td></tr>
+    <tr><td class="opt">語言</td><td class="def">繁體中文</td><td>圖上文字中／英切換。</td></tr>
+    <tr class="grp"><td colspan="3">🔔 警報</td></tr>
+    <tr><td class="opt">警報格式</td><td class="def">Telegram</td><td>Telegram 或 JSON；接 webhook 用。</td></tr>
+    <tr><td class="opt">訊息前綴</td><td class="def">（空）</td><td>給機器人辨識用的開頭字串，需要再填。</td></tr>
+  </table>
+
+  <!-- FAQ -->
+  <h2 id="faq"><span class="num">?</span>常見問題</h2>
+  <div class="card faq">
+    <q>訊號為什麼沒標在最高／最低點？</q>
+    <p>因為框會<b>等訊號確認才畫</b>，會晚幾根K棒，這是為了可靠、避免假訊號。它本來就不保證抓在極端點。</p>
+
+    <q>紅框和綠框到底哪個是賺、哪個是賠？</q>
+    <p><b>綠框永遠是獲利方向（到止盈）、紅框永遠是風險方向（到止損）</b>。做多時綠框在上、做空時綠框在下，位置會相反，但顏色意義不變。</p>
+
+    <q>建議槓桿可以直接照用嗎？</q>
+    <p>那是「緩衝後的參考值」，不是叫你一定要開這麼大。新手請更保守，<b>3～8 倍</b>就好，槓桿越高一次止損傷越重。</p>
+
+    <q>反轉模式感覺很準，可以一直用嗎？</q>
+    <p>反轉（虛線）<b>勝率天生較低</b>，甜的時候很甜、錯的時候也多。建議部位放小、以順勢為主，反轉當輔助。</p>
+
+    <q>Telegram 收不到推播？</q>
+    <p>先確認有在 TradingView <b>建立警報</b>（條件選 Any alert() function call）並把 webhook 接到你的機器人。只在設定裡選 Telegram 格式、沒建警報是不會送的。</p>
+
+    <q>可以直接照訊號無腦下單嗎？</q>
+    <p>不建議。它是<b>輔助工具</b>，會出錯。請先用歷史回放與小資金測試，確認你能接受它的節奏，再決定怎麼用。</p>
+  </div>
+
+  <footer>
+    AI 趨勢買賣訊號 ＋ 高低點反轉 · 新手圖解使用說明 ｜ 本文所有圖示皆為示意圖，實際畫面以 TradingView 為準<br>
+    本說明僅供教學，非投資建議；交易有風險，請自行評估。
+  </footer>
+</div>
+
+<script>
+(function(){
+  function el(id){return document.getElementById(id);}
+
+  // 交易設置渲染器:K棒 + 進場/止損/止盈 區塊與標籤
+  function renderTrade(cfg){
+    var W=cfg.w||880, H=cfg.h||460, PL=8, PR=cfg.pr||168, PT=16, PB=16;
+    var cs=cfg.candles;
+    var lo=Infinity, hi=-Infinity;
+    cs.forEach(function(c){lo=Math.min(lo,c.l); hi=Math.max(hi,c.h);});
+    [cfg.sl,cfg.entry,cfg.tp1,cfg.tp2].forEach(function(v){ if(v!=null){lo=Math.min(lo,v);hi=Math.max(hi,v);} });
+    var pad=(hi-lo)*0.06; lo-=pad; hi+=pad;
+    var plotW=W-PL-PR, plotH=H-PT-PB;
+    var xAt=function(i){return PL+(i+0.5)*(plotW/cs.length);};
+    var yAt=function(v){return PT+(hi-v)/(hi-lo)*plotH;};
+    var bw=Math.max(4,(plotW/cs.length)*0.5);
+    var sx=xAt(cfg.signalIdx);
+    var s='<svg viewBox="0 0 '+W+' '+H+'" role="img">';
+    var yE=yAt(cfg.entry), ySL=yAt(cfg.sl), yT2=yAt(cfg.tp2);
+    // 紅框(進場..止損) 綠框(進場..止盈2)
+    s+='<rect x="'+sx+'" y="'+Math.min(yE,ySL)+'" width="'+(W-PR-sx)+'" height="'+Math.abs(ySL-yE)+'" fill="#ef4444" fill-opacity="0.13" stroke="#ef4444" stroke-opacity="0.55"/>';
+    s+='<rect x="'+sx+'" y="'+Math.min(yE,yT2)+'" width="'+(W-PR-sx)+'" height="'+Math.abs(yT2-yE)+'" fill="#10b981" fill-opacity="0.13" stroke="#10b981" stroke-opacity="0.55"/>';
+    if(cfg.zoneText){
+      var zx=(sx+(W-PR))/2;
+      s+='<line x1="'+sx+'" y1="'+yE+'" x2="'+(W-PR)+'" y2="'+yE+'" stroke="#cbd5e1" stroke-width="1.2" stroke-dasharray="4 3"/>';
+      s+='<text x="'+(sx+4)+'" y="'+(yE-5)+'" fill="#e2e8f0" font-size="11" font-weight="700" font-family="sans-serif">'+(cfg.dir==='long'?'多 進場':'空 進場')+'</text>';
+      s+='<text x="'+zx+'" y="'+((yE+ySL)/2+4)+'" fill="#fca5a5" font-size="12.5" font-weight="700" text-anchor="middle" font-family="sans-serif">止損(紅框)</text>';
+      s+='<text x="'+zx+'" y="'+((yE+yT2)/2+4)+'" fill="#6ee7b7" font-size="12.5" font-weight="700" text-anchor="middle" font-family="sans-serif">止盈(綠框)</text>';
+    }
+    function lvl(v,color,txt){
+      var y=yAt(v);
+      s+='<line x1="'+sx+'" y1="'+y+'" x2="'+(W-PR)+'" y2="'+y+'" stroke="'+color+'" stroke-width="1.3" stroke-dasharray="4 3"/>';
+      s+='<rect x="'+(W-PR+5)+'" y="'+(y-11)+'" width="'+(PR-10)+'" height="22" rx="4" fill="'+color+'"/>';
+      s+='<text x="'+(W-PR+12)+'" y="'+(y+5)+'" fill="#fff" font-size="11.5" font-weight="700" font-family="sans-serif">'+txt+'</text>';
+    }
+    if(cfg.showLabels!==false){
+      lvl(cfg.sl,'#ef4444','止損 '+cfg.sl);
+      lvl(cfg.entry,'#64748b',(cfg.dir==='long'?'多 進場 ':'空 進場 ')+cfg.entry);
+      lvl(cfg.tp1,'#14b8a6','止盈1 '+cfg.tp1+' (RR1.5)');
+      lvl(cfg.tp2,'#10b981','止盈2 '+cfg.tp2+' (RR2.5)');
+    }
+    // K棒
+    cs.forEach(function(c,i){
+      var x=xAt(i), up=c.c>=c.o, col=up?'#26a69a':'#ef5350';
+      s+='<line x1="'+x+'" y1="'+yAt(c.h)+'" x2="'+x+'" y2="'+yAt(c.l)+'" stroke="'+col+'" stroke-width="1.3"/>';
+      var top=Math.min(yAt(c.o),yAt(c.c)), h2=Math.max(2,Math.abs(yAt(c.c)-yAt(c.o)));
+      s+='<rect x="'+(x-bw/2)+'" y="'+top+'" width="'+bw+'" height="'+h2+'" fill="'+col+'" rx="1"/>';
+    });
+    // 訊號標記(漲/跌)
+    var mx=xAt(cfg.signalIdx);
+    if(cfg.dir==='long'){
+      var my=yAt(cs[cfg.signalIdx].l)+8;
+      s+='<rect x="'+(mx-15)+'" y="'+my+'" width="30" height="22" rx="6" fill="#10b981"/>';
+      s+='<text x="'+mx+'" y="'+(my+16)+'" fill="#fff" font-size="13" font-weight="700" text-anchor="middle" font-family="sans-serif">漲</text>';
+    } else {
+      var my2=yAt(cs[cfg.signalIdx].h)-30;
+      s+='<rect x="'+(mx-15)+'" y="'+my2+'" width="30" height="22" rx="6" fill="#ef4444"/>';
+      s+='<text x="'+mx+'" y="'+(my2+16)+'" fill="#fff" font-size="13" font-weight="700" text-anchor="middle" font-family="sans-serif">跌</text>';
+    }
+    // 編號徽章
+    (cfg.badges||[]).forEach(function(b){
+      s+='<circle cx="'+b.x+'" cy="'+b.y+'" r="13" fill="#2563eb" stroke="#fff" stroke-width="2"/>';
+      s+='<text x="'+b.x+'" y="'+(b.y+4.5)+'" fill="#fff" font-size="13" font-weight="700" text-anchor="middle" font-family="sans-serif">'+b.n+'</text>';
+    });
+    s+='</svg>';
+    return s;
+  }
+
+  // 主圖:空單(對照參考截圖)
+  var heroCandles=[
+    {o:4075,h:4078,l:4074,c:4077},{o:4077,h:4080,l:4076,c:4079},{o:4079,h:4082,l:4078,c:4081},
+    {o:4081,h:4086,l:4080,c:4085},{o:4085,h:4092,l:4084,c:4091},{o:4091,h:4099,l:4090,c:4098},
+    {o:4098,h:4103,l:4097,c:4101},{o:4101,h:4102,l:4097,c:4099},{o:4099,h:4100,l:4095,c:4096},
+    {o:4096,h:4098,l:4093,c:4094},{o:4094,h:4095,l:4091,c:4092},{o:4092,h:4093,l:4089,c:4090},
+    {o:4090,h:4091,l:4087,c:4088},{o:4088,h:4089,l:4086,c:4087},{o:4087,h:4089,l:4086,c:4088},{o:4088,h:4090,l:4087,c:4089}
+  ];
+  el('hero').innerHTML=renderTrade({
+    candles:heroCandles, h:460, dir:'short', signalIdx:6,
+    sl:4106.20, entry:4100.70, tp1:4092.44, tp2:4086.94,
+    badges:[{x:335,y:55,n:'1'},{x:360,y:104,n:'2'},{x:505,y:70,n:'3'},{x:505,y:186,n:'4'},{x:660,y:234,n:'5'}]
+  });
+
+  // 多單 / 空單 對照(小圖,無編號)
+  var upC=[
+    {o:20,h:22,l:19,c:21},{o:21,h:23,l:20,c:22},{o:22,h:24,l:21,c:23},{o:23,h:27,l:22,c:26},
+    {o:26,h:30,l:25,c:29},{o:29,h:33,l:28,c:32},{o:32,h:35,l:31,c:34},{o:34,h:37,l:33,c:36},{o:36,h:39,l:35,c:38}
+  ];
+  el('mlong').innerHTML=renderTrade({
+    candles:upC, h:300, pr:14, dir:'long', signalIdx:3, showLabels:false, zoneText:true,
+    sl:22, entry:26, tp1:32, tp2:36
+  });
+  var dnC=[
+    {o:38,h:40,l:37,c:39},{o:39,h:40,l:36,c:37},{o:37,h:38,l:34,c:35},{o:35,h:36,l:31,c:32},
+    {o:32,h:34,l:30,c:31},{o:31,h:32,l:28,c:29},{o:29,h:30,l:26,c:27},{o:27,h:28,l:25,c:26},{o:26,h:28,l:24,c:25}
+  ];
+  el('mshort').innerHTML=renderTrade({
+    candles:dnC, h:300, pr:14, dir:'short', signalIdx:3, showLabels:false, zoneText:true,
+    sl:40, entry:36, tp1:30, tp2:26
+  });
+})();
+</script>
+</body>
+</html>
