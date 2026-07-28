@@ -86,6 +86,14 @@
   .faq q::before{content:"Q  "; color:var(--accent)}
   .faq p{color:var(--ink2)}
   footer{color:var(--muted); font-size:13px; text-align:center; margin-top:60px; padding-top:20px; border-top:1px solid var(--line)}
+  .quick30{background:linear-gradient(135deg,#ecfdf5,#eff6ff); border:2px solid #10b981; border-radius:18px; padding:22px 24px; margin:26px 0}
+  .quick30 h2{margin:0 0 8px; font-size:23px; color:#065f46; border:none}
+  .quick30 h4{margin:14px 0 4px; font-size:16px; color:#0f172a}
+  .quick30 ol{margin:4px 0; padding-left:24px}
+  .quick30 ol li{margin:5px 0; font-size:15.5px}
+  .quick30 .mini{display:flex; flex-wrap:wrap; gap:8px; margin-top:6px}
+  .quick30 .mini span{background:#fff; border:1px solid var(--line); border-radius:10px; padding:7px 11px; font-size:14px; line-height:1.4}
+  .qdot{display:inline-block; width:12px; height:12px; border-radius:50%; vertical-align:middle; margin-right:2px}
   .two{display:grid; grid-template-columns:1fr 1fr; gap:14px}
   .three{display:grid; grid-template-columns:repeat(3,1fr); gap:14px}
   @media(max-width:640px){.two,.three{grid-template-columns:1fr} header.hero h1{font-size:27px}}
@@ -98,6 +106,7 @@
   <p class="sub">把紐約、倫敦、東京的盤口時間畫在你的K線上，還會提醒你「哪個盤要開了、哪個盤正在跑」。</p>
   <div class="badge-newbie">📘 新手圖解版使用說明 · 看圖說故事</div>
   <nav class="toc">
+    <a href="#quick30">🐣 30秒懂</a>
     <a href="#install">加入指標</a>
     <a href="#bigpic">看圖說故事</a>
     <a href="#preset">一鍵預設</a>
@@ -123,6 +132,29 @@
     照著圖看、照著步驟點，就能上手。下面所有圖都是<strong>示意圖（手繪模擬，不是真實截圖）</strong>，
     目的是讓你知道「東西大概長這樣、會出現在哪裡」。
   </p>
+
+  <!-- 30 秒快速看懂 -->
+  <div class="quick30" id="quick30">
+    <h2>🐣 30 秒快速看懂</h2>
+    <p style="margin:2px 0 0"><b>這是什麼？</b>把東京、倫敦、紐約的<b>開盤時間</b>畫在你的K線上，還會在某個盤<b>快開盤前提醒你</b>。讓你知道「現在是哪個盤、什麼時候市場最會動」。</p>
+
+    <h4>👉 你只要做這 3 件事</h4>
+    <ol>
+      <li>「一鍵預設」選 <b>💥 大波段</b>（只留波動最大的幾個時段）。</li>
+      <li>「我的時區」選 <b>Asia/Taipei</b>（圖上就顯示台北時間）。</li>
+      <li>建一個 <b>⏰ 開盤提醒</b> 警報（做法看下面第 5 段），開盤前就會推播給你。</li>
+    </ol>
+
+    <h4>👀 圖上看到這些，代表什麼</h4>
+    <div class="mini">
+      <span><b>彩色框</b>＝某個盤的活躍時段（<span class="qdot" style="background:#3b82f6"></span>亞洲<span class="qdot" style="background:#ef4444;margin-left:6px"></span>倫敦<span class="qdot" style="background:#10b981;margin-left:6px"></span>紐約）</span>
+      <span><b>框邊變粗變深</b>＝這個盤<b>正在跑</b></span>
+      <span><b>淡色虛線框</b>＝這個盤<b>快開了</b>（預告）</span>
+      <span><b>左下小面板</b>＝現在哪個盤在跑還剩幾分 / 下一個幾點開</span>
+    </div>
+
+    <p style="margin:14px 0 0; color:#065f46"><b>就這樣！</b>其他細節不用急，下面再慢慢看圖就好。 👇</p>
+  </div>
 
   <!-- 加入指標(僅限邀請) -->
   <h2 id="install"><span class="num">0</span>怎麼把指標加到圖表上（僅限邀請）</h2>
@@ -152,7 +184,7 @@
   <ul class="legend-list">
     <li><span class="dot">1</span><div><b>時段方框</b>：每個市場的活躍時段，用一個半透明彩色方框圈起來。方框的上緣＝這段時間的最高價，下緣＝最低價。</div></li>
     <li><span class="dot">2</span><div><b>國旗＋名稱（＋當地時間）</b>：釘在方框左上角，一眼知道這是哪個盤、幾點開的（可顯示你當地時間，例如台北）。</div></li>
-    <li><span class="dot">3</span><div><b>進行中高亮 🔴</b>：正在跑的時段，邊框會加粗、右上角有一顆小圓點，讓你知道「現在就是這個盤」。</div></li>
+    <li><span class="dot">3</span><div><b>進行中高亮</b>：正在跑的時段，方框<b>邊框會加粗、顏色變深</b>（畫在框線上、不會壓到K棒）；倒數面板也會用一顆<b>該時段顏色的圓點</b>（<span style="color:#3b82f6">●</span>亞洲藍、<span style="color:#ef4444">●</span>倫敦紅、<span style="color:#10b981">●</span>紐約綠）標「進行中」。</div></li>
     <li><span class="dot">4</span><div><b>樞紐高低線</b>：從時段的最高／最低點往右延伸的虛線。價格常常會回來測試這些線，是很多人看進出場的參考。</div></li>
     <li><span class="dot">5</span><div><b>倒數面板</b>：角落的小框，告訴你「現在哪個盤在跑、還剩幾分收」以及「下一個盤幾點開、還要等多久」。</div></li>
     <li><span class="dot">6</span><div><b>振幅表</b>：各時段這次走了多少「點數」，以及跟平均比是大是小（明顯放大會標紅 🔥）。</div></li>
@@ -265,17 +297,17 @@
     <div class="two" style="align-items:center">
       <div>
         <p class="schematic" style="margin-bottom:6px">有盤在跑時 →</p>
-        <div class="panelmock">🔴 🇬🇧 倫敦 進行中 · 剩 89 分 32 秒 (收 16:00)</div>
+        <div class="panelmock"><span style="color:#ef4444">●</span> 🇬🇧 倫敦 進行中 · 剩 89 分 32 秒 (收 16:00)</div>
       </div>
       <div>
         <p class="schematic" style="margin-bottom:6px">收盤後自動換成 →</p>
-        <div class="panelmock">⏳ 下一個 🇺🇸 紐約 5:29:32 (20:00 開)</div>
+        <div class="panelmock"><span style="color:#10b981">●</span> 下一個 🇺🇸 紐約 5:29:32 (20:00 開)</div>
       </div>
     </div>
     <p class="schematic" style="margin-top:12px">示意圖：面板一次只顯示一行，會依「現在有沒有盤在跑」自動切換（括號是你的當地時間）</p>
   </div>
   <p>
-    <b>有盤在跑時</b>顯示「🔴 進行中 · 剩 X 分 Y 秒」——哪個盤正在跑、距離收盤還剩多久（有秒數會跳）。
+    <b>有盤在跑時</b>顯示「<b>●</b> 進行中 · 剩 X 分 Y 秒」——哪個盤正在跑、距離收盤還剩多久（有秒數會跳）。前面那顆<b>圓點會跟著時段變色</b>（<span style="color:#3b82f6">●</span>亞洲藍、<span style="color:#ef4444">●</span>倫敦紅、<span style="color:#10b981">●</span>紐約綠）。
     <b>等這個盤收了</b>，才換成「⏳ 下一個開盤」的倒數，告訴你下一個盤還要多久開、在你當地時間幾點開。
     <b>兩者不會同時出現</b>，是同一行輪流顯示。可在設定裡開關，位置也能選角落。
   </p>
@@ -295,16 +327,22 @@
     <ol class="steps">
       <li>設定裡把 <b>「開盤前提醒」打開</b>（新版預設已幫你開好），順便看一下要提前幾分鐘。</li>
       <li>點圖表右上角的 <b>鬧鐘圖示 ⏰</b>（Alerts），按<b>建立警報</b>。</li>
-      <li>「條件（Condition）」選 <b>這個指標（世界開盤時間）</b>。</li>
-      <li>下面那格選 <b>「任何 alert() 函式呼叫」（Any alert() function call）</b>。<b>這格最關鍵</b>，選錯就收不到。</li>
+      <li>「條件（Condition）」第一格選 <b>這個指標（世界開盤時間）</b>。<b>一定要選到「世界開盤時間」這個指標</b>，不能選到別的（例如你的買賣訊號指標）。</li>
+      <li>下面那格（第二格）挑一個：
+        <div style="margin:6px 0 0 0">
+          ・想<b>只收到開盤提醒</b>（推薦）→ 選 <b>「⏰ 開盤提醒(只提醒開盤時間)」</b>。<br>
+          ・想連樞紐突破等一起收 → 選 <b>「任何 alert() 函式呼叫」（Any alert() function call）</b>。
+        </div>
+      </li>
       <li>按 <b>建立</b>。之後每當有盤快開，你就會收到 App 推播／通知。</li>
     </ol>
     <div class="chartcard" style="margin-top:6px">
       <div id="alertdlg"></div>
-      <div class="cap">示意圖：建立警報視窗，條件那格要選「Any alert() function call」</div>
+      <div class="cap">示意圖：建立警報視窗。第一格選「世界開盤時間」，第二格想單純就選「⏰ 開盤提醒」</div>
     </div>
-    <p class="schematic">同一個警報也會一起處理「樞紐突破」「前高前低被觸及」等提醒，一次設定全部搞定。</p>
-    <div class="callout" style="margin-bottom:0">😴 沒有盤要開的時間（例如半夜、週末）<b>不會</b>亂叫。週末還有一個「週末暫停提醒」開關，預設就是開著的。</div>
+    <div class="callout danger" style="margin-bottom:10px"><b>收到「歷史新高／歷史新低」之類的訊息？</b>那<b>不是</b>這個指標發的（本指標只會發開盤提醒、樞紐突破、前高前低）。那是你圖上<b>另一個指標</b>（例如買賣訊號指標）的警報。<b>每個指標都要各自建一個警報</b>；想收開盤提醒，就要專門對「世界開盤時間」再建一個。</div>
+    <div class="callout warn" style="margin-bottom:10px"><b>提醒沒跳出來？先查這兩點：</b>①警報是不是建在<b>別的指標</b>上（第一格沒選到「世界開盤時間」）。②<b>現在是不是週末</b>——「週末暫停開盤前提醒」預設開著，六日不會提醒；做比特幣想週末也提醒，就把它關掉。</div>
+    <div class="callout" style="margin-bottom:0">😴 沒有盤要開的時間（例如半夜）<b>不會</b>亂叫，只在某個盤快開的前 N 分鐘才提醒一次。</div>
   </div>
 
   <!-- 時段的一生 -->
@@ -312,11 +350,11 @@
   <p class="lead">把「開盤前提醒」和「進行中高亮」合起來看，一個時段從頭到尾會經歷這三個階段：</p>
   <div class="chartcard">
     <div id="lifecycle"></div>
-    <div class="cap">示意圖：① 開盤前 10 分推播 → ② 進行中邊框變粗變深＋🔴圓點 → ③ 收盤後邊框淡回去</div>
+    <div class="cap">示意圖：① 開盤前淡色預告框＋推播 → ② 開盤後變正式框、邊框變粗變深 → ③ 收盤後邊框淡回去</div>
   </div>
   <div class="three">
-    <div class="card"><h3>① 開盤前 10 分</h3><p>手機收到推播「⏰ 約 10 分鐘後開盤」。<b>要先建好警報</b>（見上一段）才會送出。</p></div>
-    <div class="card"><h3>② 開盤·進行中</h3><p>方框<b>邊框變粗、顏色變深</b>，右上角多一顆<b> 🔴 圓點</b>；倒數面板也顯示「🔴 進行中 · 剩 X 分」。</p></div>
+    <div class="card"><h3>① 開盤前 10 分</h3><p>圖上先出現一個<b>淡色虛線框</b>，在未來位置預告即將到來的時段；手機也收到推播「⏰ 約 10 分鐘後開盤」（推播<b>要先建好警報</b>）。</p></div>
+    <div class="card"><h3>② 開盤·進行中</h3><p>淡色預告框變成<b>正式方框</b>，<b>邊框變粗、顏色變深</b>（畫在框線上，不擋K棒）；倒數面板顯示「<b>●</b> 進行中 · 剩 X 分」，圓點是該時段的顏色。</p></div>
     <div class="card"><h3>③ 收盤後</h3><p>邊框<b>淡回去</b>，變回一般的半透明框，代表這個盤結束了。</p></div>
   </div>
   <div class="callout">邊框其實是<b>實線</b>、不是虛線；會變的是「粗細＋深淺」。圖上真正的虛線是各時段高低點往右延伸的<b>樞紐線</b>，那是另一個功能。</div>
@@ -419,11 +457,12 @@
     <tr><td class="opt">顯示時段方框</td><td class="def">開</td><td>畫出各市場活躍時段的方框。</td></tr>
     <tr><td class="opt">顯示文字</td><td class="def">開</td><td>方框左上角的國旗＋名稱。</td></tr>
     <tr><td class="opt">只描邊不填色</td><td class="def">關</td><td>只留外框、完全不擋K棒。</td></tr>
-    <tr><td class="opt">高亮目前進行中的時段</td><td class="def">開</td><td>進行中的框邊框變粗變深＋右上角🔴圓點。</td></tr>
+    <tr><td class="opt">高亮目前進行中的時段</td><td class="def">開</td><td>進行中的框邊框變粗、顏色變深（不擋K線）。</td></tr>
+    <tr><td class="opt">開盤前先畫淡色時段框</td><td class="def">開</td><td>開盤前 N 分鐘先在未來位置畫淡色虛線框預告；開盤後由正式框接手變深。</td></tr>
     <tr><td class="opt">⭐ 時段名稱文字大小</td><td class="def">正常</td><td>手機上覺得太大就調「小 / 極小」。</td></tr>
     <tr><td class="opt">顯示下一個時段開盤倒數</td><td class="def">開</td><td>面板顯示下一個盤的開盤倒數。</td></tr>
-    <tr><td class="opt">倒數面板角落</td><td class="def">左下</td><td>放左下避免被左上的指標名稱蓋住。</td></tr>
-    <tr><td class="opt">顯示進行中與剩餘時間</td><td class="def">開</td><td>面板「🔴 進行中 · 剩 X 分 Y 秒」那行（含秒）。</td></tr>
+    <tr><td class="opt">倒數面板角落</td><td class="def">左下</td><td>放左下避免被左上的指標名稱蓋住（面板已自動往上頂一點、避開左下角 TV 浮水印）。</td></tr>
+    <tr><td class="opt">顯示進行中與剩餘時間</td><td class="def">開</td><td>面板「● 進行中 · 剩 X 分 Y 秒」那行（含秒），圓點跟著時段變色。</td></tr>
     <tr><td class="opt">⭐ 開盤前提醒</td><td class="def">開</td><td>開盤前 N 分鐘推播。<b>必須另在 TradingView 建一個警報</b>（條件選 Any alert() function call）才會真的送出。</td></tr>
     <tr><td class="opt">提前幾分鐘</td><td class="def">10</td><td>開盤前幾分鐘提醒。</td></tr>
     <tr><td class="opt">週末暫停開盤前提醒</td><td class="def">開</td><td>六日不推播提醒。</td></tr>
@@ -461,6 +500,9 @@
 
     <q>為什麼在日線圖上看不到方框？</q>
     <p>這是日內工具，超過「週期上限」（預設 30 分）就會自動隱藏，避免大週期畫面雜亂。切到 5 或 15 分鐘即可。</p>
+
+    <q>圖上出現「🥈 銀色子彈」那個框是什麼？怎麼關掉？</q>
+    <p>「銀色子彈（Silver Bullet）」是 ICT 的名詞，指紐約盤 <b>10:00–11:00（台北 22:00–23:00）</b>這一小時，是市場常出現反轉的時間窗。指標只是把這段時間<b>框起來提醒你</b>，它<b>不會下單、不發訊號</b>，就是一個時段標記框。它會出現，是因為「<b>🥈 黃金／比特幣精準時段</b>」選項<b>預設開著</b>，把原本的「紐約午休」那格自動換成了銀色子彈。<br>想關掉：點齒輪 ⚙️ →「狙擊時段」→ 取消勾選「<b>🇺🇸 紐約午休</b>」（銀色子彈就是這一格），框就不見了；或直接取消「🥈 黃金／比特幣精準時段」，那格會變回普通的「紐約午休」。</p>
 
     <q>半夜、週末會不會一直提醒我？</q>
     <p>不會。提醒只在某個盤快開的前幾分鐘觸發，其他時間安靜；週末還有「週末暫停提醒」預設開著，只有你勾選的時段才會提醒。</p>
@@ -550,7 +592,7 @@
   var heroExtra = ''
     // 倒數面板（左下）
     + '<rect x="28" y="300" width="228" height="52" rx="8" fill="#5a5a5a" fill-opacity="0.72"/>'
-    + '<text x="40" y="322" fill="#fff" font-size="12.5" font-family="sans-serif">🔴 紐約早盤 進行中 · 剩 42 分</text>'
+    + '<text x="40" y="322" font-size="12.5" font-family="sans-serif"><tspan fill="#10b981">●</tspan><tspan fill="#fff"> 紐約早盤 進行中 · 剩 42 分</tspan></text>'
     + '<text x="40" y="342" fill="#fff" font-size="12.5" font-family="sans-serif">⏳ 下一個 紐約午休  01:12:30</text>'
     // 迷你振幅表（右下）
     + '<rect x="628" y="298" width="212" height="70" rx="8" fill="#1c2230" stroke="#2a2e39"/>'
@@ -615,8 +657,8 @@
     s+='<text x="218" y="122" fill="#fff" font-size="13.5" font-family="sans-serif">世界開盤時間</text>';
     // 條件2（重點）
     s+='<rect x="205" y="146" width="350" height="34" rx="7" fill="#131722" stroke="#2563eb" stroke-width="2"/>';
-    s+='<text x="218" y="168" fill="#60a5fa" font-size="13.5" font-weight="700" font-family="sans-serif">任何 alert() 函式呼叫 ▾</text>';
-    s+='<text x="205" y="205" fill="#f59e0b" font-size="12.5" font-weight="700" font-family="sans-serif">↑ 這格要選這個！</text>';
+    s+='<text x="218" y="168" fill="#60a5fa" font-size="13" font-weight="700" font-family="sans-serif">⏰ 開盤提醒(只提醒開盤時間) ▾</text>';
+    s+='<text x="205" y="205" fill="#f59e0b" font-size="12.5" font-weight="700" font-family="sans-serif">↑ 想單純就選這個</text>';
     // 按鈕
     s+='<rect x="440" y="228" width="115" height="36" rx="8" fill="#2563eb"/>';
     s+='<text x="497" y="251" fill="#fff" font-size="14" font-weight="700" text-anchor="middle" font-family="sans-serif">建立</text>';
@@ -707,17 +749,18 @@
         s+='<rect x="'+(xs[i]-7)+'" y="'+d[i][0]+'" width="14" height="'+d[i][1]+'" fill="'+col+'" fill-opacity="'+op+'"/>';
       }
     }
-    // ① 推播泡泡
-    s+='<rect x="40" y="84" width="212" height="72" rx="12" fill="#5a5a5a" fill-opacity="0.62"/>';
-    s+='<text x="58" y="116" fill="#fff" font-size="13.5" font-family="sans-serif">⏰ 🇬🇧 倫敦</text>';
-    s+='<text x="58" y="138" fill="#fff" font-size="13.5" font-family="sans-serif">約 10 分鐘後開盤</text>';
-    s+='<text x="146" y="188" fill="#9aa4b2" font-size="12" text-anchor="middle" font-family="sans-serif">📱 手機收到推播</text>';
-    // ② 進行中:粗深邊框 + 圓點
-    s+='<rect x="330" y="84" width="150" height="106" rx="4" fill="'+R+'" fill-opacity="0.14" stroke="'+R+'" stroke-width="3"/>';
-    s+='<circle cx="480" cy="84" r="6" fill="'+R+'"/>';
+    // ① 淡色預告框 + 推播泡泡
+    s+='<rect x="44" y="56" width="204" height="24" rx="3" fill="'+R+'" fill-opacity="0.07" stroke="'+R+'" stroke-opacity="0.55" stroke-dasharray="4 3"/>';
+    s+='<text x="52" y="72" fill="'+R+'" fill-opacity="0.8" font-size="11" font-weight="700" font-family="sans-serif">🇬🇧 倫敦 即將開盤（淡色框）</text>';
+    s+='<rect x="40" y="92" width="212" height="64" rx="12" fill="#5a5a5a" fill-opacity="0.62"/>';
+    s+='<text x="58" y="120" fill="#fff" font-size="13" font-family="sans-serif">⏰ 🇬🇧 倫敦</text>';
+    s+='<text x="58" y="140" fill="#fff" font-size="13" font-family="sans-serif">約 10 分鐘後開盤</text>';
+    s+='<text x="146" y="184" fill="#9aa4b2" font-size="12" text-anchor="middle" font-family="sans-serif">📱 淡色框預告 ＋ 推播</text>';
+    // ② 進行中:粗深邊框(不放圓點)
+    s+='<rect x="330" y="84" width="150" height="106" rx="4" fill="'+R+'" fill-opacity="0.14" stroke="'+R+'" stroke-width="3.5"/>';
     s+='<text x="337" y="102" fill="'+R+'" font-size="12" font-weight="700" font-family="sans-serif">🇬🇧 倫敦</text>';
     cndls(330,1);
-    s+='<text x="405" y="212" fill="#f87171" font-size="12" text-anchor="middle" font-family="sans-serif">邊框變粗變深 ＋ 🔴圓點</text>';
+    s+='<text x="405" y="212" fill="#f87171" font-size="12" text-anchor="middle" font-family="sans-serif">邊框變粗變深（不擋K線）</text>';
     // ③ 收盤後:細淡邊框
     s+='<rect x="624" y="84" width="150" height="106" rx="4" fill="'+R+'" fill-opacity="0.07" stroke="'+R+'" stroke-opacity="0.35" stroke-width="1"/>';
     s+='<text x="631" y="102" fill="'+R+'" fill-opacity="0.6" font-size="12" font-weight="700" font-family="sans-serif">🇬🇧 倫敦</text>';
