@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 漲跌訊號 (AI_漲_跌3) — 新手圖解使用說明</title>
+<style>
+  :root{
+    --up:#00e676; --upweak:#0e4d34; --down:#ff5252; --downweak:#6e2323; --star:#ffc107;
+    --ink:#1f2937; --ink2:#4b5563; --muted:#6b7280; --line:#e5e7eb;
+    --bg:#f7f8fa; --card:#ffffff; --chartbg:#0e1116; --chartgrid:#232833;
+    --accent:#2563eb;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0; background:var(--bg); color:var(--ink);
+    font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    line-height:1.75; -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:920px; margin:0 auto; padding:0 20px 80px}
+  header.hero{background:linear-gradient(135deg,#0b1220 0%,#132033 55%,#0e3b2a 100%); color:#fff; padding:54px 20px 46px; text-align:center;}
+  header.hero h1{font-size:31px; margin:0 0 10px; font-weight:800}
+  header.hero .sub{font-size:17px; opacity:.92; margin:0 auto; max-width:600px}
+  .tags{font-size:24px; letter-spacing:8px; margin:14px 0 4px}
+  .badge-newbie{display:inline-block; background:#fbbf24; color:#78350f; font-weight:700; padding:4px 14px; border-radius:999px; font-size:14px; margin-top:14px}
+  h2{font-size:24px; margin:52px 0 6px; font-weight:800; display:flex; align-items:center; gap:10px}
+  h2 .num{display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; background:var(--accent); color:#fff; border-radius:10px; font-size:17px; flex:none}
+  h3{font-size:18px; margin:24px 0 4px; font-weight:700}
+  p{margin:8px 0}
+  .lead{color:var(--ink2); font-size:16px}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:22px 24px; margin:16px 0; box-shadow:0 1px 2px rgba(0,0,0,.04)}
+  .chartcard{background:var(--chartbg); border:1px solid #232833; border-radius:16px; padding:14px; margin:18px 0; box-shadow:0 6px 24px rgba(8,12,20,.18)}
+  .chartcard .cap{color:#9aa4b2; font-size:13px; text-align:center; margin:8px 4px 2px}
+  .schematic{color:#64748b; font-size:12.5px; text-align:center; margin-top:6px}
+  svg{display:block; width:100%; height:auto}
+  .legend-list{list-style:none; padding:0; margin:14px 0 0}
+  .legend-list li{display:flex; gap:12px; align-items:flex-start; padding:10px 0; border-top:1px dashed var(--line)}
+  .legend-list li:first-child{border-top:none}
+  .dot{flex:none; width:26px; height:26px; border-radius:50%; background:var(--accent); color:#fff; font-weight:700; font-size:14px; display:flex; align-items:center; justify-content:center; margin-top:2px}
+  .grid3{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:14px}
+  .two{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+  @media(max-width:640px){.grid3,.two{grid-template-columns:1fr} header.hero h1{font-size:25px}}
+  .mode{border:1px solid var(--line); border-radius:14px; padding:16px; background:#fff}
+  .mode h4{margin:0 0 6px; font-size:16px}
+  .mode .who{color:var(--muted); font-size:13.5px}
+  .steps{counter-reset:s; list-style:none; padding:0; margin:14px 0 0}
+  .steps li{position:relative; padding:4px 0 20px 52px; counter-increment:s}
+  .steps li::before{content:counter(s); position:absolute; left:0; top:0; width:34px; height:34px; background:var(--accent); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700}
+  .steps li::after{content:""; position:absolute; left:16px; top:36px; bottom:2px; width:2px; background:var(--line)}
+  .steps li:last-child::after{display:none}
+  .callout{background:#eff6ff; border-left:4px solid var(--accent); border-radius:8px; padding:12px 16px; margin:14px 0; font-size:15px}
+  .warn{background:#fffbeb; border-left-color:#f59e0b} .warn b{color:#b45309}
+  .danger{background:#fef2f2; border-left-color:#ef4444} .danger b{color:#b91c1c}
+  .toc{display:flex; flex-wrap:wrap; gap:8px; margin-top:22px; justify-content:center}
+  .toc a{background:rgba(255,255,255,.12); color:#fff; text-decoration:none; padding:6px 14px; border-radius:999px; font-size:14px}
+  .toc a:hover{background:rgba(255,255,255,.24)}
+  .faq q{display:block; font-weight:700; color:var(--ink); margin-top:16px}
+  .faq q::before{content:"Q  "; color:var(--accent)}
+  .faq p{color:var(--ink2)}
+  .cheat{width:100%; border-collapse:collapse; margin:14px 0; font-size:14px}
+  .cheat th,.cheat td{border:1px solid var(--line); padding:8px 11px; text-align:left; vertical-align:top}
+  .cheat th{background:#f1f5f9; font-weight:700}
+  .cheat tr:nth-child(even) td{background:#fafbfc}
+  .cheat .grp td{background:#ecfdf5; font-weight:800; color:#065f46}
+  .cheat .def{white-space:nowrap; color:#b45309; font-weight:700}
+  .cheat .opt{font-weight:600}
+  .quick30{background:linear-gradient(135deg,#ecfdf5,#eff6ff); border:2px solid #00c46a; border-radius:18px; padding:22px 24px; margin:26px 0}
+  .quick30 h2{margin:0 0 8px; font-size:23px; color:#065f46; border:none}
+  .quick30 h4{margin:14px 0 4px; font-size:16px; color:#0f172a}
+  .quick30 ol{margin:4px 0; padding-left:24px} .quick30 ol li{margin:5px 0; font-size:15.5px}
+  .quick30 .mini{display:flex; flex-wrap:wrap; gap:8px; margin-top:6px}
+  .quick30 .mini span{background:#fff; border:1px solid var(--line); border-radius:10px; padding:7px 11px; font-size:14px; line-height:1.4}
+  .chip{display:inline-block; padding:2px 10px; border-radius:999px; font-size:13px; font-weight:700; color:#fff}
+  footer{color:var(--muted); font-size:13px; text-align:center; margin-top:60px; padding-top:20px; border-top:1px solid var(--line)}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="tags">📈 🌈 ⭐</div>
+  <h1>AI 漲跌訊號（AI_漲_跌3）</h1>
+  <p class="sub">用一條會轉色的趨勢線抓多空方向，翻轉時標「漲／跌」，還會用顏色深淺表示力道、在大頂大底標星星。</p>
+  <div class="badge-newbie">📘 新手圖解版使用說明 · 看圖說故事</div>
+  <nav class="toc">
+    <a href="#quick30">🐣 30秒懂</a>
+    <a href="#install">加入指標</a>
+    <a href="#bigpic">看圖說故事</a>
+    <a href="#what">會做什麼</a>
+    <a href="#knobs">兩個旋鈕</a>
+    <a href="#signal">漲跌訊號</a>
+    <a href="#star">星星</a>
+    <a href="#strength">力道濃淡</a>
+    <a href="#color">配色語言</a>
+    <a href="#alert">警報</a>
+    <a href="#note">新手注意</a>
+    <a href="#cheat">速查表</a>
+    <a href="#faq">常見問題</a>
+  </nav>
+</header>
+
+<div class="wrap">
+
+  <div class="danger callout" style="margin-top:30px">
+    <b>先讀這一句：</b>這是輔助判斷工具，不是穩賺保證，也不是投資建議。訊號會出錯、即時模式會重繪（先出現又消失）。<b>請先用歷史回放與小資金測試</b>，確認你能接受它的節奏再實戰。
+  </div>
+
+  <p class="lead">這份給<strong>第一次用</strong>的朋友。每個功能都配示意圖，照著看就懂。下面所有圖都是<strong>示意圖（手繪模擬，不是真實截圖）</strong>。</p>
+
+  <!-- 30秒 -->
+  <div class="quick30" id="quick30">
+    <h2>🐣 30 秒快速看懂</h2>
+    <p style="margin:2px 0 0"><b>這是什麼？</b>它幫你判斷「現在是漲勢還是跌勢」，方向一翻轉就標<b>漲</b>或<b>跌</b>，並用<b>顏色深淺</b>告訴你這一根力道強不強，還會在<b>大頂大底標⭐</b>。</p>
+    <h4>👉 新手這樣用</h4>
+    <ol>
+      <li>維持<b>預設</b>就好（趨勢線、力道濃淡、只標最高低點都幫你開好了）。</li>
+      <li>看到 <b>綠漲 / 紅跌</b> 標籤＝趨勢翻轉了；⭐＝可能到大頂或大底。</li>
+      <li>要手機提醒就建一個<b>警報</b>（選「漲跌都要」或「星星」）。</li>
+    </ol>
+    <h4>👀 圖上看到這些</h4>
+    <div class="mini">
+      <span><b>那條會轉色的線</b>＝趨勢線（<span style="color:#00b869">綠</span>＝漲勢、<span style="color:#e23b3b">紅</span>＝跌勢）</span>
+      <span><b>漲／跌 標籤</b>＝方向翻轉的進場參考</span>
+      <span><b>K棒越亮</b>＝力道越強、越暗＝越弱</span>
+      <span><b>⭐ 金色星星</b>＝大波段的頂或底</span>
+    </div>
+    <p style="margin:14px 0 0; color:#065f46"><b>就這樣！</b>其他細節下面再慢慢看。 👇</p>
+  </div>
+
+  <!-- 加入指標 -->
+  <h2 id="install"><span class="num">0</span>怎麼把指標加到圖表上（僅限邀請）</h2>
+  <div class="card">
+    <ol class="steps">
+      <li><b>先確認已被作者授權。</b>授權後它才會出現在你的清單；找不到就先聯絡作者。</li>
+      <li>打開圖表，點上方 <b>「指標 Indicators（fx）」</b>。</li>
+      <li>左側點 <b>「僅限邀請的腳本」</b>分頁。</li>
+      <li>找到 <b>AI_漲_跌3</b> 點它加到圖表。要調整就點名稱旁的 <b>齒輪 ⚙️</b>。</li>
+    </ol>
+    <div class="callout">💡 這是短線工具，建議 <b>5～15 分鐘</b>週期。它會直接畫在你的K線上（overlay）。</div>
+  </div>
+
+  <!-- 看圖說故事 -->
+  <h2 id="bigpic"><span class="num">1</span>看圖說故事：一張圖看懂</h2>
+  <p class="lead">圖上 <b>①～⑤</b> 對應下方說明。</p>
+  <div class="chartcard">
+    <div id="hero"></div>
+    <div class="cap">示意圖：趨勢線轉紅→標「跌」＋頂部⭐；轉綠→標「漲」＋底部⭐；K棒越亮力道越強</div>
+  </div>
+  <ul class="legend-list">
+    <li><span class="dot">1</span><div><b>趨勢線（會轉色）</b>：跟著價格走的一條線，<span style="color:#00b869;font-weight:700">綠色＝漲勢</span>、<span style="color:#e23b3b;font-weight:700">紅色＝跌勢</span>。它就是這個指標的核心，方向都看它。</div></li>
+    <li><span class="dot">2</span><div><b>漲 標籤（綠）</b>：趨勢由跌翻漲時，在K棒下方冒出「漲」（英文版 Buy）＝做多參考點。</div></li>
+    <li><span class="dot">3</span><div><b>跌 標籤（紅）</b>：趨勢由漲翻跌時，在K棒上方冒出「跌」（英文版 Sell）＝做空參考點。</div></li>
+    <li><span class="dot">4</span><div><b>⭐ 金色星星</b>：標在<b>大波段的頂／底</b>（預設「只標最高／最低點」），提醒你這裡可能是轉折的極端點。</div></li>
+    <li><span class="dot">5</span><div><b>K棒顏色深淺＝力道</b>：同樣是漲，<b>越亮＝這根衝得越強、越暗＝越弱</b>（跌同理）。這是預設就幫你開好的。</div></li>
+  </ul>
+
+  <!-- 會做什麼 -->
+  <h2 id="what"><span class="num">2</span>這個指標會幫你做什麼</h2>
+  <div class="grid3">
+    <div class="mode"><h4>① 判斷方向</h4><div class="who">用一條「範圍過濾」趨勢線，濾掉小雜訊，告訴你現在偏漲還是偏跌。</div></div>
+    <div class="mode"><h4>② 標漲跌點</h4><div class="who">方向一翻轉就標<b>漲／跌</b>，當作進出場的參考時機。</div></div>
+    <div class="mode"><h4>③ 看力道</h4><div class="who">用顏色深淺表示這根K的強弱，<b>亮=強、暗=弱</b>，一眼判斷動能。</div></div>
+    <div class="mode"><h4>④ 抓頂底</h4><div class="who">在大波段的頂、底標⭐，提醒可能的轉折極端點。</div></div>
+  </div>
+
+  <!-- 兩個旋鈕 -->
+  <h2 id="knobs"><span class="num">3</span>兩個最重要的旋鈕：控制「訊號多還是少」</h2>
+  <p class="lead">新手其實不用動，但你如果覺得訊號太多太雜、或太少太慢，就是調這兩個。</p>
+  <div class="two">
+    <div class="card"><h3>取樣週期 Sampling Period（預設 100）</h3><p>趨勢線要參考<b>多少根K棒</b>。<b>調大</b>→線更平滑穩定、訊號更少更慢；<b>調小</b>→線更靈敏、訊號更多更快。</p></div>
+    <div class="card"><h3>區間倍率 Range Multiplier（預設 3）</h3><p>趨勢線的<b>容忍範圍</b>有多寬。<b>調大</b>→要漲/跌比較多才翻轉，訊號少而穩（過濾雜訊）；<b>調小</b>→一點波動就翻轉，訊號多而雜。</p></div>
+  </div>
+  <div class="callout">一句話：<b>兩個都調大 → 訊號少、穩、慢；都調小 → 訊號多、雜、快。</b>覺得被雜訊掃來掃去就往大調，覺得太鈍反應太慢就往小調。</div>
+
+  <!-- 漲跌訊號 -->
+  <h2 id="signal"><span class="num">4</span>漲／跌 訊號怎麼看</h2>
+  <p class="lead">
+    <b>漲</b>（綠、在K棒下方）＝趨勢翻成漲勢，偏多的參考點。<b>跌</b>（紅、在K棒上方）＝趨勢翻成跌勢，偏空的參考點。
+    英文版會顯示 <b>Buy / Sell</b>。
+  </p>
+  <div class="callout warn"><b>訊號是「參考時機」不是「保證」。</b>翻轉訊號在盤整時容易來回被巴，最好搭配你自己的判斷（例如只做順著大方向的訊號），不要每個都照單全收。</div>
+
+  <!-- 星星 -->
+  <h2 id="star"><span class="num">5</span>⭐ 星星：兩種模式</h2>
+  <p class="lead">星星跟漲跌標籤是<strong>分開的</strong>兩套東西，用來抓「頂／底」。有兩種模式，設定裡用「★ 只標最高/最低點」切換。</p>
+  <div class="two">
+    <div class="mode"><h4>🎯 只標最高/最低點（預設）</h4><div class="who">整段<b>只在真正的大頂、大底各冒一顆⭐</b>，畫面最乾淨。缺點：要等頂/底確認，星會<b>慢幾根K</b>才出現（但位置很準）。靈敏度由「最高/最低點靈敏度」（預設 30）控制，越大只抓越大的頂底。</div></div>
+    <div class="mode"><h4>⚡ 即時星（取消上面那個勾）</h4><div class="who">反轉就<b>馬上</b>冒星、最快，但星較多。由「最高點星／最低點星靈敏度」（各預設 3）控制，越小越靈敏星越多。</div></div>
+  </div>
+  <div class="callout">新手建議維持<b>預設「只標最高/最低點」</b>，畫面乾淨、只看大轉折就好。</div>
+
+  <!-- 力道濃淡 -->
+  <h2 id="strength"><span class="num">6</span>🌈 力道濃淡（預設已開）</h2>
+  <p class="lead">
+    這個功能<strong>預設幫你打勾了</strong>：同樣是漲，K棒<b>越亮＝這根力道越強、越暗＝越弱</b>（跌也一樣，紅色越強越亮）。讓你不只看方向，還看得出「動能強不強」。
+  </p>
+  <div class="chartcard"><div id="strbar"></div><div class="cap">示意圖：由暗到亮＝力道由弱到強（左：漲/綠　右：跌/紅）</div></div>
+  <div class="two">
+    <div class="card"><h3>🤍 最強勢的漲用亮白色</h3><p>這個<b>預設不打勾</b>（留給你自己決定）。勾了之後，漲到最強的K棒會變<b>亮白色</b>（只適合黑底圖表，白底會看不到）。需要先開「力道濃淡」才有作用。</p></div>
+    <div class="card"><h3>不想要濃淡？</h3><p>把「🌈 顏色深淺表示力道」取消勾選，就回到<b>單純的綠漲紅跌</b>、不隨強弱變化，K棒也回復原本樣子。</p></div>
+  </div>
+
+  <!-- 配色語言 -->
+  <h2 id="color"><span class="num">7</span>配色與語言</h2>
+  <div class="two">
+    <div class="card"><h3>🟢🔴 漲跌配色</h3><p><b>國際標準</b>（預設）＝漲綠跌紅；<b>台股/中港</b>＝漲紅跌綠。習慣哪種就選哪種，趨勢線、K棒、標籤會一起換。</p></div>
+    <div class="card"><h3>介面語言 / 出哪些訊號</h3><p>語言可切<b>繁中（漲/跌）</b>或<b>English（Buy/Sell）</b>。「出現哪些訊號」可選<b>漲跌都要</b>（預設）、只出現漲、或只出現跌。</p></div>
+  </div>
+
+  <!-- 警報 -->
+  <h2 id="alert"><span class="num">8</span>設定警報（手機提醒）</h2>
+  <p class="lead">想在出訊號時收到推播，就建立警報。</p>
+  <div class="card">
+    <ol class="steps">
+      <li>點圖表右上角<b>鬧鐘 ⏰</b> → 建立警報。</li>
+      <li>「條件」第一格選 <b>AI_漲_跌3</b> 這個指標。</li>
+      <li>第二格挑你要的：<b>漲跌都要</b>（漲、跌都通知）、<b>漲訊號</b>、<b>跌訊號</b>、或 <b>★ 星星（都要/買/賣）</b>。</li>
+      <li>按建立。之後出訊號就會推播。</li>
+    </ol>
+    <div class="callout">這個指標本身用的是「具名警報條件」，所以第二格<b>直接選你要的那一個</b>就好，不用選「任何 alert() 函式呼叫」。想只收星星就選「★ 星星」，想只收漲跌就選「漲跌都要」。</div>
+  </div>
+
+  <!-- 收盤確認 + 新手注意 -->
+  <h2 id="note"><span class="num">9</span>新手一定要知道的幾件事</h2>
+  <div class="card">
+    <ol class="steps">
+      <li><b>穩定 vs 即時（收盤確認）。</b>預設「收盤確認」是<b>勾著＝穩定</b>：等這根K棒走完才出圖示，不會亂跳。取消勾＝即時：圖示馬上出，但<b>會重繪</b>（可能先出現又消失/反轉）。新手建議維持穩定。</li>
+      <li><b>星會慢幾根K。</b>「只標最高/最低點」要等頂/底確認，星會晚幾根出現，這是正常的（換來位置更準）。</li>
+      <li><b>盤整時訊號容易來回。</b>沒有方向的時候翻轉訊號會多且容易錯，覺得雜就把兩個旋鈕往大調。</li>
+      <li><b>先回測再實戰。</b>用歷史回放走幾十筆，確認你能接受它的節奏，再用小資金上場。</li>
+      <li><b>它是輔助不是命令。</b>幫你看方向、標時機，最後怎麼下單是你的決定。</li>
+    </ol>
+  </div>
+
+  <!-- 速查表 -->
+  <h2 id="cheat"><span class="num">📋</span>設定速查表</h2>
+  <p class="lead">每個選項的<strong>預設值</strong>與一句話說明。標 <b>⭐</b> 的是新手最常會動的。</p>
+  <table class="cheat">
+    <tr><th>設定項目</th><th>預設</th><th>說明／建議</th></tr>
+    <tr class="grp"><td colspan="3">🎛️ 訊號靈敏度</td></tr>
+    <tr><td class="opt">⭐ 取樣週期 Sampling Period</td><td class="def">100</td><td>趨勢線參考幾根K。大＝穩、少、慢；小＝靈敏、多、快。</td></tr>
+    <tr><td class="opt">⭐ 區間倍率 Range Multiplier</td><td class="def">3</td><td>翻轉的容忍範圍。大＝訊號少而穩；小＝多而雜。</td></tr>
+    <tr><td class="opt">出現哪些訊號</td><td class="def">漲跌都要</td><td>漲跌都要 / 只出現漲 / 只出現跌。</td></tr>
+    <tr class="grp"><td colspan="3">🎨 外觀</td></tr>
+    <tr><td class="opt">🌈 顏色深淺表示力道</td><td class="def">開</td><td>亮＝強、暗＝弱。已幫你預設開；不想要可取消回單色。</td></tr>
+    <tr><td class="opt">🤍 最強勢的漲用亮白色</td><td class="def">關</td><td>漲到最強變亮白（黑底限定）。要自己勾；需先開力道濃淡。</td></tr>
+    <tr><td class="opt">🟢🔴 漲跌配色</td><td class="def">國際標準</td><td>綠漲紅跌（國際）或紅漲綠跌（台股）。</td></tr>
+    <tr><td class="opt">介面語言</td><td class="def">繁體中文</td><td>漲/跌 或 Buy/Sell。</td></tr>
+    <tr class="grp"><td colspan="3">⭐ 星星（頂/底）</td></tr>
+    <tr><td class="opt">★ 只標最高/最低點</td><td class="def">開</td><td>只在大頂大底出星，畫面乾淨（會慢幾根K）。取消＝即時星。</td></tr>
+    <tr><td class="opt">↳ 最高/最低點靈敏度</td><td class="def">30</td><td>越大只抓越大的頂底、星越少。</td></tr>
+    <tr><td class="opt">★ 最高/最低點星靈敏度</td><td class="def">3 / 3</td><td>即時星模式才用；越小越靈敏、星越多。</td></tr>
+    <tr class="grp"><td colspan="3">🛡️ 穩定度</td></tr>
+    <tr><td class="opt">⭐ 收盤確認</td><td class="def">開（穩定）</td><td>勾＝走完K棒才出圖、不重繪；取消＝即時但會重繪。</td></tr>
+  </table>
+
+  <!-- FAQ -->
+  <h2 id="faq"><span class="num">?</span>常見問題</h2>
+  <div class="card faq">
+    <q>訊號怎麼一直翻來翻去、很多假訊號？</q>
+    <p>多半是<b>盤整</b>或旋鈕太靈敏。把「取樣週期」和「區間倍率」<b>往大調</b>（例如週期 150、倍率 4），訊號會變少變穩。</p>
+
+    <q>為什麼圖示會先出現又消失？</q>
+    <p>那是<b>即時模式</b>（收盤確認沒勾）造成的重繪。把「收盤確認」<b>勾起來（穩定）</b>，等K棒走完才出圖示就不會亂跳。</p>
+
+    <q>星星為什麼比較慢才出現？</q>
+    <p>因為「只標最高/最低點」要<b>等頂/底確認</b>（左右各看 N 根），所以會晚幾根K，換來位置準準壓在最高/最低那根。想要快就取消它、改用即時星。</p>
+
+    <q>K棒顏色有的亮有的暗，是壞了嗎？</q>
+    <p>不是，那是<b>力道濃淡</b>（預設開）：亮＝這根力道強、暗＝弱。不想要就取消「🌈 顏色深淺表示力道」，回到單色。</p>
+
+    <q>我是台股習慣，紅漲綠跌可以嗎？</q>
+    <p>可以，把「🟢🔴 漲跌配色」改成<b>台股/中港（紅漲綠跌）</b>即可，全部會一起換。</p>
+
+    <q>可以直接照訊號無腦下單嗎？</q>
+    <p>不建議。它是<b>輔助工具</b>會出錯，請先歷史回放與小資金測試，確認節奏再決定怎麼用。</p>
+  </div>
+
+  <footer>
+    AI 漲跌訊號（AI_漲_跌3）· 新手圖解使用說明 ｜ 本文所有圖示皆為示意圖，實際畫面以 TradingView 為準<br>
+    本說明僅供教學，非投資建議；交易有風險，請自行評估。
+  </footer>
+</div>
+
+<script>
+(function(){
+  function el(id){return document.getElementById(id);}
+  function hx(n){n=Math.max(0,Math.min(255,Math.round(n)));var s=n.toString(16);return s.length<2?'0'+s:s;}
+  function lerp(a,b,t){
+    var ar=parseInt(a.slice(1,3),16),ag=parseInt(a.slice(3,5),16),ab=parseInt(a.slice(5,7),16);
+    var br=parseInt(b.slice(1,3),16),bg=parseInt(b.slice(3,5),16),bb=parseInt(b.slice(5,7),16);
+    return '#'+hx(ar+(br-ar)*t)+hx(ag+(bg-ag)*t)+hx(ab+(bb-ab)*t);
+  }
+  var UP='#00e676',UPW='#0e4d34',DN='#ff5252',DNW='#6e2323',STAR='#ffc107',MID='#787b86';
+
+  function renderRF(id,cfg){
+    var W=880,H=cfg.h||420,PL=10,PR=10,PT=18,PB=18;
+    var cs=cfg.candles, rf=cfg.rf, dir=cfg.dir;
+    var lo=Infinity,hi=-Infinity;
+    cs.forEach(function(c){lo=Math.min(lo,c.l);hi=Math.max(hi,c.h);});
+    rf.forEach(function(v){lo=Math.min(lo,v);hi=Math.max(hi,v);});
+    var pad=(hi-lo)*0.08; lo-=pad; hi+=pad;
+    var plotW=W-PL-PR, plotH=H-PT-PB;
+    var xAt=function(i){return PL+(i+0.5)*(plotW/cs.length);};
+    var yAt=function(v){return PT+(hi-v)/(hi-lo)*plotH;};
+    var bw=Math.max(4,(plotW/cs.length)*0.55);
+    // body max for strength
+    var bmax=0; cs.forEach(function(c){bmax=Math.max(bmax,Math.abs(c.c-c.o));});
+    var s='<svg viewBox="0 0 '+W+' '+H+'" role="img">';
+    for(var g=0;g<=4;g++){var gy=PT+g*(plotH/4);s+='<line x1="'+PL+'" y1="'+gy+'" x2="'+(W-PR)+'" y2="'+gy+'" stroke="#232833" stroke-width="1"/>';}
+    // K棒 (力道濃淡上色)
+    cs.forEach(function(c,i){
+      var up=(dir[i]==='up'), col;
+      var ratio=bmax<=0?0:Math.min(1,Math.abs(c.c-c.o)/bmax);
+      col = up ? lerp(UPW,UP,ratio) : lerp(DNW,DN,ratio);
+      var x=xAt(i);
+      s+='<line x1="'+x+'" y1="'+yAt(c.h)+'" x2="'+x+'" y2="'+yAt(c.l)+'" stroke="'+col+'" stroke-width="1.4"/>';
+      var top=Math.min(yAt(c.o),yAt(c.c)),h2=Math.max(2,Math.abs(yAt(c.c)-yAt(c.o)));
+      s+='<rect x="'+(x-bw/2)+'" y="'+top+'" width="'+bw+'" height="'+h2+'" fill="'+col+'" rx="1"/>';
+    });
+    // 趨勢線 (分段轉色)
+    for(var i=0;i<cs.length-1;i++){
+      var c1=dir[i]==='up'?UP:DN;
+      s+='<line x1="'+xAt(i)+'" y1="'+yAt(rf[i])+'" x2="'+xAt(i+1)+'" y2="'+yAt(rf[i+1])+'" stroke="'+c1+'" stroke-width="2.4"/>';
+    }
+    // 漲/跌 標籤
+    (cfg.signals||[]).forEach(function(sg){
+      var x=xAt(sg.i);
+      if(sg.type==='up'){
+        var y=yAt(cs[sg.i].l)+10;
+        s+='<rect x="'+(x-15)+'" y="'+y+'" width="30" height="22" rx="6" fill="#2fbf6b"/>';
+        s+='<text x="'+x+'" y="'+(y+16)+'" fill="#fff" font-size="13" font-weight="700" text-anchor="middle" font-family="sans-serif">漲</text>';
+      } else {
+        var y2=yAt(cs[sg.i].h)-32;
+        s+='<rect x="'+(x-15)+'" y="'+y2+'" width="30" height="22" rx="6" fill="#e23b3b"/>';
+        s+='<text x="'+x+'" y="'+(y2+16)+'" fill="#fff" font-size="13" font-weight="700" text-anchor="middle" font-family="sans-serif">跌</text>';
+      }
+    });
+    // ⭐ 星星
+    (cfg.stars||[]).forEach(function(st){
+      var x=xAt(st.i);
+      var y=st.type==='top'?yAt(cs[st.i].h)-14:yAt(cs[st.i].l)+22;
+      s+='<text x="'+x+'" y="'+y+'" fill="'+STAR+'" font-size="18" text-anchor="middle" font-family="sans-serif">★</text>';
+    });
+    // 編號徽章
+    (cfg.badges||[]).forEach(function(b){
+      s+='<circle cx="'+b.x+'" cy="'+b.y+'" r="13" fill="#2563eb" stroke="#fff" stroke-width="2"/>';
+      s+='<text x="'+b.x+'" y="'+(b.y+4.5)+'" fill="#fff" font-size="13" font-weight="700" text-anchor="middle" font-family="sans-serif">'+b.n+'</text>';
+    });
+    s+='</svg>';
+    el(id).innerHTML=s;
+  }
+
+  // 主圖資料:漲→頂(跌+★)→跌→底(漲+★)→漲
+  var C=[
+    {o:99,h:101,l:98,c:100},{o:100,h:103,l:99,c:102},{o:102,h:105,l:101,c:104},{o:104,h:108,l:103,c:107},
+    {o:107,h:112,l:106,c:111},{o:111,h:115,l:110,c:114},{o:114,h:116,l:112,c:113},
+    {o:113,h:114,l:109,c:110},{o:110,h:111,l:106,c:107},{o:107,h:108,l:103,c:104},{o:104,h:105,l:100,c:101},{o:101,h:102,l:97,c:98},{o:98,h:99,l:94,c:95},
+    {o:95,h:99,l:94,c:98},{o:98,h:102,l:97,c:101},{o:101,h:104,l:100,c:103},{o:103,h:106,l:102,c:105},{o:105,h:108,l:104,c:107}
+  ];
+  var DIR=['up','up','up','up','up','up','up','down','down','down','down','down','down','up','up','up','up','up'];
+  var RF=[97,99,101,103,106,109,111, 114,112,109,106,102,99, 96,98,100,102,104];
+  renderRF('hero',{
+    candles:C, rf:RF, dir:DIR, h:430,
+    signals:[{i:7,type:'down'},{i:13,type:'up'}],
+    stars:[{i:6,type:'top'},{i:12,type:'bottom'}],
+    badges:[{x:235,y:255,n:'1'},{x:690,y:352,n:'2'},{x:352,y:72,n:'3'},{x:560,y:378,n:'4'},{x:180,y:150,n:'5'}]
+  });
+
+  // 力道濃淡示範:一排由暗到亮的漲，再一排由暗到亮的跌
+  (function(){
+    var W=880,H=150,PL=20,PR=20,PT=30,PB=20;
+    var s='<svg viewBox="0 0 '+W+' '+H+'" role="img">';
+    s+='<text x="'+(W*0.27)+'" y="20" fill="#34d399" font-size="13" font-weight="700" text-anchor="middle" font-family="sans-serif">漲：弱 → 強（越亮越強）</text>';
+    s+='<text x="'+(W*0.75)+'" y="20" fill="#f87171" font-size="13" font-weight="700" text-anchor="middle" font-family="sans-serif">跌：弱 → 強</text>';
+    var n=6, halfW=(W-PL-PR-40)/2, bw=22;
+    for(var i=0;i<n;i++){
+      var t=i/(n-1);
+      var xg=PL+ (halfW/n)*i + (halfW/n)*0.3;
+      var cg=lerp(UPW,UP,t);
+      s+='<rect x="'+xg+'" y="'+(PT+ (1-t)*10)+'" width="'+bw+'" height="'+(70+ t*10)+'" rx="2" fill="'+cg+'"/>';
+      var xr=PL+halfW+40+ (halfW/n)*i + (halfW/n)*0.3;
+      var cr=lerp(DNW,DN,t);
+      s+='<rect x="'+xr+'" y="'+(PT+ (1-t)*10)+'" width="'+bw+'" height="'+(70+ t*10)+'" rx="2" fill="'+cr+'"/>';
+    }
+    s+='</svg>';
+    el('strbar').innerHTML=s;
+  })();
+})();
+</script>
+</body>
+</html>
