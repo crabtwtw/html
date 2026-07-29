@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>黃金/BTC 真實成交量 — 新手圖解使用說明</title>
+<style>
+  :root{
+    --up:#26a69a; --down:#ef5350; --spike:#ffc107; --ma:#ff9800; --gold:#f6c445; --btc:#f7931a;
+    --ink:#1f2937; --ink2:#4b5563; --muted:#6b7280; --line:#e5e7eb;
+    --bg:#f7f8fa; --card:#ffffff; --chartbg:#0e1116; --chartgrid:#232833; --accent:#2563eb;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0; background:var(--bg); color:var(--ink);
+    font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    line-height:1.75; -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:920px; margin:0 auto; padding:0 20px 80px}
+  header.hero{background:linear-gradient(135deg,#1a1405 0%,#2a2410 45%,#3a2a05 100%); color:#fff; padding:54px 20px 46px; text-align:center;}
+  header.hero h1{font-size:31px; margin:0 0 10px; font-weight:800}
+  header.hero .sub{font-size:17px; opacity:.92; margin:0 auto; max-width:600px}
+  .tags{font-size:24px; letter-spacing:8px; margin:14px 0 4px}
+  .badge-newbie{display:inline-block; background:#fbbf24; color:#78350f; font-weight:700; padding:4px 14px; border-radius:999px; font-size:14px; margin-top:14px}
+  h2{font-size:24px; margin:52px 0 6px; font-weight:800; display:flex; align-items:center; gap:10px}
+  h2 .num{display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; background:var(--accent); color:#fff; border-radius:10px; font-size:17px; flex:none}
+  h3{font-size:18px; margin:24px 0 4px; font-weight:700}
+  p{margin:8px 0}
+  .lead{color:var(--ink2); font-size:16px}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:22px 24px; margin:16px 0; box-shadow:0 1px 2px rgba(0,0,0,.04)}
+  .chartcard{background:var(--chartbg); border:1px solid #232833; border-radius:16px; padding:14px; margin:18px 0; box-shadow:0 6px 24px rgba(8,12,20,.18)}
+  .chartcard .cap{color:#9aa4b2; font-size:13px; text-align:center; margin:8px 4px 2px}
+  .schematic{color:#64748b; font-size:12.5px; text-align:center; margin-top:6px}
+  svg{display:block; width:100%; height:auto}
+  .legend-list{list-style:none; padding:0; margin:14px 0 0}
+  .legend-list li{display:flex; gap:12px; align-items:flex-start; padding:10px 0; border-top:1px dashed var(--line)}
+  .legend-list li:first-child{border-top:none}
+  .dot{flex:none; width:26px; height:26px; border-radius:50%; background:var(--accent); color:#fff; font-weight:700; font-size:14px; display:flex; align-items:center; justify-content:center; margin-top:2px}
+  .two{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+  @media(max-width:640px){.two{grid-template-columns:1fr} header.hero h1{font-size:24px}}
+  .steps{counter-reset:s; list-style:none; padding:0; margin:14px 0 0}
+  .steps li{position:relative; padding:4px 0 20px 52px; counter-increment:s}
+  .steps li::before{content:counter(s); position:absolute; left:0; top:0; width:34px; height:34px; background:var(--accent); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700}
+  .steps li::after{content:""; position:absolute; left:16px; top:36px; bottom:2px; width:2px; background:var(--line)}
+  .steps li:last-child::after{display:none}
+  .callout{background:#eff6ff; border-left:4px solid var(--accent); border-radius:8px; padding:12px 16px; margin:14px 0; font-size:15px}
+  .warn{background:#fffbeb; border-left-color:#f59e0b} .warn b{color:#b45309}
+  .toc{display:flex; flex-wrap:wrap; gap:8px; margin-top:22px; justify-content:center}
+  .toc a{background:rgba(255,255,255,.12); color:#fff; text-decoration:none; padding:6px 14px; border-radius:999px; font-size:14px}
+  .toc a:hover{background:rgba(255,255,255,.24)}
+  .faq q{display:block; font-weight:700; color:var(--ink); margin-top:16px}
+  .faq q::before{content:"Q  "; color:var(--accent)}
+  .faq p{color:var(--ink2)}
+  .cheat{width:100%; border-collapse:collapse; margin:14px 0; font-size:14px}
+  .cheat th,.cheat td{border:1px solid var(--line); padding:8px 11px; text-align:left; vertical-align:top}
+  .cheat th{background:#f1f5f9; font-weight:700}
+  .cheat tr:nth-child(even) td{background:#fafbfc}
+  .cheat .grp td{background:#fef9ec; font-weight:800; color:#92600a}
+  .cheat .def{white-space:nowrap; color:#b45309; font-weight:700}
+  .cheat .opt{font-weight:600}
+  .quick30{background:linear-gradient(135deg,#fef9ec,#eff6ff); border:2px solid #f6c445; border-radius:18px; padding:22px 24px; margin:26px 0}
+  .quick30 h2{margin:0 0 8px; font-size:23px; color:#92600a; border:none}
+  .quick30 h4{margin:14px 0 4px; font-size:16px; color:#0f172a}
+  .quick30 ol{margin:4px 0; padding-left:24px} .quick30 ol li{margin:5px 0; font-size:15.5px}
+  .quick30 .mini{display:flex; flex-wrap:wrap; gap:8px; margin-top:6px}
+  .quick30 .mini span{background:#fff; border:1px solid var(--line); border-radius:10px; padding:7px 11px; font-size:14px; line-height:1.4}
+  footer{color:var(--muted); font-size:13px; text-align:center; margin-top:60px; padding-top:20px; border-top:1px solid var(--line)}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="tags">🟡 📊 🟠</div>
+  <h1>黃金 / BTC 真實成交量</h1>
+  <p class="sub">一個開關切換「黃金」或「比特幣」，在你的圖表下方顯示<strong>真實成交量</strong>，還會標出爆量、附數字面板。</p>
+  <div class="badge-newbie">📘 新手圖解版使用說明 · 看圖說故事</div>
+  <nav class="toc">
+    <a href="#quick30">🐣 30秒懂</a>
+    <a href="#why">為何黃金要這支</a>
+    <a href="#bigpic">看圖說故事</a>
+    <a href="#switch">切黃金/比特幣</a>
+    <a href="#spike">爆量怎麼看</a>
+    <a href="#rev">反轉參考</a>
+    <a href="#source">換來源</a>
+    <a href="#cheat">速查表</a>
+    <a href="#faq">常見問題</a>
+  </nav>
+</header>
+
+<div class="wrap">
+
+  <p class="lead" style="margin-top:30px">這份給<strong>第一次用</strong>的朋友。下面所有圖都是<strong>示意圖（手繪模擬，不是真實截圖）</strong>，用來讓你知道東西長怎樣。</p>
+
+  <!-- 30秒 -->
+  <div class="quick30" id="quick30">
+    <h2>🐣 30 秒快速看懂</h2>
+    <p style="margin:2px 0 0"><b>這是什麼？</b>幫你在圖表下方看「<b>真實成交量</b>」——量大代表市場有人在動、行情比較有力；量小代表沒人氣。一個開關切<b>黃金</b>或<b>比特幣</b>。</p>
+    <h4>👉 這樣用</h4>
+    <ol>
+      <li>設定裡「看哪個商品」切 <b>🟡 黃金</b> 或 <b>🟠 比特幣</b>。</li>
+      <li>看<b>量柱</b>：綠＝漲的量、紅＝跌的量；<b>橘線</b>是平均量（正常值）。</li>
+      <li>量柱變<b>金色 🔥</b>＝爆量（量比平常大很多），通常代表有大事、要留意。</li>
+    </ol>
+    <h4>👀 圖上看到這些</h4>
+    <div class="mini">
+      <span><b>綠/紅量柱</b>＝這根K棒的真實成交量</span>
+      <span><b>橘色線</b>＝平均量（基準）</span>
+      <span><b>金色柱 🔥</b>＝爆量（異常放大）</span>
+      <span><b>右上面板</b>＝目前量、均量、倍數（直接查數字）</span>
+    </div>
+  </div>
+
+  <div class="callout" style="margin-top:18px">💡 <b>加在你對應的圖上最直覺</b>：看黃金就加在黃金圖、看比特幣就加在比特幣圖；建議 <b>5～15 分鐘</b>週期。它會出現在圖表<b>下方獨立一格</b>（不蓋在K線上）。</div>
+
+  <!-- 為何黃金 -->
+  <h2 id="why"><span class="num">1</span>為什麼黃金要用「這支」？（重要觀念）</h2>
+  <p class="lead">
+    這是全指標最重要的觀念：<strong>現貨黃金（XAUUSD / GOLD）沒有「真正的成交量」。</strong>
+    因為現貨黃金是場外、分散式市場，沒有集中撮合，所以圖上顯示的「量」其實是券商的
+    <b>「跳動量（tick）」</b>——只是「價格跳動了幾次」，不是真的成交口數。
+  </p>
+  <div class="chartcard">
+    <div id="cmp"></div>
+    <div class="cap">示意圖：左＝現貨黃金的「跳動量」(不是真的量)；右＝期貨 COMEX GC 的「真實成交量」</div>
+  </div>
+  <p>
+    所以要看「<b>有真實量的來源</b>」。這支<strong>選黃金時，預設抓你的 BingX 黃金永續 <code>GOLDXAUUSDT.P</code></strong>（跟你的圖一致、有真實量）；想看<b>全球</b>黃金期貨量，可改成 <code>COMEX:GC1!</code>。
+    <b>比特幣</b>本來就有真量（交易所真實撮合），預設抓 <code>BINGX:BTCUSDT.P</code>。<b>重點：別拿現貨黃金 XAUUSD 的跳動量當真量。</b>
+  </p>
+
+  <!-- 看圖說故事 -->
+  <h2 id="bigpic"><span class="num">2</span>看圖說故事：一張圖看懂</h2>
+  <p class="lead">圖上 <b>①～④</b> 對應下方說明。</p>
+  <div class="chartcard">
+    <div id="hero"></div>
+    <div class="cap">示意圖：綠/紅量柱＋橘色均量線＋一根金色爆量柱＋右上數字面板</div>
+  </div>
+  <ul class="legend-list">
+    <li><span class="dot">1</span><div><b>成交量柱</b>：每一根對應一根K棒的真實量。<span style="color:#1a9e88;font-weight:700">綠＝這根是漲的量</span>、<span style="color:#e04b4b;font-weight:700">紅＝跌的量</span>。柱子越高＝量越大。</div></li>
+    <li><span class="dot">2</span><div><b>均量線（橘）</b>：最近 N 根（預設 20）的平均量，是「正常量」的基準。量柱比它高＝比平常熱、比它低＝比平常冷。</div></li>
+    <li><span class="dot">3</span><div><b>爆量金柱 🔥</b>：當某根量 <b>≥ 平均量 × 倍數</b>（預設 2 倍），柱子變<b>金色</b>，提示量能<b>異常放大</b>——通常代表有大單、消息或突破，要特別留意。</div></li>
+    <li><span class="dot">4</span><div><b>數字面板</b>：直接顯示「來源、目前量、均量、量/均量倍數」，讓你不用估、直接<b>查數字</b>。爆量時還會顯示 🔥。<b>位置（左上/右上/左下/右下）和文字大小都能自己調。</b>標題旁那格可<b>自選</b>顯示：<b>距離收盤倒數（這根K還多久走完，預設）</b>、K線週期（幾分線）、現價、或今日漲跌%；爆量時改顯示 🔥。</div></li>
+  </ul>
+  <div class="callout warn"><b>量只是「參考」不是買賣訊號。</b>量大代表有人在動、行情較有力；但方向還是要看價格。常見用法：<b>價格突破＋爆量</b>比較可信；<b>價漲量縮</b>要小心追高沒力。</div>
+
+  <!-- 切換 -->
+  <h2 id="switch"><span class="num">3</span>切換「黃金 / 比特幣」</h2>
+  <p class="lead">設定裡「看哪個商品的真實量」一個下拉切換就好，你只專注這兩個。</p>
+  <div class="two">
+    <div class="card"><h3>🟡 黃金 Gold</h3><p>預設抓 <b>BINGX:GOLDXAUUSDT.P</b>（你在用的 BingX 黃金永續，量跟你的圖一致）。想看全球黃金期貨量可改 <b>COMEX:GC1!</b>。</p></div>
+    <div class="card"><h3>🟠 比特幣 Bitcoin</h3><p>抓 <b>BINGX:BTCUSDT.P</b>（你在用的 BingX 永續，量會跟你的圖一致）。想參考更大流動性可改 <b>BINANCE:BTCUSDT</b>。</p></div>
+  </div>
+
+  <!-- 爆量 -->
+  <h2 id="spike"><span class="num">4</span>🔥 爆量怎麼看、怎麼調</h2>
+  <p class="lead">
+    「爆量」＝這根量比平常大很多，指標會把它標成<b>金色</b>並在面板顯示 🔥。判斷標準是<b>「爆量倍數」</b>（預設 2）：
+    量 ≥ 均量 × 2 就算爆量。想更敏感（多抓一點）就把倍數<b>調小</b>（例如 1.5）；想只抓超大量就<b>調大</b>（例如 3）。
+  </p>
+  <div class="callout">爆量常見意義：<b>突破時爆量</b>＝動能真、比較可信；<b>高檔爆量後量縮</b>＝可能追不動。可以建「🔥 爆量提醒」警報，爆量時推播給你。</div>
+
+  <!-- 換來源 -->
+  <h2 id="rev"><span class="num">5</span>反轉參考：量能狀態 ＋ 量價背離</h2>
+  <p class="lead">短線想「心裡有個底」，面板多了兩行參考（預設開）。<b>先講清楚：這只是<span style="color:#b91c1c">參考、不是買賣訊號</span></b>——真正的反轉訊號請看 AI_漲_跌3 的 ★星星。</p>
+  <div class="two">
+    <div class="card"><h3>量能狀態</h3><p>一句話看這根有沒有力：<b style="color:#1a9e88">🟢 量增(強)</b>＝量比平均大、動能足；<b style="color:#c77c1a">🔻 量縮(弱)</b>＝量不到平均、追不太動；<b style="color:#b8860b">🔥 爆量</b>＝異常放大。走勢中<b>量縮＝動能減弱、反轉機率升</b>。</p></div>
+    <div class="card"><h3>量價背離</h3><p>價格<b>創新高但量縮</b>→「🔺 頂背離·留意轉跌」；<b>創新低但量縮</b>→「🔻 底背離·留意轉漲」。價、量<b>背道而馳</b>＝動能跟價格不同調，是經典的反轉警示。回看根數可調。</p></div>
+  </div>
+  <div class="callout warn"><b>⚠️ 只是「機率提示」，不是預言。</b>沒有任何數據能預測反轉；量縮／背離只代表<b>動能減弱、反轉機率升</b>，不代表一定反轉。當佐證用，搭配你的判斷和 AI_漲_跌3 的訊號一起看。</div>
+
+  <h2 id="source"><span class="num">6</span>換來源商品（進階）</h2>
+  <div class="card">
+    <p>如果量柱空白或怪怪的，多半是那個來源在你帳號沒有資料（例如免費帳號期貨延遲）。到設定的「來源商品」換一個試試：</p>
+    <p style="margin:6px 0">🟡 黃金：<b>BINGX:GOLDXAUUSDT.P</b>（預設，跟你的圖一致）、或 <b>COMEX:GC1!</b>／<b>MGC1!</b>／<b>GLD</b>（全球期貨量）。</p>
+    <p style="margin:6px 0">🟠 比特幣：<b>BINGX:BTCUSDT.P</b>（預設，跟你的圖一致）、或 <b>BINANCE:BTCUSDT</b>。</p>
+    <div class="callout warn">代碼要含<b>交易所前綴</b>（例如 <b>COMEX:</b>、<b>BINGX:</b>），打對才抓得到。</div>
+  </div>
+
+  <!-- 速查表 -->
+  <h2 id="cheat"><span class="num">📋</span>設定速查表</h2>
+  <table class="cheat">
+    <tr><th>設定項目</th><th>預設</th><th>說明／建議</th></tr>
+    <tr><td class="opt">⭐ 看哪個商品</td><td class="def">🟠 比特幣</td><td>切換 黃金 / 比特幣 的真實量（預設比特幣）。</td></tr>
+    <tr><td class="opt">🟡 黃金來源</td><td class="def">BINGX:GOLDXAUUSDT.P</td><td>你的 BingX 黃金永續，量跟你的圖一致。想看全球期貨量改 COMEX:GC1!。</td></tr>
+    <tr><td class="opt">🟠 比特幣來源</td><td class="def">BINGX:BTCUSDT.P</td><td>你的 BingX 永續，量跟你的圖一致。</td></tr>
+    <tr><td class="opt">均量根數</td><td class="def">20</td><td>算平均量(橘線)用幾根K，當正常量基準。</td></tr>
+    <tr><td class="opt">⭐ 爆量倍數</td><td class="def">2.0</td><td>量≥均量×此倍數→金色🔥。小＝敏感、大＝只抓超大量。</td></tr>
+    <tr><td class="opt">量柱配色</td><td class="def">國際(綠漲紅跌)</td><td>可改台股(紅漲綠跌)。</td></tr>
+    <tr><td class="opt">顯示數字面板</td><td class="def">開</td><td>顯示來源/目前量/均量/倍數。</td></tr>
+    <tr><td class="opt">⭐ 面板位置</td><td class="def">右下</td><td>面板放哪個角落:左上/右上/左下/右下,自己選。</td></tr>
+    <tr><td class="opt">⭐ 面板文字大小</td><td class="def">正常</td><td>小/正常/大/極大,手機看不清就調大。</td></tr>
+    <tr><td class="opt">⭐ 面板標題旁顯示</td><td class="def">距離收盤</td><td>那格顯示啥:距離收盤倒數(這根K還多久)/K線週期/現價/今日漲跌%。爆量時改顯示🔥。</td></tr>
+    <tr><td class="opt">面板顯示反轉參考</td><td class="def">開</td><td>面板加兩行:量能狀態、量價背離(僅供參考、非買賣訊號)。</td></tr>
+    <tr><td class="opt">背離回看根數</td><td class="def">10</td><td>判斷價創新高/新低看幾根K。</td></tr>
+  </table>
+
+  <!-- FAQ -->
+  <h2 id="faq"><span class="num">?</span>常見問題</h2>
+  <div class="card faq">
+    <q>為什麼現貨黃金的量不能直接用？</q>
+    <p>現貨黃金(XAUUSD)是場外市場、沒有集中撮合，圖上的「量」只是<b>跳動量(tick)</b>＝價格跳幾次，不是真成交量。所以要用有真實量的來源——這支選黃金<b>預設抓你的 BingX 黃金永續</b>(跟你的圖一致)；想看全球量可改 COMEX 期貨(GC)。</p>
+
+    <q>比特幣也需要換來源嗎？</q>
+    <p>比特幣本來就有真實量（交易所真實撮合）。預設抓 <b>BINGX:BTCUSDT.P</b>＝你在用的圖，量會一致，通常不用換。</p>
+
+    <q>量柱是空白/沒東西？</q>
+    <p>多半是那個來源在你帳號沒資料（免費帳號期貨常延遲）。到「來源商品」換一個：黃金試 <b>MGC1!</b> 或 <b>GLD</b>；比特幣試 <b>BINANCE:BTCUSDT</b>。也確認代碼有<b>交易所前綴</b>。</p>
+
+    <q>金色的柱子是什麼？</q>
+    <p>那是<b>爆量</b>：這根量 ≥ 均量 × 倍數(預設2)。代表量能異常放大，通常有大單/消息/突破，要留意。倍數可在設定調。</p>
+
+    <q>量大就一定要進場嗎？</q>
+    <p>不是。量是<b>參考</b>不是買賣訊號：量大代表有人在動、行情較有力，但方向還是看價格。<b>突破＋爆量</b>比較可信；<b>漲勢量縮</b>要小心。</p>
+
+    <q>黃金想看「全球」期貨的真量可以嗎？</q>
+    <p>可以。預設抓的是你的 <b>BingX 黃金永續</b>(跟你的圖一致)；想看全球黃金期貨量，把「黃金來源」改成 <b>COMEX:GC1!</b> 即可。</p>
+  </div>
+
+  <footer>
+    黃金 / BTC 真實成交量 · 新手圖解使用說明 ｜ 本文所有圖示皆為示意圖，實際畫面以 TradingView 為準<br>
+    本說明僅供教學，非投資建議；交易有風險，請自行評估。
+  </footer>
+</div>
+
+<script>
+(function(){
+  function el(id){return document.getElementById(id);}
+  var UP='#26a69a',DN='#ef5350',SPK='#ffc107',MA='#ff9800',GRY='#5c636e';
+
+  // 量柱渲染器
+  function renderVol(id,cfg){
+    var W=880,H=cfg.h||330,PL=12,PR=cfg.pr||14,PT=16,PB=16;
+    var cols=cfg.cols, ma=cfg.ma;
+    var plotW=W-PL-PR, plotH=H-PT-PB, baseY=H-PB;
+    var cw=plotW/cols.length, bw=Math.max(3,cw*0.62);
+    var s='<svg viewBox="0 0 '+W+' '+H+'" role="img">';
+    for(var g=1;g<=3;g++){var gy=PT+g*(plotH/4);s+='<line x1="'+PL+'" y1="'+gy+'" x2="'+(W-PR)+'" y2="'+gy+'" stroke="#232833" stroke-width="1"/>';}
+    s+='<line x1="'+PL+'" y1="'+baseY+'" x2="'+(W-PR)+'" y2="'+baseY+'" stroke="#39404d" stroke-width="1"/>';
+    // 量柱
+    cols.forEach(function(c,i){
+      var x=PL+i*cw+cw/2, bh=c.h*plotH, y=baseY-bh;
+      var col=c.spike?SPK:(c.g?(c.dir==='up'?UP:DN):GRY);
+      s+='<rect x="'+(x-bw/2)+'" y="'+y+'" width="'+bw+'" height="'+bh+'" fill="'+col+'" rx="1"/>';
+      if(c.spike) s+='<text x="'+x+'" y="'+(y-6)+'" fill="'+SPK+'" font-size="14" text-anchor="middle" font-family="sans-serif">🔥</text>';
+    });
+    // 均量線
+    if(ma){
+      var d='';
+      ma.forEach(function(v,i){var x=PL+i*cw+cw/2,y=baseY-v*plotH;d+=(i===0?'M':'L')+x+' '+y+' ';});
+      s+='<path d="'+d+'" fill="none" stroke="'+MA+'" stroke-width="2.2"/>';
+    }
+    // 數字面板
+    if(cfg.panel){
+      var px=W-PR-172, py=20;
+      s+='<rect x="'+px+'" y="'+py+'" width="168" height="104" rx="8" fill="#1c2230" stroke="#2a2e39"/>';
+      s+='<text x="'+(px+12)+'" y="'+(py+22)+'" fill="#f6c445" font-size="13" font-weight="700" font-family="sans-serif">🟡 黃金真實量</text>';
+      s+='<text x="'+(px+156)+'" y="'+(py+22)+'" fill="'+SPK+'" font-size="12" font-weight="700" text-anchor="end" font-family="sans-serif">🔥爆量</text>';
+      var rows=[['來源','GOLDXAUUSDT.P'],['目前量','12.3K'],['均量(20)','5.1K'],['量/均量','2.4x']];
+      rows.forEach(function(r,i){
+        var ry=py+42+i*16;
+        s+='<text x="'+(px+12)+'" y="'+ry+'" fill="#9aa4b2" font-size="11.5" font-family="sans-serif">'+r[0]+'</text>';
+        s+='<text x="'+(px+156)+'" y="'+ry+'" fill="'+(i===3?SPK:'#e5e7eb')+'" font-size="11.5" font-weight="700" text-anchor="end" font-family="sans-serif">'+r[1]+'</text>';
+      });
+    }
+    // 徽章
+    (cfg.badges||[]).forEach(function(b){
+      s+='<circle cx="'+b.x+'" cy="'+b.y+'" r="13" fill="#2563eb" stroke="#fff" stroke-width="2"/>';
+      s+='<text x="'+b.x+'" y="'+(b.y+4.5)+'" fill="#fff" font-size="13" font-weight="700" text-anchor="middle" font-family="sans-serif">'+b.n+'</text>';
+    });
+    s+='</svg>';
+    el(id).innerHTML=s;
+  }
+
+  // 主圖資料
+  var H=[0.30,0.46,0.26,0.52,0.34,0.60,0.40,0.30,0.56,0.36,0.24,0.46,0.50,0.34,0.30,0.42,0.95,0.52,0.40,0.30,0.46,0.34,0.50,0.30];
+  var D=['up','up','down','up','down','up','up','down','up','down','down','up','down','up','down','up','up','down','up','down','up','down','up','down'];
+  var cols=H.map(function(h,i){return {h:h, dir:D[i], g:true, spike:(i===16)};});
+  var ma=H.map(function(_,i){var a=0; for(var k=Math.max(0,i-4);k<=i;k++)a+=Math.min(H[k],0.5); return (a/(i-Math.max(0,i-4)+1))*0.9+0.05;});
+  renderVol('hero',{cols:cols, ma:ma, h:330, panel:true,
+    badges:[{x:190,y:250,n:'1'},{x:110,y:150,n:'2'},{x:625,y:70,n:'3'},{x:660,y:120,n:'4'}]});
+
+  // 對照圖:現貨跳動量(灰) vs 期貨真實量(彩)
+  (function(){
+    var W=880,H=200,mid=W/2;
+    var s='<svg viewBox="0 0 '+W+' '+H+'" role="img">';
+    s+='<line x1="'+mid+'" y1="14" x2="'+mid+'" y2="'+(H-24)+'" stroke="#2a2e39" stroke-dasharray="4 5"/>';
+    s+='<text x="'+(mid/2)+'" y="26" fill="#9aa4b2" font-size="13" font-weight="700" text-anchor="middle" font-family="sans-serif">❌ 現貨黃金 XAUUSD（跳動量）</text>';
+    s+='<text x="'+(mid+mid/2)+'" y="26" fill="#f6c445" font-size="13" font-weight="700" text-anchor="middle" font-family="sans-serif">✅ 期貨 COMEX GC（真實量）</text>';
+    var base=H-30;
+    // 左:灰、平板無意義
+    var lh=[0.4,0.42,0.38,0.41,0.4,0.43,0.39,0.4,0.41,0.4];
+    lh.forEach(function(h,i){var x=40+i*((mid-70)/lh.length);var bh=h*90;s+='<rect x="'+x+'" y="'+(base-bh)+'" width="18" height="'+bh+'" fill="#5c636e" rx="1"/>';});
+    s+='<text x="'+(mid/2)+'" y="'+(base+16)+'" fill="#6b7280" font-size="11.5" text-anchor="middle" font-family="sans-serif">只是價格跳幾次,幾乎一樣高、看不出強弱</text>';
+    // 右:彩、有高低
+    var rh=[0.3,0.55,0.35,0.8,0.4,0.25,0.6,0.45,0.9,0.35];
+    var rd=['up','up','down','up','down','down','up','up','up','down'];
+    rh.forEach(function(h,i){var x=mid+30+i*((mid-70)/rh.length);var bh=h*90;var col=(i===8)?'#ffc107':(rd[i]==='up'?'#26a69a':'#ef5350');s+='<rect x="'+x+'" y="'+(base-bh)+'" width="18" height="'+bh+'" fill="'+col+'" rx="1"/>';});
+    s+='<text x="'+(mid+mid/2)+'" y="'+(base+16)+'" fill="#8b93a1" font-size="11.5" text-anchor="middle" font-family="sans-serif">真的成交量,高低分明、看得出量能</text>';
+    s+='</svg>';
+    el('cmp').innerHTML=s;
+  })();
+})();
+</script>
+</body>
+</html>
