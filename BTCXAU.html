@@ -119,8 +119,12 @@
   </p>
   <div class="chartcard">
     <div id="cmp"></div>
-    <div class="cap">示意圖：左＝現貨黃金的「跳動量」(不是真的量)；右＝期貨 COMEX GC 的「真實成交量」</div>
+    <div class="cap">示意圖：左＝現貨黃金的「跳動量」(不是真的量)；右＝真實成交量(高低分明、還會標🔥爆量)</div>
   </div>
+  <div class="callout warn"><b>菜鳥必看：這張圖的「灰色」和「🔥」在我實際的指標裡去哪看？</b><br>
+  ①<b>灰色柱</b>＝只是<b>示意</b>「現貨黃金跳動量長怎樣」(平平的、看不出強弱)。<b>你實際用這支指標『不會』看到灰色</b>——因為指標已經幫你換成有真實量的來源(綠/紅柱)，灰色只是拿來對比的「反例」。<br>
+  ②<b>🔥</b>＝爆量標記，<b>會</b>出現在你的實際圖上：某根量特別大時，柱頂就放一個 🔥(柱子仍是漲綠跌紅)。<br>
+  ③舊版本爆量是把整根柱子變<b>黃色</b>，<b>現在已改成柱頂放🔥、不再變黃</b>，所以你圖上不會再有黃色柱囉。</div>
   <p>
     所以要看「<b>有真實量的來源</b>」。這支<strong>選黃金時，預設抓你的 BingX 黃金永續 <code>GOLDXAUUSDT.P</code></strong>（跟你的圖一致、有真實量）；想看<b>全球</b>黃金期貨量，可改成 <code>COMEX:GC1!</code>。
     <b>比特幣</b>本來就有真量（交易所真實撮合），預設抓 <code>BINGX:BTCUSDT.P</code>。<b>重點：別拿現貨黃金 XAUUSD 的跳動量當真量。</b>
@@ -216,7 +220,8 @@
 
   <footer>
     黃金 / BTC 真實成交量 · 新手圖解使用說明 ｜ 本文所有圖示皆為示意圖，實際畫面以 TradingView 為準<br>
-    本說明僅供教學，非投資建議；交易有風險，請自行評估。
+    本說明僅供教學，非投資建議；交易有風險，請自行評估。<br>
+    <span style="display:inline-block;margin-top:8px;padding:3px 10px;border-radius:999px;background:#eef2f7;color:#64748b;font-size:12px;font-weight:700">版本 v2 · 爆量＝柱頂🔥（漲綠跌紅，已無黃色柱）· 2026-07</span>
   </footer>
 </div>
 
@@ -292,7 +297,7 @@
     // 右:彩、有高低
     var rh=[0.3,0.55,0.35,0.8,0.4,0.25,0.6,0.45,0.9,0.35];
     var rd=['up','up','down','up','down','down','up','up','up','down'];
-    rh.forEach(function(h,i){var x=mid+30+i*((mid-70)/rh.length);var bh=h*90;var col=(i===8)?'#ffc107':(rd[i]==='up'?'#26a69a':'#ef5350');s+='<rect x="'+x+'" y="'+(base-bh)+'" width="18" height="'+bh+'" fill="'+col+'" rx="1"/>';});
+    rh.forEach(function(h,i){var x=mid+30+i*((mid-70)/rh.length);var bh=h*90;var col=(rd[i]==='up'?'#26a69a':'#ef5350');s+='<rect x="'+x+'" y="'+(base-bh)+'" width="18" height="'+bh+'" fill="'+col+'" rx="1"/>';if(i===8)s+='<text x="'+(x+9)+'" y="'+(base-bh-5)+'" fill="#ffc107" font-size="13" text-anchor="middle" font-family="sans-serif">🔥</text>';});
     s+='<text x="'+(mid+mid/2)+'" y="'+(base+16)+'" fill="#8b93a1" font-size="11.5" text-anchor="middle" font-family="sans-serif">真的成交量,高低分明、看得出量能</text>';
     s+='</svg>';
     el('cmp').innerHTML=s;
