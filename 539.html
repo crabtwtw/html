@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>拖牌鏈分析器 · 新手圖解教學</title>
+<style>
+  :root{
+    --bg:#0f1115; --panel:#181b22; --panel2:#20242d; --line:#2b303b;
+    --txt:#e8ebf0; --dim:#9aa3b2; --pick:#f5c518; --hot:#ff5d6c; --blue:#37b6ff; --ok:#3ddc97;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);
+    font-family:-apple-system,"PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;
+    line-height:1.75;padding:16px;max-width:760px;margin:0 auto}
+  h1{font-size:1.5rem;margin:.2em 0 .1em;text-align:center}
+  .lead{color:var(--dim);text-align:center;margin:0 0 18px;font-size:.95rem}
+  h2{font-size:1.2rem;margin:1.5em 0 .3em;padding-left:10px;border-left:5px solid var(--blue)}
+  h3{font-size:1.02rem;margin:1em 0 .2em}
+  p{margin:.5em 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin:14px 0}
+  .num-tag{display:inline-flex;align-items:center;justify-content:center;min-width:30px;height:30px;padding:0 8px;border-radius:15px;
+    background:var(--blue);color:#04121c;font-weight:800;margin-right:8px;flex:0 0 auto;font-size:.9rem}
+  .tit{display:flex;align-items:center;font-weight:800;font-size:1.08rem;margin-bottom:6px}
+  .draw{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:8px 0}
+  .lbl{color:var(--dim);font-size:.8rem;min-width:74px}
+  .ball{position:relative;display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;
+    background:#171b22;border:1px solid var(--line);font-weight:700;font-size:.95rem;flex:0 0 auto}
+  .ball.pick{background:var(--pick);color:#111;border-color:var(--pick)}
+  .ball.hot{background:var(--hot);color:#fff;border-color:var(--hot)}
+  .ball.blue{border-color:var(--blue);color:#cdeafd}
+  .ball.dan{background:var(--pick);color:#111;border-color:var(--pick)}
+  .ball.tuo{background:var(--blue);color:#04121c;border-color:var(--blue)}
+  .ball.ring{box-shadow:0 0 0 3px var(--ok)}
+  .ball.latest{outline:2px dashed var(--ok);outline-offset:2px}
+  .ball .cnt{position:absolute;bottom:-3px;right:-4px;font-size:.58rem;background:var(--blue);
+    color:#04121c;border-radius:8px;padding:0 4px;line-height:1.5;font-weight:800}
+  .cellbox{border:2px solid var(--line);border-radius:12px;padding:6px 8px}
+  .cellbox.src{border-color:var(--pick)}
+  .cellbox.n1{border-color:var(--blue)}
+  .cellbox .cap{font-size:.72rem;color:var(--dim);text-align:center;margin-bottom:4px}
+  .arrow{color:var(--dim);font-size:1.3rem;padding:0 2px}
+  .note{background:var(--panel2);border-left:4px solid var(--ok);border-radius:8px;padding:8px 12px;margin:10px 0;font-size:.9rem}
+  .warn{border-left-color:var(--hot)}
+  .legend{display:flex;flex-wrap:wrap;gap:8px 16px;margin:8px 0;font-size:.85rem}
+  .legend span{display:flex;align-items:center;gap:6px}
+  .dot{width:16px;height:16px;border-radius:50%;flex:0 0 auto}
+  b.hl{color:var(--hot)} b.hy{color:var(--pick)} b.hb{color:var(--blue)} b.hg{color:var(--ok)}
+  .toc{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 18px;margin:10px 0 4px}
+  .toc a{color:var(--blue);text-decoration:none;display:block;padding:3px 0}
+  .foot{color:var(--dim);font-size:.82rem;text-align:center;margin:26px 0 6px;border-top:1px solid var(--line);padding-top:14px}
+  .plus{color:var(--dim);padding:0 4px;font-weight:700}
+  .combo{font-family:ui-monospace,Menlo,monospace;font-size:.95rem;background:var(--panel2);border:1px solid var(--line);
+    border-radius:8px;padding:4px 10px;margin:4px 0;display:inline-block}
+  /* 介面模擬 */
+  .ui{border:1px solid var(--line);border-radius:14px;background:var(--panel2);padding:12px;margin:10px 0}
+  .ui .uirow{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap}
+  .ui h4{margin:0;font-size:1rem}
+  .ui .sub{color:var(--dim);font-size:.76rem;margin-top:2px}
+  .sel{background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:6px 10px;font-size:.85rem;display:inline-block}
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  .seg i{font-style:normal;padding:6px 12px;font-size:.82rem;color:var(--dim)}
+  .seg i.on{background:var(--blue);color:#04121c;font-weight:800}
+  .expchip{font-size:.72rem;font-weight:800;color:var(--ok)}
+  .expchip.red{color:var(--hot)}
+  .bar{display:flex;align-items:center;gap:8px;margin:5px 0}
+  .barline{flex:1;height:22px;background:var(--bg);border-radius:7px;position:relative;overflow:hidden;border:1px solid var(--line)}
+  .barline i{display:block;height:100%;background:linear-gradient(90deg,var(--blue),#7fd4ff)}
+  .barline b{position:absolute;left:8px;top:0;line-height:22px;font-size:.72rem;font-weight:600}
+  .bdate{font-size:.64rem;color:var(--dim);flex:0 0 auto;max-width:36%;text-align:right}
+  .rball{width:34px;height:34px;border-radius:50%;background:var(--bg);border:1px solid var(--line);
+    display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex:0 0 auto}
+  .rball.top{background:var(--hot);color:#fff;border-color:var(--hot)}
+  .btnfake{display:inline-block;background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:7px 12px;font-size:.85rem;margin:3px 4px 3px 0}
+  .qa{margin:10px 0}
+  .qa b{color:var(--blue)}
+</style>
+</head>
+<body>
+
+<h1>🎯 拖牌鏈分析器</h1>
+<p class="lead">新手圖解教學 · 一步一步看圖說故事</p>
+
+<div class="toc">
+  <b>目錄</b>
+  <a href="#a">① 這工具在做什麼？（先看這個）</a>
+  <a href="#b">② 介面導覽：畫面上每個東西是什麼</a>
+  <a href="#c">③ 三個設定鈕（含兩種分析方式）</a>
+  <a href="#d">④ 號碼盤：綠虛線圈、右下小數字</a>
+  <a href="#e">⑤ 排名條怎麼看</a>
+  <a href="#f">⑥ 走勢盤顏色：黃 / 紅 / 藍框</a>
+  <a href="#g">⑦ 續鏈：一路追下去</a>
+  <a href="#h">⑧ 列印 / 存 PDF / 批次選號</a>
+  <a href="#i">⑨ 策略選號六招（重號→膽拖）</a>
+  <a href="#j">⑩ 常見問題</a>
+</div>
+
+<h2 id="a">① 這工具在做什麼？</h2>
+<div class="step">
+  <p>一句話：它幫你看「<b class="hy">某個號碼開出之後，接下來幾期常常跟著開出哪些號</b>」——坊間叫這個「<b>拖牌</b>」。</p>
+  <p>你點一個號，它就幫你把<b>歷史上有這個號的那幾期</b>翻出來，並把那幾期「往後」開了什麼，全部橫排給你看，再統計出誰最常跟著出現。</p>
+  <h3>三步驟上手</h3>
+  <div class="draw"><span class="num-tag">1</span>選遊戲（今彩539 或 天天樂）</div>
+  <div class="draw"><span class="num-tag">2</span>在號碼盤點一個號，例如 <span class="ball pick">23</span></div>
+  <div class="draw"><span class="num-tag">3</span>下面自動跑出「排名條」和「橫排走勢盤」</div>
+  <div class="note">想換號隨時再點別的號就好，不用重整頁面。資料每天開獎後由系統自動更新，你不用自己按。</div>
+</div>
+
+<h2 id="b">② 介面導覽</h2>
+<div class="step">
+  <p>先認識畫面最上面這一區，長得像這樣：</p>
+  <div class="ui">
+    <div style="text-align:right"><span class="expchip">有效至 2026/8/29（剩 27 天）</span></div>
+    <div class="uirow">
+      <div>
+        <h4>今彩539 拖牌鏈分析器</h4>
+        <div class="sub">晚上開獎，約 20:32 出號｜最新：2026-08-01 開出 06 11 18 22 29</div>
+      </div>
+      <div><div class="sub" style="margin:0 0 3px">遊戲</div><span class="sel">今彩539（晚上） ▾</span></div>
+    </div>
+  </div>
+  <div class="draw"><span class="num-tag">右上</span><b>你的帳號有效到哪天</b>。平常綠色，剩 <b>7 天內會變紅字</b>提醒你快到期。</div>
+  <div class="draw"><span class="num-tag">標題</span>目前正在看哪個遊戲。</div>
+  <div class="draw"><span class="num-tag">灰字</span>開獎時間＋<b>目前最新一期</b>是哪天、開了哪 5 個號。看這行就知道資料是不是最新的。</div>
+  <div class="draw"><span class="num-tag">遊戲</span>切換兩個遊戲的下拉選單。</div>
+  <div class="note">
+    <b>兩個遊戲的差別：</b><br>
+    <b class="hy">今彩539</b>（晚上約 20:32 開）— <b>週日不開獎</b>。<br>
+    <b class="hb">天天樂</b>（早上開，夏令約 09:55／冬令約 10:55）— <b>天天開，含週日</b>。<br>
+    兩個都是 1~39 選 5 個號，玩法邏輯一樣，工具通用。
+  </div>
+</div>
+
+<h2 id="c">③ 三個設定鈕</h2>
+<div class="step">
+  <div class="tit"><span class="num-tag">回看</span>回看期數（有此號的最近幾期）</div>
+  <p>往回找「<b>最近幾次出現你選的號</b>」。設 <b>5</b> ＝ 抓最近 5 次；想看更多歷史就調大，最多 40。</p>
+  <div class="note">數字越大＝樣本越多、越有參考性，但畫面也越長。新手先用 5。</div>
+
+  <div class="tit" style="margin-top:14px"><span class="num-tag">往後</span>每列往後顯示（下N期）</div>
+  <p>每一列要往右看「<b>之後幾期</b>」。設 <b>5</b> ＝ 看下1～下5期；想追更遠就調大，最多 20。</p>
+
+  <div class="tit" style="margin-top:14px"><span class="num-tag">方式</span>分析方式（兩種模式，很重要！）</div>
+  <div class="draw"><span class="seg"><i class="on">下一期拖出</i><i>同期一起開</i></span></div>
+  <p><b class="hb">下一期拖出</b>（預設）：看「這個號開出<b>之後</b>，下一期會拖出誰」。這是<b>拖牌</b>的核心玩法。</p>
+  <p><b class="hb">同期一起開</b>：看「這個號<b>同一期</b>常跟誰一起開」。適合找「常一起出現的組合」。</p>
+  <div class="note">
+    用 23 舉例最好懂：<br>
+    <b>下一期拖出</b>＝23 開了之後，<b>隔一期</b>常開出 14。<br>
+    <b>同期一起開</b>＝23 開的<b>那一期</b>，常常同時有 31。<br>
+    選「同期一起開」時，「每列往後顯示」會自動隱藏（因為用不到）。
+  </div>
+</div>
+
+<h2 id="d">④ 號碼盤怎麼看</h2>
+<div class="step">
+  <p>中間那盤 1~39 的號碼球，藏了三個訊息：</p>
+  <div class="draw">
+    <span class="ball">01</span>
+    <span class="ball pick">23</span>
+    <span class="ball latest">06</span>
+    <span class="ball">14<i class="cnt">3</i></span>
+  </div>
+  <div class="legend" style="margin-top:10px">
+    <span><span class="dot" style="background:var(--pick)"></span><b class="hy">黃色</b>＝你目前點選的號</span>
+    <span><span class="dot" style="background:transparent;outline:2px dashed var(--ok)"></span><b class="hg">綠色虛線圈</b>＝最新一期有開出的號</span>
+    <span><span class="dot" style="background:var(--blue)"></span><b class="hb">右下小數字</b>＝被拖出幾次</span>
+  </div>
+  <div class="note">上圖 <b>14</b> 右下角的藍色小 <b>3</b>，意思是「在你選的 23 的分析裡，14 總共被拖出 3 次」。數字越大＝越常跟著出現。<br>再點一次<b class="hy">黃色</b>的號可以取消選取。</div>
+</div>
+
+<h2 id="e">⑤ 排名條怎麼看</h2>
+<div class="step">
+  <p>選好號後，第一區是<b>排名</b>：把最常被拖出的號由多到少排好。</p>
+  <div class="ui">
+    <div class="sub" style="margin-bottom:6px">23 出現後「下一期」最常拖出的號碼（點可續鏈）：</div>
+    <div class="bar"><span class="rball top">14</span><span class="barline"><i style="width:100%"></i><b>3 次</b></span><span class="bdate">07-29、07-01、06-17</span></div>
+    <div class="bar"><span class="rball top">05</span><span class="barline"><i style="width:66%"></i><b>2 次</b></span><span class="bdate">07-29、07-10</span></div>
+    <div class="bar"><span class="rball top">32</span><span class="barline"><i style="width:66%"></i><b>2 次</b></span><span class="bdate">07-29、07-27</span></div>
+    <div class="bar"><span class="rball">19</span><span class="barline"><i style="width:33%"></i><b>1 次</b></span><span class="bdate">07-27</span></div>
+  </div>
+  <div class="draw"><span class="num-tag">左</span>號碼球。<b>前三名是紅色</b>，一眼看出誰最常被拖。</div>
+  <div class="draw"><span class="num-tag">中</span>藍色長條＝次數，<b>越長越常出現</b>。</div>
+  <div class="draw"><span class="num-tag">右</span>灰色小字＝<b>哪幾天</b>出現的（月-日）。</div>
+  <div class="note">這些號<b>都能點</b>，點下去就換成分析那個號（＝續鏈，見第⑦節）。</div>
+  <p style="margin-top:10px">排名上方還有幾顆小灰標籤，意思是：</p>
+  <div><span class="btnfake">回看 5 期（有 23）</span><span class="btnfake">每列往後 5 期</span><span class="btnfake">實際 5 列</span><span class="btnfake">23 全部出現 12 次</span></div>
+  <div class="note warn">如果「<b>實際 N 列</b>」比你設定的回看期數<b>少</b>，標籤會變紅框，代表資料庫裡這個號出現的次數還不夠多，樣本較少、參考性較低。</div>
+</div>
+
+<h2 id="f">⑥ 走勢盤顏色</h2>
+<div class="step">
+  <p>第二區是<b>橫排走勢</b>：每一列＝「有你選的號的那一期」，往右是那期的下一期、下二期…（手機可左右滑）。</p>
+  <div class="legend">
+    <span><span class="dot" style="background:var(--pick)"></span> 黃球＝<b class="hy">你點選的號</b></span>
+    <span><span class="dot" style="background:var(--hot)"></span> 紅球＝<b class="hl">下一期最常被拖出的號</b></span>
+    <span><span class="dot" style="border:3px solid var(--blue)"></span> 藍框格＝<b class="hb">下一期</b></span>
+  </div>
+  <p style="margin-top:12px">例子：你點了 <span class="ball pick">23</span></p>
+  <div class="draw">
+    <span class="lbl">有23<br>07-28</span>
+    <span class="cellbox src"><div class="cap">本期 07-28</div>
+      <span class="ball">05</span><span class="ball">08</span><span class="ball">13</span><span class="ball pick">23</span><span class="ball">31</span>
+    </span>
+    <span class="arrow">→</span>
+    <span class="cellbox n1"><div class="cap">下1 07-29</div>
+      <span class="ball">05</span><span class="ball hot">14</span><span class="ball">32</span><span class="ball">33</span><span class="ball">36</span>
+    </span>
+    <span class="arrow">→</span>
+    <span class="cellbox"><div class="cap">下2 07-30</div>
+      <span class="ball">04</span><span class="ball">07</span><span class="ball">08</span><span class="ball">16</span><span class="ball">38</span>
+    </span>
+  </div>
+  <div class="note">
+    <b>故事這樣讀：</b>07-28 那期開出了 <b class="hy">23</b>（黃框格＝本期）。<br>
+    它的<b class="hb">下一期</b>（07-29，藍框格）開了 05 <b class="hl">14</b> 32 33 36。<br>
+    其中 <b class="hl">14</b> 是紅色，代表<b>在所有「下一期」裡，14 最常跟在 23 後面</b>——這就是 23 最愛拖出來的號。<br>
+    再往右的「下2、下3…」是更之後的期數，可以看趨勢有沒有延續。
+  </div>
+  <div class="note warn">最左邊「有23 / 07-28」是列標籤，告訴你這一列是從哪一期開始算的。</div>
+</div>
+
+<h2 id="g">⑦ 續鏈：一路追下去</h2>
+<div class="step">
+  <p>走勢盤和排名裡的號碼<b>每一顆都能再點</b>。點下去就改成分析那個號，像接龍一樣往下追：</p>
+  <div class="draw">
+    <span class="ball pick">23</span><span class="arrow">→</span>
+    <span class="ball pick">14</span><span class="arrow">→</span>
+    <span class="ball pick">31</span><span class="arrow">→</span>
+    <span style="color:var(--dim)">…</span>
+  </div>
+  <p>畫面上方會留下一排<b>麵包屑</b>（23 → 14 → 31），記錄你追過的路。點麵包屑上任何一個號可以<b>跳回那一層</b>，也有「← 上一層」按鈕。</p>
+  <div class="note">這就是「拖牌<b>鏈</b>」名字的由來：23 拖 14、14 再拖 31…一條鏈追下去。</div>
+</div>
+
+<h2 id="h">⑧ 列印 / 存 PDF / 批次選號</h2>
+<div class="step">
+  <p>走勢盤右上角有三顆按鈕：</p>
+  <div><span class="btnfake">🖨 列印</span><span class="btnfake">📄 存成 PDF</span><span class="btnfake">🗂 批次選號(1~39)</span></div>
+  <div class="draw" style="margin-top:10px"><span class="num-tag">印</span><b>列印</b>：直接把目前這張走勢盤送印表機。版面請選 <b>橫向</b>。</div>
+  <div class="draw"><span class="num-tag">PDF</span><b>存成 PDF</b>：會先跳一張<b>黃色說明卡</b>，照著兩步驟做——按藍色按鈕，然後把「印表機／目的地」改選「<b>另存為 PDF</b>」，就能命名存檔。</div>
+  <div class="draw"><span class="num-tag">批</span><b>批次選號</b>：一次勾多個號（可全選 1~39），<b>一個號印一張</b>，下面留白可以手寫記錄。</div>
+  <div class="note warn">存 PDF 一定要在跳出的視窗把印表機改成「另存為 PDF」，這是瀏覽器的規矩、不是工具壞掉。選過一次之後瀏覽器通常會記住。</div>
+</div>
+
+<h2 id="i">⑨ 策略選號 · 六招</h2>
+<p>展開工具頁的「<b>🎯 策略選號</b>」，它會依<b>最新一期</b>＋近 30 期熱度，整理六種選號牌路。每個號下方小字＝近 30 期出現次數（越大越熱），<b>點任一號可直接跳去看它的拖牌</b>。</p>
+
+<div class="step">
+  <div class="tit"><span class="num-tag">1</span>重號</div>
+  <p>上一期開的號，下一期常有 1~2 個會<b>重複</b>出現。所以「最新一期那 5 個號」就是重號候選。</p>
+  <div class="draw"><span class="lbl">上一期</span><span class="ball">11</span><span class="ball">12</span><span class="ball">25</span><span class="ball">30</span><span class="ball">34</span></div>
+  <div class="draw"><span class="lbl">最新一期</span><span class="ball">06</span><span class="ball hot">11</span><span class="ball">18</span><span class="ball">22</span><span class="ball">29</span></div>
+  <div class="note"><b class="hl">11</b> 兩期都開＝這就是重號。下一期它會不會又來？重號就是在看這個。</div>
+</div>
+
+<div class="step">
+  <div class="tit"><span class="num-tag">2</span>連號</div>
+  <p>兩個<b>相鄰</b>的號一起開，例如 07、08。工具會告訴你最新一期有沒有連號，並列出「可能接續」的鄰接號。</p>
+  <div class="draw"><span class="lbl">某一期</span><span class="ball ring">07</span><span class="ball ring">08</span><span class="ball">15</span><span class="ball">22</span><span class="ball">33</span></div>
+  <div class="note">綠圈的 <b>07-08</b> 就是一組連號。</div>
+</div>
+
+<div class="step">
+  <div class="tit"><span class="num-tag">3</span>隔期號</div>
+  <p>上一期有、最新一期<b>沒有</b>的號——它「跳過一期」，常常隔一期又回補。</p>
+  <div class="draw"><span class="lbl">上一期</span><span class="ball">11</span><span class="ball hot">12</span><span class="ball">25</span><span class="ball">30</span><span class="ball">34</span></div>
+  <div class="draw"><span class="lbl">最新一期</span><span class="ball">06</span><span class="ball">11</span><span class="ball">18</span><span class="ball">22</span><span class="ball">29</span></div>
+  <div class="note"><b class="hl">12</b> 上期有、這期沒有 → 隔期號候選，賭它下一期回來。</div>
+</div>
+
+<div class="step">
+  <div class="tit"><span class="num-tag">4</span>鄰號</div>
+  <p>某個號的<b>左右鄰居</b>（±1）。工具抓「近期最熱的號」，各給你它的鄰號當參考。</p>
+  <div class="draw"><span class="ball hot">20</span><span class="arrow">的鄰號 →</span><span class="ball blue">19</span><span class="ball blue">21</span></div>
+  <div class="note">熱號 20 的隔壁 19、21，常被拿來當「拖」搭配。</div>
+</div>
+
+<div class="step">
+  <div class="tit"><span class="num-tag">5</span>尾數</div>
+  <p>看<b>個位數</b>。同尾數是一組，例如「尾 3」＝03、13、23、33。工具把最近熱的尾數排前面。</p>
+  <div class="draw"><span class="lbl">尾 3</span><span class="ball">03</span><span class="ball">13</span><span class="ball hot">23</span><span class="ball">33</span></div>
+  <div class="note">若最近「尾3」特別常開，就多留意這一整排；紅框代表最新一期剛出現過。</div>
+</div>
+
+<div class="step">
+  <div class="tit"><span class="num-tag">6</span>膽拖組合</div>
+  <p>看完前五招、心裡有幾個看好的號後，就在這裡組牌。點號碼切換：<b>一下＝<span style="color:var(--blue)">拖</span>、兩下＝<span style="color:var(--pick)">膽</span>、三下＝取消</b>。</p>
+  <p><b class="hy">膽</b>＝每一注都<b>一定包含</b>的固定號；<b class="hb">拖</b>＝搭配用的號。539 每注 5 碼。</p>
+  <div class="draw">
+    <span class="lbl">膽（固定）</span><span class="ball dan">06</span><span class="ball dan">11</span>
+    <span class="plus">＋</span>
+    <span class="lbl" style="min-width:auto">拖（搭配）</span><span class="ball tuo">18</span><span class="ball tuo">22</span><span class="ball tuo">29</span><span class="ball tuo">34</span>
+  </div>
+  <p>2 膽 + 4 拖，每注要湊 5 碼 → 「2 膽 ＋ 從 4 個拖裡選 3 個」＝ 共 <b>4 注</b>：</p>
+  <div>
+    <span class="combo">06 11 18 22 29</span>
+    <span class="combo">06 11 18 22 34</span>
+    <span class="combo">06 11 18 29 34</span>
+    <span class="combo">06 11 22 29 34</span>
+  </div>
+  <p style="margin-top:8px">每注都含膽號 <b class="hy">06、11</b>，其餘 3 碼從拖裡輪流搭。按「<b>產生組合</b>」全部列出，再按「<b>列印 / 存 PDF</b>」印出下注單。</p>
+  <div class="note warn">防呆：膽最多 5 個；拖不夠會提示還差幾個；超過 500 注會擋下，請減少拖的數量。</div>
+</div>
+
+<h2 id="j">⑩ 常見問題</h2>
+<div class="step">
+  <div class="qa"><b>Q：資料要自己更新嗎？</b><br>不用。系統每天開獎後自動抓最新一期，你打開就是最新的。看標題下方灰字就知道目前最新是哪一期。</div>
+  <div class="qa"><b>Q：手機、平板、電腦都能用嗎？</b><br>可以。同一條連結可綁定多台裝置（預設由客服設定台數）。綁滿時再開，會自動釋放最早那一台，不會被鎖在外面。</div>
+  <div class="qa"><b>Q：換手機或清了瀏覽器資料怎麼辦？</b><br>用原本那條連結重開一次即可重新綁定。真的有問題再找客服。</div>
+  <div class="qa"><b>Q：畫面沒更新、還是舊的？</b><br>下拉重新整理頁面即可。</div>
+  <div class="qa"><b>Q：走勢盤太寬看不完？</b><br>手機上用手指<b>左右滑</b>；或用「列印／存 PDF」印成橫向 A4 慢慢看。</div>
+  <div class="qa"><b>Q：紅色的號是不是一定會開？</b><br><b>不是。</b>紅色只代表「過去最常跟著出現」，是統計參考，不是預測。</div>
+</div>
+
+<div class="foot">
+  © 2026　本工具僅供號碼統計參考。<br>
+  開獎為<b>隨機獨立事件</b>，過往結果<b>不能</b>預測未來。<br>
+  請理性娛樂、量力而為。
+</div>
+
+</body>
+</html>
