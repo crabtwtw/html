@@ -86,8 +86,8 @@
   <a href="#a">① 這工具在做什麼？（先看這個）</a>
   <a href="#b">② 介面導覽：畫面上每個東西是什麼</a>
   <a href="#c">③ 三個設定鈕（含兩種分析方式）</a>
-  <a href="#d">④ 號碼盤：黃虛線圈、右下小數字</a>
-  <a href="#e">⑤ 排名條怎麼看</a>
+  <a href="#d">④ 號碼盤：黃虛線圈、右下小數字、期別回溯</a>
+  <a href="#e">⑤ 排名條怎麼看（含並列名次）</a>
   <a href="#f">⑥ 走勢盤顏色：黃 / 紅 / 藍框</a>
   <a href="#g">⑦ 續鏈：一路追下去</a>
   <a href="#h">⑧ 列印 / 存 PDF / 批次選號</a>
@@ -139,7 +139,7 @@
   <p>往回找「<b>最近幾次出現你選的號</b>」。在框裡<b>直接打數字</b>，打完按旁邊的 <b>✓ 確定</b>（或按鍵盤 Enter）就會套用。</p>
   <div class="draw"><span class="btnfake">5</span><span class="btnfake" style="background:var(--pick);color:#111;border-color:var(--pick);font-weight:800">✓ 確定</span><span class="btnfake">全部</span></div>
   <p>按 <b>全部</b> 會一次拉到資料庫的最大期數（框框下面會寫「資料庫共 N 期」，這個數字每天自動變多）。</p>
-  <div class="note">數字越大＝樣本越多、越有參考性，但畫面也越長。新手先用 5，想看完整統計再按「全部」。</div>
+  <div class="note">數字越大＝樣本越多、結果越<b>穩定</b>（不會每開一期就大洗牌），但撈到的資料也越舊：<b>5 期</b>約往回一個半月、<b>10 期</b>約三個月、<b>20 期</b>就快半年前了。<br>預設是 <b class="hy">10</b>，想看短線就調小、想看完整統計再按「全部」。</div>
 
   <div class="tit" style="margin-top:14px"><span class="num-tag">往後</span>每列往後顯示（下N期）</div>
   <p>每一列要往右看「<b>之後幾期</b>」。設 <b>5</b> ＝ 看下1～下5期；想追更遠就調大，最多 20。</p>
@@ -171,6 +171,17 @@
     <span><span class="dot" style="background:var(--blue)"></span><b class="hb">右下小數字</b>＝被拖出幾次</span>
   </div>
   <div class="note">上圖 <b>14</b> 右下角的藍色小 <b>3</b>，意思是「在你選的 23 的分析裡，14 總共被拖出 3 次」。數字越大＝越常跟著出現。<br>再點一次<b class="hy">黃色</b>的號可以取消選取。</div>
+
+  <div class="tit" style="margin-top:16px"><span class="num-tag">🔒</span>期別選單：回到過去某一期看（回溯模式）</div>
+  <p>號碼盤上方那排 <b>‹ 下拉選單 ›</b>，預設停在<b>最新一期</b>。往回選別期，會做兩件事：</p>
+  <div class="draw"><span class="lbl">黃圈顯示</span><span class="btnfake">‹</span>
+    <span class="sel">2026-08-01（六）　往回 2 期</span><span class="btnfake">›</span></div>
+  <div class="draw"><span class="num-tag">一</span>號碼盤上的<b class="hy">黃色虛線圈</b>跳到那一期開出的號。</div>
+  <div class="draw"><span class="num-tag">二</span>整個分析<b>只用那一期（含）以前的資料</b>——就像把時光機開回那天。</div>
+  <div class="note">選了往回的期別，畫面上會出現一條藍色的
+    <b class="hb">🔒 回溯模式：只用 2026-08-01（含）以前的資料分析</b>。<br>
+    這就是<b>回頭驗證</b>用的：想確認「我上禮拜看到的到底準不準」，把期別轉回那一天，跑出來的結果會跟你當天看到的<b>一模一樣</b>。<br>
+    看完記得把期別<b>調回「最新」</b>，不然你會一直看著舊資料。</div>
 </div>
 
 <h2 id="e">⑤ 排名條怎麼看</h2>
@@ -184,8 +195,12 @@
     <div class="bar"><span class="rball">19</span><span class="barline"><i style="width:33%"></i><b>1 次</b></span><span class="bdate">07-27</span></div>
   </div>
   <div class="draw"><span class="num-tag">左</span>號碼球。<b>前三名是紅色</b>，一眼看出誰最常被拖。</div>
-  <div class="draw"><span class="num-tag">中</span>藍色長條＝次數，<b>越長越常出現</b>。</div>
+  <div class="draw"><span class="num-tag">中</span>藍色長條＝次數，後面會寫<b>第幾名</b>，<b>越長越常出現</b>。</div>
   <div class="draw"><span class="num-tag">右</span>灰色小字＝<b>哪幾天</b>出現的（月-日）。</div>
+  <div class="note warn">⚖️ <b class="hy">看到「並列第N」和虛線球框，要特別注意</b>：<br>
+    次數一樣就是<b>同一個名次</b>，例如四個號都 2 次，它們就都是「並列第2」，誰排上面<b>只是因為號碼比較小</b>，
+    <b>不代表比較強</b>。這種時候不要只挑最上面那個，四個要一起看。<br>
+    如果同分的號超過三個，走勢盤裡的<b class="hl">紅球</b>會直接不標——因為那時候「最熱」根本分不出來，硬標反而誤導。</div>
   <div class="note">這些號<b>都能點</b>，點下去就換成分析那個號（＝續鏈，見第⑦節）。</div>
   <p style="margin-top:10px">排名上方還有幾顆小灰標籤，意思是：</p>
   <div><span class="btnfake">回看 5 期（有 23）</span><span class="btnfake">每列往後 5 期</span><span class="btnfake">實際 5 列</span><span class="btnfake">23 全部出現 12 次</span></div>
@@ -197,7 +212,7 @@
   <p>第二區是<b>橫排走勢</b>：每一列＝「有你選的號的那一期」，往右是那期的下一期、下二期…（手機可左右滑）。</p>
   <div class="legend">
     <span><span class="dot" style="background:var(--pick)"></span> 黃球＝<b class="hy">你點選的號</b></span>
-    <span><span class="dot" style="background:var(--hot)"></span> 紅球＝<b class="hl">下一期最常被拖出的號</b></span>
+    <span><span class="dot" style="background:var(--hot)"></span> 紅球＝<b class="hl">下一期最常被拖出的號</b>（並列第一都會標；同分超過 3 個就不標）</span>
     <span><span class="dot" style="border:3px solid var(--blue)"></span> 藍框格＝<b class="hb">下一期</b></span>
   </div>
   <p style="margin-top:12px">例子：你點了 <span class="ball pick">23</span></p>
@@ -338,6 +353,11 @@
   <div class="qa"><b>Q：換手機或清了瀏覽器資料怎麼辦？</b><br>一樣用原本那條連結重開一次即可重新綁定（或用「🔗 我的連結」複製）。真的有問題再找客服。</div>
   <div class="qa"><b>Q：畫面沒更新、還是舊的？</b><br>下拉重新整理頁面即可。</div>
   <div class="qa"><b>Q：走勢盤太寬看不完？</b><br>手機上用手指<b>左右滑</b>；或用「列印／存 PDF」印成橫向 A4 慢慢看。</div>
+  <div class="qa"><b>Q：昨天看的結果，今天回來看怎麼變了？</b><br>
+    這是<b>正常的</b>，不是資料出錯。「回看 N 期」是往回找<b>最近 N 次出現這個號</b>的那幾期，像一條只放 N 格的輸送帶：
+    今天新開一期，就可能有一列新的擠進來、最舊那列被擠出去，次數當然會變。<br>
+    想看「當天到底是什麼樣子」，把號碼盤上方的<b>期別選單轉回那一天</b>（回溯模式），結果就會跟你那天看到的完全一致。<br>
+    另外，<b>回看期數調大</b>（例如 10 或 20）樣本多、變動就小很多。</div>
   <div class="qa"><b>Q：紅色的號是不是一定會開？</b><br><b>不是。</b>紅色只代表「過去最常跟著出現」，是統計參考，不是預測。</div>
 </div>
 
