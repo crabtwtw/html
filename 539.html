@@ -32,7 +32,7 @@
   .ball.dan{background:var(--pick);color:#111;border-color:var(--pick)}
   .ball.tuo{background:var(--blue);color:#04121c;border-color:var(--blue)}
   .ball.ring{box-shadow:0 0 0 3px var(--ok)}
-  .ball.latest{outline:2px dashed var(--ok);outline-offset:2px}
+  .ball.latest{outline:2px dashed #ffd400;outline-offset:2px}
   .ball .cnt{position:absolute;bottom:-3px;right:-4px;font-size:.58rem;background:var(--blue);
     color:#04121c;border-radius:8px;padding:0 4px;line-height:1.5;font-weight:800}
   .cellbox{border:2px solid var(--line);border-radius:12px;padding:6px 8px}
@@ -86,7 +86,7 @@
   <a href="#a">① 這工具在做什麼？（先看這個）</a>
   <a href="#b">② 介面導覽：畫面上每個東西是什麼</a>
   <a href="#c">③ 三個設定鈕（含兩種分析方式）</a>
-  <a href="#d">④ 號碼盤：綠虛線圈、右下小數字</a>
+  <a href="#d">④ 號碼盤：黃虛線圈、右下小數字</a>
   <a href="#e">⑤ 排名條怎麼看</a>
   <a href="#f">⑥ 走勢盤顏色：黃 / 紅 / 藍框</a>
   <a href="#g">⑦ 續鏈：一路追下去</a>
@@ -114,15 +114,17 @@
     <div class="uirow">
       <div>
         <h4>今彩539 拖牌鏈分析器</h4>
-        <div class="sub">晚上開獎，約 20:32 出號｜最新：2026-08-01 開出 06 11 18 22 29</div>
+        <div class="sub">晚上開獎，約 20:32 出號</div>
       </div>
-      <div><div class="sub" style="margin:0 0 3px">遊戲</div><span class="sel">今彩539（晚上） ▾</span></div>
+      <div><span class="sel">今彩539（晚上） ▾</span></div>
     </div>
   </div>
   <div class="draw"><span class="num-tag">右上</span><b>你的帳號有效到哪天</b>。平常綠色，剩 <b>7 天內會變紅字</b>提醒你快到期。</div>
   <div class="draw"><span class="num-tag">標題</span>目前正在看哪個遊戲。</div>
-  <div class="draw"><span class="num-tag">灰字</span>開獎時間＋<b>目前最新一期</b>是哪天、開了哪 5 個號。看這行就知道資料是不是最新的。</div>
-  <div class="draw"><span class="num-tag">遊戲</span>切換兩個遊戲的下拉選單。</div>
+  <div class="draw"><span class="num-tag">灰字</span>這個遊戲的開獎時間。</div>
+  <div class="draw"><span class="num-tag">黃球</span>底下獨立一排的<b style="color:#ffd400">亮黃大球</b>＝<b>最新一期開出的號碼</b>，上面寫著日期。看這排就知道資料是不是最新的。<b>這些黃球可以直接點</b>，點下去就看那個號的拖牌。</div>
+  <div class="draw"><span class="num-tag">選單</span>切換兩個遊戲的下拉選單。</div>
+  <div class="draw"><span class="num-tag">歷史</span>黃球那一排右上角有「<b>📜 歷史開獎</b>」，點進去可以看<b>一整份開獎紀錄</b>（日期＋星期＋號碼），能選近 3／6／8 個月或全部，也能自己挑起訖月份。清單裡的號碼一樣可以點，點了就跳回去看它的拖牌。</div>
   <div class="note">
     <b>兩個遊戲的差別：</b><br>
     <b class="hy">今彩539</b>（晚上約 20:32 開）— <b>週日不開獎</b>。<br>
@@ -134,8 +136,10 @@
 <h2 id="c">③ 三個設定鈕</h2>
 <div class="step">
   <div class="tit"><span class="num-tag">回看</span>回看期數（有此號的最近幾期）</div>
-  <p>往回找「<b>最近幾次出現你選的號</b>」。設 <b>5</b> ＝ 抓最近 5 次；想看更多歷史就調大，最多 40。</p>
-  <div class="note">數字越大＝樣本越多、越有參考性，但畫面也越長。新手先用 5。</div>
+  <p>往回找「<b>最近幾次出現你選的號</b>」。在框裡<b>直接打數字</b>，打完按旁邊的 <b>✓ 確定</b>（或按鍵盤 Enter）就會套用。</p>
+  <div class="draw"><span class="btnfake">5</span><span class="btnfake" style="background:var(--pick);color:#111;border-color:var(--pick);font-weight:800">✓ 確定</span><span class="btnfake">全部</span></div>
+  <p>按 <b>全部</b> 會一次拉到資料庫的最大期數（框框下面會寫「資料庫共 N 期」，這個數字每天自動變多）。</p>
+  <div class="note">數字越大＝樣本越多、越有參考性，但畫面也越長。新手先用 5，想看完整統計再按「全部」。</div>
 
   <div class="tit" style="margin-top:14px"><span class="num-tag">往後</span>每列往後顯示（下N期）</div>
   <p>每一列要往右看「<b>之後幾期</b>」。設 <b>5</b> ＝ 看下1～下5期；想追更遠就調大，最多 20。</p>
@@ -163,7 +167,7 @@
   </div>
   <div class="legend" style="margin-top:10px">
     <span><span class="dot" style="background:var(--pick)"></span><b class="hy">黃色</b>＝你目前點選的號</span>
-    <span><span class="dot" style="background:transparent;outline:2px dashed var(--ok)"></span><b class="hg">綠色虛線圈</b>＝最新一期有開出的號</span>
+    <span><span class="dot" style="background:transparent;outline:2px dashed #ffd400"></span><b class="hg">黃色虛線圈</b>＝最新一期有開出的號</span>
     <span><span class="dot" style="background:var(--blue)"></span><b class="hb">右下小數字</b>＝被拖出幾次</span>
   </div>
   <div class="note">上圖 <b>14</b> 右下角的藍色小 <b>3</b>，意思是「在你選的 23 的分析裡，14 總共被拖出 3 次」。數字越大＝越常跟著出現。<br>再點一次<b class="hy">黃色</b>的號可以取消選取。</div>
