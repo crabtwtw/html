@@ -388,7 +388,13 @@
 <div class="step">
   <p>前面的拖牌一次只看<b>一個號</b>。這裡可以一次選 <b>1~5 個號</b>，問系統：「歷史上<b>同一期</b>同時開出這幾個號的時候，往後第 N 期都開什麼？」</p>
   <div class="draw"><span class="num-tag">1</span>點號碼選 1~5 個（再點一次取消）。</div>
-  <div class="draw"><span class="num-tag">2</span>選<b>往後看第幾期</b>（下 1 期～下 10 期）。</div>
+  <div class="draw"><span class="num-tag">2</span>選<b>方向</b>（往後看／往前看）和<b>期數</b>（1~10 期）。</div>
+  <div class="note"><b class="hy">期數是「範圍」不是「單一期」。</b>選「往後 3 期」＝<b>下1、下2、下3 三期一起看</b>，不是只看第 3 期。<br>
+    例：起點 <b>7/2</b>、往後 3 期 → 看的是 <b>7/3、7/4、7/6</b> 這三期（7/5 是週日 539 沒開，會<b>自動順延</b>抓下一個有開的日子，不會算成空的）。<br>
+    只想看單獨那一期，勾下面的「<b>只看第 N 期</b>」。<br>
+    <b class="hb">往前看</b>則是反過來，看起點<b>之前</b>那幾期開什麼。</div>
+  <div class="note">同一個號在同一個視窗裡出現好幾次，<b>只算 1 次</b>，所以百分比不會超過 100%。
+    「往後 3 期、某號 40%」的意思是：<b>有四成的起點，在後面那三期內至少開出過這個號一次</b>。</div>
   <div class="draw"><span class="num-tag">3</span>選比對方式，按「<b>🔍 查詢排行榜</b>」。</div>
 
   <div class="tit" style="margin-top:14px"><span class="num-tag">比</span>兩種比對方式</div>
