@@ -72,84 +72,6 @@
     display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex:0 0 auto}
   .rball.top{background:var(--hot);color:#fff;border-color:var(--hot)}
   .btnfake{display:inline-block;background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:7px 12px;font-size:.85rem;margin:3px 4px 3px 0}
-  /* ===== 圖解共用 ===== */
-
-  .fig{border:1px solid var(--line);border-radius:14px;overflow:hidden;margin:12px 0;background:#0b0d10}
-  .fig .figh{background:var(--panel2);padding:7px 12px;font-size:.8rem;color:var(--dim);
-    border-bottom:1px solid var(--line)}
-  .fig .figh b{color:var(--blue)}
-  .fig .figb{padding:12px}
-  .figcap{font-size:.8rem;color:var(--dim);padding:8px 12px;border-top:1px dashed var(--line);line-height:1.9}
-  .cal{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;padding:0 6px;
-    border-radius:11px;background:var(--blue);color:#04121c;font-weight:800;font-size:.74rem;margin-right:6px;flex:0 0 auto}
-  .cal.y{background:var(--pick);color:#241c00}
-  .cal.r{background:#c0564d;color:#fff}
-  .pt{font-size:.85rem;margin:8px 0;line-height:1.95}
-  .pt .cal{vertical-align:1px}
-  /* 同日對照：完全照實際畫面的配色 */
-  .sd{--scell:#1b3d2c;--scelltx:#e6ebe7;--scellline:#28563d;--syel:#d4bc42;--syel2:#9c8730;
-      --syeltx:#141002;--sgrn:#5f9169;--sblue:#4aa3d8;--sred:#a8443c;--sred2:#c0564d;
-      --srow1:#000;--srow2:#1b1e23;--sanchor:#12160f;--sline:#191c20;
-      background:#050607;border-radius:12px;padding:10px;color:#ccd1d6}
-  .sd .sdlb{display:flex;gap:6px}
-  .sd .sdlb span{flex:1 1 0;aspect-ratio:1;max-width:52px;display:inline-flex;align-items:center;justify-content:center;
-    border-radius:50%;font-weight:800;font-size:1.05rem;color:#241c00;
-    background:radial-gradient(circle at 34% 27%,#ffee8c,#ffd400 55%,#e3ab00)}
-  .sd .sdlb span.q{background:none;border:2px dashed var(--sline);color:#6b7079}
-  .sd .sdcard{border:1px solid var(--sline);border-radius:10px;overflow:hidden;margin-top:8px;background:#050607}
-  .sd .sdtit{font-weight:800;font-size:.84rem;padding:8px 10px 0}
-  .sd .sdlast{font-size:.7rem;color:var(--syel2);padding:2px 10px 4px;font-weight:700}
-  .sd .sdlast b{color:var(--syel)}
-  .sd .sdnote{font-size:.68rem;color:#6b7079;padding:0 10px 6px}
-  .sd .sdd{padding:6px 8px;display:flex;align-items:center;gap:6px;flex-wrap:nowrap}
-  .sd .sdd:nth-child(odd){background:var(--srow1)}
-  .sd .sdd:nth-child(even){background:var(--srow2)}
-  .sd .sdd.anchor{background:var(--sanchor);box-shadow:inset 3px 0 0 var(--syel)}
-  .sd .sdt{flex:0 0 84px;font-size:.64rem;color:#6b7079;line-height:1.35;white-space:nowrap}
-  .sd .sdt b{display:block;font-size:.78rem;color:var(--sgrn)}
-  .sd .sdd:nth-child(even) .sdt b{color:var(--syel)}
-  .sd .sdd.anchor .sdt b{color:var(--syel)}
-  .sd .sdd.anchor .aw{color:var(--sblue);font-weight:800}
-  .sd .sdd.anchor .st{color:var(--syel2)}
-  .sd .sdn{display:flex;gap:4px;flex:1;min-width:0}
-  .sd .sdn span{position:relative;flex:1 1 0;text-align:center;border-radius:7px;padding:5px 1px;
-    font-size:.95rem;font-weight:800;background:var(--scell);color:var(--scelltx);
-    box-shadow:inset 0 0 0 1px var(--scellline)}
-  .sd .sdn span.hit{background:var(--syel);color:var(--syeltx);box-shadow:none}
-  .sd .sdn span.real{box-shadow:inset 0 0 0 2px var(--sred)}
-  .sd .sdn span.real::after{content:"";position:absolute;top:-3px;right:-3px;width:8px;height:8px;
-    border-radius:50%;background:var(--sred2);box-shadow:0 0 0 2px var(--srow1)}
-  .sd .sdd:nth-child(even) .sdn span.real::after{box-shadow:0 0 0 2px var(--srow2)}
-  .sd .sdd.anchor .sdn span.real::after{box-shadow:0 0 0 2px var(--sanchor)}
-  .sd .sdc{display:inline-block;font-size:.6rem;border-radius:999px;padding:0 6px;font-weight:700;margin-top:2px;
-    background:var(--syel);color:var(--syeltx)}
-  .sd .sdc.n{background:rgba(139,143,153,.16);color:#6b7079}
-  .sd .chips{display:flex;gap:5px;flex-wrap:wrap;margin:8px 0 0}
-  .sd .chips i{font-style:normal;font-size:.72rem;padding:5px 10px;border-radius:999px;
-    border:1px solid var(--sline);background:#1b1e23;color:#ccd1d6}
-  .sd .chips i.on{background:var(--syel);color:var(--syeltx);border-color:var(--syel);font-weight:800}
-  .sd .selbox{background:#0b0d0f;border:1px solid var(--sline);border-radius:9px;padding:7px 10px;
-    font-size:.82rem;font-weight:700;margin-bottom:7px;display:flex;justify-content:space-between}
-  .sd .selbox span{color:#6b7079;font-weight:400}
-  /* 圖例 */
-  .keys{display:flex;flex-direction:column;gap:7px;margin-top:4px}
-  .keyrow{font-size:.82rem;line-height:1.95}
-  .keyrow .kk{position:relative;display:inline-block;width:46px;text-align:center;border-radius:7px;
-    padding:5px 0;font-size:.9rem;font-weight:800;margin-right:9px;vertical-align:-3px}
-  /* 電腦選號 */
-  .lucky{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px}
-  .lucky .lb{display:flex;gap:7px;margin:10px 0 6px}
-  .lucky .lb span{flex:1 1 0;aspect-ratio:1;max-width:56px;display:inline-flex;align-items:center;
-    justify-content:center;border-radius:50%;font-weight:800;font-size:1.15rem;color:#241c00;
-    background:radial-gradient(circle at 34% 27%,#ffee8c,#ffd400 55%,#e3ab00)}
-  .lucky .lb span.roll{background:#20242d;color:#6b7079;border:2px dashed var(--line)}
-  .lucky .go{display:block;text-align:center;background:var(--pick);color:#241c00;font-weight:800;
-    border-radius:10px;padding:10px;font-size:.95rem;margin-top:8px}
-  .lucky .two{display:flex;gap:8px;margin-top:8px}
-  .lucky .two i{flex:1;font-style:normal;text-align:center;background:var(--bg);border:1px solid var(--line);
-    border-radius:9px;padding:7px;font-size:.8rem}
-  .lucky .cmp{background:var(--panel2);border-left:3px solid var(--blue);border-radius:8px;
-    padding:8px 10px;font-size:.78rem;color:var(--dim);margin-top:9px;line-height:1.8}
   .qa{margin:10px 0}
   .qa b{color:var(--blue)}
 </style>
@@ -176,37 +98,11 @@
   <a href="#k">⑪ 組合排行榜（多號一起查）</a>
   <a href="#l">⑫ 🌙 深色／米白切換</a>
   <a href="#sd">⑬ 📅 同日對照（開獎前找參考號）</a>
-  <a href="#ht">⑭ 🌡 冷熱／遺漏表</a>
   <a href="#j">⑩ 常見問題</a>
 </div>
 
 <h2 id="a">① 這工具在做什麼？</h2>
 <div class="step">
-  <div class="fig">
-    <div class="figh">一張圖看懂它在算什麼</div>
-    <div class="figb">
-      <div style="font-size:.8rem;color:var(--dim);margin-bottom:6px">① 你點一個號 → 系統把<b style="color:var(--pick)">歷史上有這個號的那幾期</b>翻出來</div>
-      <div class="draw"><span class="lbl">07-28</span>
-        <span class="ball">05</span><span class="ball">08</span><span class="ball">13</span><span class="ball pick">23</span><span class="ball">31</span></div>
-      <div class="draw"><span class="lbl">07-16</span>
-        <span class="ball">13</span><span class="ball pick">23</span><span class="ball">25</span><span class="ball">28</span><span class="ball">30</span></div>
-      <div class="draw"><span class="lbl">07-08</span>
-        <span class="ball">01</span><span class="ball">11</span><span class="ball pick">23</span><span class="ball">30</span><span class="ball">34</span></div>
-      <div style="font-size:.8rem;color:var(--dim);margin:12px 0 6px">② 再看每一期的<b style="color:var(--blue)">下一期</b>開了什麼</div>
-      <div class="draw"><span class="lbl">→ 07-29</span>
-        <span class="ball">05</span><span class="ball hot">14</span><span class="ball">32</span><span class="ball">33</span><span class="ball">36</span></div>
-      <div class="draw"><span class="lbl">→ 07-17</span>
-        <span class="ball">10</span><span class="ball">12</span><span class="ball">28</span><span class="ball hot">14</span><span class="ball">35</span></div>
-      <div class="draw"><span class="lbl">→ 07-09</span>
-        <span class="ball">18</span><span class="ball">22</span><span class="ball">28</span><span class="ball">35</span><span class="ball hot">14</span></div>
-      <div style="font-size:.8rem;color:var(--dim);margin:12px 0 6px">③ 誰最常跟在後面，就排最前面</div>
-      <div class="draw"><span class="lbl">排行</span>
-        <span class="rball top">14</span><span class="rball">28</span><span class="rball">35</span>
-        <span style="color:var(--dim);font-size:.78rem">← 14 出現 3 次，最常跟著 23</span></div>
-    </div>
-    <div class="figcap">整套工具就是在做這件事。後面每一節都是<b>把這張圖的細節攤開來講</b>而已。</div>
-  </div>
-
   <p>一句話：它幫你看「<b class="hy">某個號碼開出之後，接下來幾期常常跟著開出哪些號</b>」——坊間叫這個「<b>拖牌</b>」。</p>
   <p>你點一個號，它就幫你把<b>歷史上有這個號的那幾期</b>翻出來，並把那幾期「往後」開了什麼，全部橫排給你看，再統計出誰最常跟著出現。</p>
   <h3>三步驟上手</h3>
@@ -218,47 +114,7 @@
 
 <h2 id="b">② 介面導覽</h2>
 <div class="step">
-  <div class="fig">
-    <div class="figh">整個畫面由上往下長這樣（<b>這張是地圖</b>）</div>
-    <div class="figb">
-      <div class="ui" style="background:var(--bg)">
-        <div style="text-align:right"><span class="expchip">有效至 2026/8/29（剩 27 天）</span>
-          <span class="cal" style="margin-left:6px">1</span></div>
-        <div class="uirow" style="margin-top:4px">
-          <div><h4>今彩539 <span style="color:#3f4653">/</span> 天天樂</h4>
-            <div class="sub"><span style="color:#ffd400;font-weight:700">拖牌分析</span>　·　晚上開獎，約 20:32 出號</div></div>
-          <div><span class="cal">2</span></div>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:10px 0 4px">
-          <span class="btnfake" style="margin:0;text-align:center">📚 新手教學</span>
-          <span class="btnfake" style="margin:0;text-align:center">🎲 電腦選號</span>
-          <span class="btnfake" style="margin:0;text-align:center">📋 我的紀錄</span>
-          <span class="btnfake" style="margin:0;text-align:center">🔗 我的連結</span>
-        </div>
-        <div style="font-size:.72rem;color:var(--dim);margin-bottom:10px"><span class="cal">3</span>四顆功能鈕，最右邊還有一顆 🌙 換主題</div>
-        <div style="border:1px solid var(--line);border-radius:10px;padding:9px;background:var(--panel2)">
-          <div style="font-size:.78rem;color:var(--dim)">最新一期　<b style="color:var(--txt)">2026-08-04</b><span class="cal" style="margin-left:6px">4</span></div>
-          <div class="draw" style="margin:7px 0 0">
-            <span class="ball latest">09</span><span class="ball latest">32</span><span class="ball latest">35</span>
-            <span class="ball latest">37</span><span class="ball latest">39</span></div>
-          <div style="display:flex;gap:6px;margin-top:9px">
-            <span class="btnfake" style="margin:0;flex:1;text-align:center">📜 歷史開獎</span>
-            <span class="btnfake" style="margin:0;flex:1;text-align:center">📅 同日對照</span></div>
-          <div style="font-size:.72rem;color:var(--dim);margin-top:6px"><span class="cal">5</span>兩顆並排的鈕</div>
-        </div>
-        <div style="font-size:.78rem;color:var(--dim);margin-top:10px"><span class="cal">6</span>再往下：三個設定鈕 → 號碼盤 → 排名條 → 走勢盤</div>
-      </div>
-    </div>
-    <div class="figcap">
-      <div class="pt"><span class="cal">1</span><b>有效期限</b>：平常綠色，剩 <b class="hl">7 天內變紅字</b>提醒。</div>
-      <div class="pt"><span class="cal">2</span><b>標題</b>：現在在看哪個遊戲，<b>兩個名字都可以點</b>直接切換。右邊也有下拉選單。</div>
-      <div class="pt"><span class="cal">3</span><b>四顆功能鈕</b>：新手教學、電腦選號、我的紀錄、我的連結；最右邊圓形 🌙 是換主題。</div>
-      <div class="pt"><span class="cal">4</span><b>亮黃大球</b>＝最新一期開的號，上面寫日期。<b>看這排就知道資料是不是最新的</b>，球可以直接點。</div>
-      <div class="pt"><span class="cal">5</span><b>📜 歷史開獎</b>看整份紀錄，<b>📅 同日對照</b>是開獎前找參考號。</div>
-      <div class="pt"><span class="cal">6</span>再往下才是主要的分析區，第 ③～⑥ 節會一個一個講。</div>
-    </div>
-  </div>
-  <p>把上面那一區單獨放大：</p>
+  <p>先認識畫面最上面這一區，長得像這樣：</p>
   <div class="ui">
     <div style="text-align:right"><span class="expchip">有效至 2026/8/29（剩 27 天）</span></div>
     <div class="uirow">
@@ -285,28 +141,6 @@
 
 <h2 id="c">③ 三個設定鈕</h2>
 <div class="step">
-  <div class="fig">
-    <div class="figh">三個設定鈕在畫面上長這樣</div>
-    <div class="figb">
-      <div class="ui">
-        <div class="draw"><span class="lbl">回看期數</span>
-          <span class="btnfake" style="min-width:56px;text-align:center">10</span>
-          <span class="btnfake" style="background:var(--pick);color:#111;border-color:var(--pick);font-weight:800">✓ 確定</span>
-          <span class="btnfake">全部</span></div>
-        <div class="sub" style="margin:-4px 0 10px">資料庫共 5932 期，可輸入 3~5932</div>
-        <div class="draw"><span class="lbl">每列往後顯示</span>
-          <span class="btnfake" style="min-width:56px;text-align:center">5</span><span style="color:var(--dim);font-size:.85rem">期</span></div>
-        <div class="draw" style="margin-top:8px"><span class="lbl">分析方式</span>
-          <span class="seg"><i class="on">下一期拖出</i><i>同期一起開</i></span></div>
-      </div>
-    </div>
-    <div class="figcap">
-      <div class="pt"><span class="cal">1</span><b>回看期數</b>：往回找「最近幾次出現你選的號」。打完數字要按 <b>✓ 確定</b> 才會套用。</div>
-      <div class="pt"><span class="cal">2</span><b>每列往後顯示</b>：每一列往右看幾期。設 5 ＝ 看下1～下5期。</div>
-      <div class="pt"><span class="cal">3</span><b>分析方式</b>：<b class="hb">亮起來</b>的那個才是目前用的。選「同期一起開」時，第 2 項會自動隱藏。</div>
-    </div>
-  </div>
-
   <div class="tit"><span class="num-tag">回看</span>回看期數（有此號的最近幾期）</div>
   <p>往回找「<b>最近幾次出現你選的號</b>」。在框裡<b>直接打數字</b>，打完按旁邊的 <b>✓ 確定</b>（或按鍵盤 Enter）就會套用。</p>
   <div class="draw"><span class="btnfake">5</span><span class="btnfake" style="background:var(--pick);color:#111;border-color:var(--pick);font-weight:800">✓ 確定</span><span class="btnfake">全部</span></div>
@@ -450,25 +284,6 @@
 
 <h2 id="g">⑦ 續鏈：一路追下去</h2>
 <div class="step">
-  <div class="fig">
-    <div class="figh">續鏈的畫面：上面會留下一排<b>麵包屑</b></div>
-    <div class="figb">
-      <div class="ui">
-        <div class="draw"><span class="btnfake">← 上一層</span>
-          <span style="color:var(--dim);font-size:.8rem">追蹤路徑：</span>
-          <span class="ball" style="width:30px;height:30px;font-size:.82rem">23</span><span class="arrow">→</span>
-          <span class="ball" style="width:30px;height:30px;font-size:.82rem">14</span><span class="arrow">→</span>
-          <span class="ball pick" style="width:30px;height:30px;font-size:.82rem">31</span></div>
-        <div class="sub" style="margin-top:6px">目前分析中：31（黃色那顆）</div>
-      </div>
-    </div>
-    <div class="figcap">
-      <div class="pt"><span class="cal">1</span>走勢盤、排名條裡的號碼<b>每一顆都能再點</b>，點下去就換成分析那個號。</div>
-      <div class="pt"><span class="cal">2</span>麵包屑上<b>任何一個號都能點</b>，點了就跳回那一層。</div>
-      <div class="pt"><span class="cal">3</span><b>黃色那顆</b>＝目前正在分析的號。</div>
-    </div>
-  </div>
-
   <p>走勢盤和排名裡的號碼<b>每一顆都能再點</b>。點下去就改成分析那個號，像接龍一樣往下追：</p>
   <div class="draw">
     <span class="ball pick">23</span><span class="arrow">→</span>
@@ -482,27 +297,8 @@
 
 <h2 id="h">⑧ 列印 / 存 PDF / 批次選號</h2>
 <div class="step">
-  <div class="fig">
-    <div class="figh">走勢盤右上角這三顆</div>
-    <div class="figb">
-      <div class="ui">
-        <div><span class="btnfake">🖨 列印</span><span class="btnfake">📄 存成 PDF</span><span class="btnfake">🗂 批次選號(1~39)</span></div>
-      </div>
-      <div style="margin-top:10px;background:#3a3210;border:1px solid var(--pick);border-radius:10px;padding:10px">
-        <div style="font-weight:800;font-size:.86rem;color:var(--pick)">📄 怎麼存成 PDF</div>
-        <div style="font-size:.8rem;color:#f0e4bb;line-height:1.9;margin-top:4px">
-          1. 按下面藍色按鈕<br>
-          2. 在跳出的視窗把「印表機／目的地」改成「<b>另存為 PDF</b>」</div>
-        <div style="margin-top:8px"><span class="btnfake" style="background:var(--blue);color:#04121c;border-color:var(--blue);font-weight:800">開始列印</span></div>
-      </div>
-    </div>
-    <div class="figcap">
-      <div class="pt"><span class="cal y">1</span>按「📄 存成 PDF」<b>會先跳出這張黃色說明卡</b>，照著兩步驟做就好。</div>
-      <div class="pt"><span class="cal">2</span>版面請選<b>橫向</b>，走勢盤才不會被切掉。</div>
-      <div class="pt"><span class="cal">3</span><b>🗂 批次選號</b>：一次勾多個號（可全選 1~39），<b>一個號印一張</b>，下面留白可以手寫。</div>
-    </div>
-  </div>
-
+  <p>走勢盤右上角有三顆按鈕：</p>
+  <div><span class="btnfake">🖨 列印</span><span class="btnfake">📄 存成 PDF</span><span class="btnfake">🗂 批次選號(1~39)</span></div>
   <div class="draw" style="margin-top:10px"><span class="num-tag">印</span><b>列印</b>：直接把目前這張走勢盤送印表機。版面請選 <b>橫向</b>。</div>
   <div class="draw"><span class="num-tag">PDF</span><b>存成 PDF</b>：會先跳一張<b>黃色說明卡</b>，照著兩步驟做——按藍色按鈕，然後把「印表機／目的地」改選「<b>另存為 PDF</b>」，就能命名存檔。</div>
   <div class="draw"><span class="num-tag">批</span><b>批次選號</b>：一次勾多個號（可全選 1~39），<b>一個號印一張</b>，下面留白可以手寫記錄。</div>
@@ -511,21 +307,6 @@
 
 <h2 id="i">⑨ 策略選號 · 六招</h2>
 <p>展開工具頁的「<b>🎯 策略選號</b>」，它會依<b>最新一期</b>＋近 30 期熱度，整理六種選號牌路。每個號下方小字＝近 30 期出現次數（越大越熱），<b>點任一號可直接跳去看它的拖牌</b>。</p>
-
-<div class="fig">
-  <div class="figh">先看懂號碼上的<b>三種記號</b>，六招都用同一套</div>
-  <div class="figb">
-    <div class="keys" style="gap:10px">
-      <div class="keyrow"><span class="ball hot" style="width:40px;height:40px;margin-right:9px;vertical-align:-12px">14</span>
-        <b class="hl">紅色</b>＝這一招裡<b>最熱</b>的那一群（近 30 期出現最多次）。</div>
-      <div class="keyrow"><span class="ball" style="width:40px;height:40px;margin-right:9px;vertical-align:-12px">28<i class="cnt">6</i></span>
-        <b>右下小數字</b>＝這個號<b>近 30 期出現幾次</b>，數字越大越熱。</div>
-      <div class="keyrow"><span class="ball latest" style="width:40px;height:40px;margin-right:9px;vertical-align:-12px">35</span>
-        <b class="hy">黃虛線圈</b>＝這個號是<b>最新一期</b>剛開出來的。</div>
-    </div>
-  </div>
-  <div class="figcap">六招的畫面長得都一樣，只是挑號的規則不同。<b>每個號都可以點</b>，點下去就跳去看它的拖牌。</div>
-</div>
 
 <div class="step" style="border-color:#3ddc97">
   <div class="tit">先看懂三種記號</div>
@@ -607,10 +388,12 @@
   <div class="note warn">防呆：膽最多 5 個；拖不夠會提示還差幾個；超過 500 注會擋下，請減少拖的數量。</div>
 </div>
 
-<h2 id="p">📲 加到主畫面（強烈建議做一次）</h2>
+<h2 id="p">📲 加到主畫面</h2>
 <div class="step">
+  <p>加到主畫面之後，<b class="hg">打開就是全螢幕</b>，跟一般 App 一樣，也不用每次去翻連結。<b>做一次就好。</b></p>
+
   <div class="fig">
-    <div class="figh">Android（Chrome）：按右上角 <b>⋮</b> 之後會看到這個選單</div>
+    <div class="figh">Android：按右上角 <b>⋮</b></div>
     <div class="figb">
       <div style="background:#1c1f26;border:1px solid var(--line);border-radius:12px;overflow:hidden;max-width:300px">
         <div style="padding:9px 12px;font-size:.84rem;color:var(--dim);border-bottom:1px solid var(--line)">新增分頁</div>
@@ -619,11 +402,11 @@
         <div style="padding:9px 12px;font-size:.84rem;color:var(--dim)">分享…</div>
       </div>
     </div>
-    <div class="figcap">有的手機寫「<b>安裝應用程式</b>」，意思一樣。按下去再按一次「安裝」就完成。</div>
+    <div class="figcap">有的手機寫「<b>安裝應用程式</b>」，一樣。按下去再按「安裝」就完成。</div>
   </div>
 
   <div class="fig">
-    <div class="figh">iPhone（Safari）：按下面中間的<b>分享</b> ⬆️ 之後，往下滑</div>
+    <div class="figh">iPhone：按下面中間的<b>分享</b> ⬆️，往下滑</div>
     <div class="figb">
       <div style="background:#1c1f26;border:1px solid var(--line);border-radius:12px;overflow:hidden;max-width:300px">
         <div style="padding:9px 12px;font-size:.84rem;color:var(--dim);border-bottom:1px solid var(--line)">拷貝</div>
@@ -632,147 +415,30 @@
         <div style="padding:9px 12px;font-size:.84rem;color:var(--dim)">列印</div>
       </div>
     </div>
-    <div class="figcap">選完之後，右上角再按一次「<b>加入</b>」就好。桌面就會多一個圖示。</div>
+    <div class="figcap">再按右上角「<b>加入</b>」，桌面就多一個圖示。</div>
   </div>
 
-  <div class="fig">
-    <div class="figh">做完之後的差別</div>
-    <div class="figb">
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <div style="flex:1;min-width:130px">
-          <div style="font-size:.74rem;color:var(--dim);margin-bottom:4px">做之前</div>
-          <div style="border:1px solid var(--line);border-radius:10px;overflow:hidden">
-            <div style="background:#2a2f3a;padding:6px 8px;font-size:.66rem;color:#9aa3b2">🔒 bot.chaho.com.tw/539/…</div>
-            <div style="background:var(--panel2);padding:16px 8px;text-align:center;font-size:.8rem">工具畫面</div>
-          </div>
-        </div>
-        <div style="flex:1;min-width:130px">
-          <div style="font-size:.74rem;color:var(--ok);margin-bottom:4px">做之後</div>
-          <div style="border:1px solid var(--ok);border-radius:10px;overflow:hidden">
-            <div style="background:var(--panel2);padding:22px 8px;text-align:center;font-size:.8rem">工具畫面</div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="figcap">網址列不見了，<b class="hg">全螢幕</b>，看起來就像一個 App，也不用每次去翻連結。</div>
-  </div>
-  <p>把這個工具<b>加到手機主畫面</b>，之後從桌面圖示打開，會是<b class="hg">全螢幕、沒有網址列</b>，看起來就像一個 App，也不用每次去翻連結。</p>
-  <div class="tit" style="margin-top:12px"><span class="num-tag">A</span>Android（用 Chrome 開）</div>
-  <div class="draw"><span class="num-tag">1</span>按右上角 <b>⋮</b> 選單</div>
-  <div class="draw"><span class="num-tag">2</span>選「<b>加到主畫面</b>」或「<b>安裝應用程式</b>」</div>
-  <div class="draw"><span class="num-tag">3</span>按「<b>安裝</b>」</div>
-  <div class="tit" style="margin-top:12px"><span class="num-tag">i</span>iPhone / iPad（用 Safari 開）</div>
-  <div class="draw"><span class="num-tag">1</span>按畫面下方中間的<b>分享</b>鈕 <b class="hb">⬆️</b></div>
-  <div class="draw"><span class="num-tag">2</span>往下滑，選「<b>加入主畫面</b>」</div>
-  <div class="draw"><span class="num-tag">3</span>右上角按「<b>加入</b>」</div>
-  <div class="note warn">重要：如果你現在是用 <b>LINE 內建瀏覽器</b>開的，<b>加不了</b>。<br>
-    要先按右上角「⋯」選「用 Safari 開啟」或「用其他瀏覽器開啟」，再照上面的步驟做。</div>
-  <div class="note">找不到入口？按上方的「<b>🔗 我的連結</b>」，裡面有一顆「<b>📲 加到主畫面</b>」會教你。</div>
+  <div class="note warn">用 <b>LINE 裡面</b>打開的話加不了。先按右上角「⋯」選「<b>用其他瀏覽器開啟</b>」，再照上面做。</div>
 </div>
 
 <h2 id="n">🎲 電腦選號（試手氣）</h2>
 <div class="step">
-  <p>上方按鈕列的「<b class="hy">🎲 電腦選號</b>」，按下去會跳出一個小視窗。</p>
-  <div class="fig">
-    <div class="figh">按下 <b>🎲 電腦選號</b> 後，你會看到這個畫面</div>
-    <div class="figb">
-      <div class="lucky">
-        <div style="font-weight:800;font-size:.92rem">🎲 電腦選號</div>
-        <div style="color:var(--dim);font-size:.78rem;margin-top:2px">按「開始」號碼會跑，按「停止」定住五個號（不重複）。</div>
-        <div class="lb"><span class="roll">?</span><span class="roll">?</span><span class="roll">?</span><span class="roll">?</span><span class="roll">?</span></div>
-        <div class="go">▶ 開始</div>
-      </div>
-    </div>
-    <div class="figcap"><span class="cal">1</span>剛打開時五個位置是<b>問號</b>，按下「▶ 開始」號碼就開始滾動。</div>
-  </div>
-  <div class="fig">
-    <div class="figh">按「■ 停止」之後</div>
-    <div class="figb">
-      <div class="lucky">
-        <div class="lb"><span>03</span><span>11</span><span>19</span><span>28</span><span>35</span></div>
-        <div class="go">▶ 開始</div>
-        <div class="two"><i>🔁 再抽一次</i><i>🏆 查這組</i></div>
-        <div class="cmp">這組是 <b style="color:var(--txt)">03　11　19　28　35</b><br>
-          其中 <b style="color:var(--ok)">35</b> 是最新一期（08-04）開過的號，共 1 個。</div>
-      </div>
-    </div>
-    <div class="figcap">
-      <div class="pt"><span class="cal">2</span><b>五個號定住了</b>，不會重複。</div>
-      <div class="pt"><span class="cal">3</span><b>🔁 再抽一次</b>：不用「開始→停止」按兩次，一鍵重抽。</div>
-      <div class="pt"><span class="cal">4</span><b>🏆 查這組</b>：把這五個號<b>直接帶進組合排行榜</b>自動查，看歷史上這組出現過沒。</div>
-      <div class="pt"><span class="cal">5</span>藍框那行是<b>自動比對</b>：這五個號裡有幾個是最新一期開過的。</div>
-    </div>
-  </div>
+  <p>上方按鈕列的「<b class="hy">🎲 電腦選號</b>」，按下去會跳出一個小視窗：按「<b>開始</b>」號碼會滾動，按「<b>停止</b>」就定住<b>五個不重複</b>的號。</p>
+  <div class="draw"><span class="num-tag">🔁</span><b>再抽一次</b>：不用先開始再停止，一鍵重抽。</div>
+  <div class="draw"><span class="num-tag">🏆</span><b>查這組</b>：把抽到的五個號直接帶進「組合排行榜」自動查詢，看歷史上這組出現過沒有。</div>
+  <div class="draw"><span class="num-tag">✓</span>抽完會自動告訴你，這五個號裡有幾個是<b>最新一期開過</b>的。</div>
   <div class="note warn">這是<b>純隨機</b>產生的，只供參考娛樂，<b class="hl">不能預測開獎</b>，跟前面那些統計功能沒有關係。</div>
 </div>
 
 <h2 id="m">⑩-2 給客戶對照：上一期當時算的 ＋ 我的紀錄</h2>
 <div class="step">
-  <div class="fig">
-    <div class="figh">自動出現的「📅 上一期當時算的」長這樣</div>
-    <div class="figb">
-      <div class="ui">
-        <h4>📅 上一期當時算的</h4>
-        <div class="sub">基準期 2026-08-03　·　回看 10 期　·　下一期拖出</div>
-        <div class="draw" style="margin-top:8px"><span class="lbl">當時前三名</span>
-          <span class="ball ring">36</span><span class="ball">16</span><span class="ball">28</span></div>
-        <div class="draw"><span class="lbl">後來開出</span>
-          <span class="ball latest">09</span><span class="ball latest">32</span><span class="ball latest">35</span>
-          <span class="ball latest">37</span><span class="ball latest">39</span></div>
-        <div class="note" style="margin:8px 0 0"><b class="hg">中 0 個</b>　（有中的號會畫綠圈）</div>
-      </div>
-    </div>
-    <div class="figcap">
-      <div class="pt"><span class="cal">1</span>這塊<b>不用按任何按鈕</b>，看最新結果時它自己會出現。</div>
-      <div class="pt"><span class="cal">2</span>上排＝上一期<b>當時</b>算出來的前三名；下排＝後來<b>實際開出</b>的號。</div>
-      <div class="pt"><span class="cal">3</span>中的號會畫<b class="hg">綠圈</b>；<b>沒中就寫沒中</b>，系統自己算的，改不了。</div>
-    </div>
-  </div>
-
-  <div class="fig">
-    <div class="figh">「📋 我的紀錄」裡每一筆長這樣</div>
-    <div class="figb">
-      <div class="ui">
-        <div class="uirow"><h4>06　·　回看 10 期　·　下一期拖出</h4><span class="expchip">中 1 個</span></div>
-        <div class="sub">存的時候：2026-08-03　基準期 2026-08-03</div>
-        <div class="draw" style="margin-top:6px"><span class="lbl">當時前三名</span>
-          <span class="ball">36</span><span class="ball ring">16</span><span class="ball">28</span></div>
-        <div class="draw"><span class="lbl">後來開出</span>
-          <span class="ball latest">07</span><span class="ball latest">16</span><span class="ball latest">21</span>
-          <span class="ball latest">28</span><span class="ball latest">35</span></div>
-        <div class="draw" style="margin-top:6px"><span class="btnfake">🔁 重現設定</span><span class="btnfake">🗑 刪除</span></div>
-      </div>
-    </div>
-    <div class="figcap">
-      <div class="pt"><span class="cal">1</span>還沒開獎的會寫「<b>⏳ 開了就會自動對獎</b>」，開完自己跳成中幾個。</div>
-      <div class="pt"><span class="cal">2</span><b>🔁 重現設定</b>：一鍵把當時的四個設定和基準期全部還原，畫面跳回當時的樣子。</div>
-      <div class="pt"><span class="cal">3</span>紀錄存在<b>你的帳號</b>裡，<b class="hg">換手機、清資料都不會不見</b>。最多 60 筆。</div>
-    </div>
-  </div>
-
   <div class="tit"><span class="num-tag">📅</span>自動：上一期當時算的</div>
   <p>看<b>最新</b>結果時，下面會自動多一塊<b class="hb">📅 上一期當時算的</b>，直接告訴你：如果在<b>上一期那天</b>用同樣設定查同一個號，會看到哪三個號；以及<b>後來實際開出</b>什麼、中了幾個（中的畫綠圈）。</p>
   <div class="note">這塊<b>不用按任何按鈕</b>，設定也自動跟你現在一致，所以永遠不會發生「對不上」的情況。<br>
     客戶問「你上次給我的準不準」，把這塊給他看就結束了。</div>
 
-  <div class="tit" style="margin-top:16px"><span class="num-tag">📊</span>累積戰績（在「我的紀錄」最上面）</div>
-  <p>打開「<b>📋 我的紀錄</b>」，最上面會有一塊<b class="hy">我的累積戰績</b>：存過幾筆、已經對過幾筆、
-     <b>中 1 個以上幾次</b>、<b>中 2 個以上幾次</b>、最好的一次是哪天中幾個、平均每次中幾個。</p>
-  <div class="note">最下面那行灰字是<b>純隨機的期望值</b>——同樣圈這麼多號，亂猜平均會中幾個。<br>
-    放這個是為了讓你<b>自己有個基準</b>：比它高才算有東西，跟它差不多就是還看不出名堂。樣本少的時候高高低低都正常。<br>
-    這塊<b>不碰金額、不碰注數</b>，只算中幾個。</div>
-
   <div class="tit" style="margin-top:16px"><span class="num-tag">📌</span>手動：存起來 ／ 我的紀錄</div>
-  <p>任何一組結果，按「<b class="hy">📌 存起來</b>」就會把<b>號碼、回看期數、往後期數、分析方式、基準期</b>整包存進<b>你的帳號</b>。</p>
-  <div class="note"><b class="hy">現在有五個地方可以按「📌 存起來」：</b><br>
-    ① <b>拖牌分析結果</b>（跟列印、存PDF並排那顆）<br>
-    ② <b>📅 同日對照</b> 的參考號（最下面）<br>
-    ③ <b>🎲 電腦選號</b> 抽完之後<br>
-    ④ <b>🎯 策略選號</b> 每一招的標題右邊（①重號②連號③隔期號④鄰號）<br>
-    ⑤ <b>🏆 組合排行榜</b> 的前五名<br>
-    全部都會進「📋 我的紀錄」，開獎後自動對獎。</div>
-  <div class="note warn">組合排行榜那個比較特別：它算的是「<b>往後 N 期</b>」，所以會拿<b>後面那 N 期一起</b>對獎，
-    中的機會本來就比別人多。因此它的戰績<b class="hl">單獨算一塊</b>，不會跟其他四種混在一起，免得平均值被拉高看不出真相。</div>
+  <p>任何一組結果，按「<b class="hy">📌 存起來</b>」就會把<b>號碼、回看期數、往後期數、分析方式、基準期</b>整包存進<b>這支手機</b>。</p>
   <p>之後從上方的「<b>📋 我的紀錄</b>」叫出來，每一筆會顯示：當時算的前三名（＋同分）、後來那期開出什麼、<b class="hg">中了幾個</b>。還沒開獎的會寫「⏳ 開了就會自動對獎」。</p>
   <div class="note">每一筆都有「<b>🔁 重現設定</b>」，按下去會把當時的四個設定和基準期<b>一次還原</b>，畫面直接跳回當時的樣子——這是最保險的對照方式，不會因為設定不同而對不上。<br>
     紀錄是存在<b>你的帳號</b>裡（不是存在手機），所以<b>換手機、清瀏覽器資料都不會不見</b>，用專屬連結在新裝置開啟就看得到。最多保留 60 筆，超過會自動汰換最舊的。</div>
@@ -780,54 +446,6 @@
 
 <h2 id="k">⑪ 組合排行榜（多號一起查）</h2>
 <div class="step">
-  <div class="fig">
-    <div class="figh">操作區：選號 → 選方向期數 → 查詢</div>
-    <div class="figb">
-      <div class="ui">
-        <div class="draw"><span class="lbl">已選</span>
-          <span class="ball pick">06</span><span class="ball pick">11</span><span class="ball pick">18</span>
-          <span style="color:var(--dim);font-size:.8rem">（再點一次取消）</span></div>
-        <div class="draw"><span class="lbl">方向</span>
-          <span class="seg"><i class="on">往下看</i><i>往上看</i><i>上下都看</i></span>
-          <span class="sel">往後 3 期</span></div>
-        <div class="draw"><span class="lbl">比對</span>
-          <span class="seg"><i class="on">全部都要有</i><i>至少中 K 個</i></span></div>
-        <div style="font-size:.8rem;color:var(--dim);margin-top:8px">
-          <span style="border:1px solid var(--line);border-radius:4px;padding:0 5px">☐</span> 只看第 N 期（不要 1~N 期一起算）<br>
-          <span style="border:1px solid var(--line);border-radius:4px;padding:0 5px">☐</span> 只看「有回補到我選的號」的那些期</div>
-        <div class="draw" style="margin-top:8px"><span class="btnfake" style="background:var(--pick);color:#111;border-color:var(--pick);font-weight:800">🔍 查詢排行榜</span></div>
-      </div>
-    </div>
-    <div class="figcap">
-      <div class="pt"><span class="cal">1</span>一次可以選 <b>1~5 個號</b>，選越多符合的期數掉越快。</div>
-      <div class="pt"><span class="cal">2</span><b>往後 3 期</b>是<b class="hy">範圍</b>（下1、下2、下3 一起看），不是只看第 3 期。</div>
-      <div class="pt"><span class="cal">3</span>兩個勾選框<b>預設都不勾</b>，用途在下面有說明。</div>
-    </div>
-  </div>
-
-  <div class="fig">
-    <div class="figh">結果：明細每一期長這樣</div>
-    <div class="figb">
-      <div class="ui">
-        <div class="uirow"><h4>樣本 11 期</h4><span class="expchip">回補 5 期（45%）</span></div>
-        <div class="draw" style="margin-top:8px"><span class="lbl">起點 09-14</span>
-          <span class="ball">03</span><span class="ball">29</span>
-          <span class="ball pick">34</span><span class="ball pick">35</span><span class="ball pick">37</span></div>
-        <div class="draw"><span class="lbl">往後第2期</span>
-          <span class="ball">07</span><span class="ball">09</span><span class="ball">31</span>
-          <span class="ball pick">38</span><span class="ball">39</span>
-          <span class="expchip">回補 1 個</span></div>
-        <div class="draw" style="margin-top:10px"><span class="lbl">排行榜</span>
-          <span class="rball top">12</span><span class="rball top">27</span><span class="rball">08</span><span class="rball">19</span></div>
-      </div>
-    </div>
-    <div class="figcap">
-      <div class="pt"><span class="cal y">1</span><b>黃底</b>＝你自己選的號。起點那列看得到，往後那列如果又出現就叫<b>回補</b>。</div>
-      <div class="pt"><span class="cal r">2</span><b>紅色</b>的是排行榜第一名那一群，並列同分會一起紅。</div>
-      <div class="pt"><span class="cal">3</span>樣本<b>少於 5 期會變紅字警告</b>，每一期都列出來給你核對，不是黑箱。</div>
-    </div>
-  </div>
-
   <p>前面的拖牌一次只看<b>一個號</b>。這裡可以一次選 <b>1~5 個號</b>，問系統：「歷史上<b>同一期</b>同時開出這幾個號的時候，往後第 N 期都開什麼？」</p>
   <div class="draw"><span class="num-tag">1</span>點號碼選 1~5 個（再點一次取消）。</div>
   <div class="draw"><span class="num-tag">2</span>選<b>方向</b>（往下看／往上看／上下都看）和<b>期數</b>（1~10 期）。</div>
@@ -870,9 +488,7 @@
   <div class="note">「全部都要有」查不到 → 去掉最後一個號再找。<br>
     例：<code>06 11 18 22 29</code> 查無 → <code>06 11 18 22</code> 查無 → <code>06 11 18</code> 查無 → <code>06 11</code> <b class="hg">找到 11 期</b>。<br>
     「至少中 K 個」查不到 → K 自動減 1（4 個 → 3 個 → 2 個）。<br>
-    畫面上會寫清楚降到哪一層才找到，你不會被蒙在鼓裡。<br>
-    <b class="hy">結果上方那排標籤也會直接標出來</b>，例如「<b>至少中 3 個（你選 4，查無紀錄自動降）</b>」，
-    而且會變成金色。所以下面那個數字跟你選的不一樣時，<b>不是壞掉，是自動放寬過</b>。</div>
+    畫面上會寫清楚降到哪一層才找到，你不會被蒙在鼓裡。</div>
 
   <div class="tit" style="margin-top:14px"><span class="num-tag">數</span>先有心理準備：樣本會很少</div>
   <p>號碼選越多，符合的期數掉得<b>非常快</b>。以 539 五百多期估：</p>
@@ -896,35 +512,6 @@
 
 <h2 id="l">⑫ 🌙 深色／米白切換</h2>
 <div class="step">
-  <div class="fig">
-    <div class="figh">兩種主題的差別</div>
-    <div class="figb">
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <div style="flex:1;min-width:140px">
-          <div style="font-size:.74rem;color:var(--dim);margin-bottom:4px">🌙 深色（預設）</div>
-          <div style="background:#181b22;border:1px solid #2b303b;border-radius:10px;padding:10px">
-            <div style="color:#e8ebf0;font-weight:800;font-size:.85rem">最新一期 08-04</div>
-            <div style="display:flex;gap:5px;margin-top:7px">
-              <span style="flex:1;text-align:center;border-radius:50%;aspect-ratio:1;display:inline-flex;align-items:center;justify-content:center;background:radial-gradient(circle at 34% 27%,#ffee8c,#ffd400 55%,#e3ab00);color:#241c00;font-weight:800;font-size:.8rem">09</span>
-              <span style="flex:1;text-align:center;border-radius:50%;aspect-ratio:1;display:inline-flex;align-items:center;justify-content:center;background:radial-gradient(circle at 34% 27%,#ffee8c,#ffd400 55%,#e3ab00);color:#241c00;font-weight:800;font-size:.8rem">32</span>
-              <span style="flex:1;text-align:center;border-radius:50%;aspect-ratio:1;display:inline-flex;align-items:center;justify-content:center;background:radial-gradient(circle at 34% 27%,#ffee8c,#ffd400 55%,#e3ab00);color:#241c00;font-weight:800;font-size:.8rem">35</span></div>
-          </div>
-        </div>
-        <div style="flex:1;min-width:140px">
-          <div style="font-size:.74rem;color:var(--dim);margin-bottom:4px">☀️ 米白</div>
-          <div style="background:#fffdf7;border:1px solid #e0d5bf;border-radius:10px;padding:10px">
-            <div style="color:#241d10;font-weight:800;font-size:.85rem">最新一期 08-04</div>
-            <div style="display:flex;gap:5px;margin-top:7px">
-              <span style="flex:1;text-align:center;border-radius:50%;aspect-ratio:1;display:inline-flex;align-items:center;justify-content:center;background:radial-gradient(circle at 34% 27%,#ffe9a0,#f0b429 55%,#b8860b);color:#3b2a00;font-weight:800;font-size:.8rem">09</span>
-              <span style="flex:1;text-align:center;border-radius:50%;aspect-ratio:1;display:inline-flex;align-items:center;justify-content:center;background:radial-gradient(circle at 34% 27%,#ffe9a0,#f0b429 55%,#b8860b);color:#3b2a00;font-weight:800;font-size:.8rem">32</span>
-              <span style="flex:1;text-align:center;border-radius:50%;aspect-ratio:1;display:inline-flex;align-items:center;justify-content:center;background:radial-gradient(circle at 34% 27%,#ffe9a0,#f0b429 55%,#b8860b);color:#3b2a00;font-weight:800;font-size:.8rem">35</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="figcap">按鈕列<b>最右邊那顆圓形按鈕</b>：🌙 按下去變米白，☀️ 按下去變回深色。</div>
-  </div>
-
   <p>上方按鈕列最右邊有一顆圓形按鈕：<b>🌙</b> 按下去變<b>米白</b>（白天、日光下好看），<b>☀️</b> 按下去變回<b>深色</b>（晚上不刺眼）。</p>
   <div class="note">選擇會<b>記在你自己的手機裡</b>，下次打開就是你上次選的那個。每個人各記各的，互不影響。<br>
     順帶一提，<b>遊戲、回看期數、往後期數、分析方式</b>也一樣會被記住，不用每次重設。</div>
@@ -932,67 +519,7 @@
 
 <h2 id="sd">⑬ 📅 同日對照（開獎前找參考號）</h2>
 <div class="step">
-  <p>位置：<b>最新一期</b>那一塊的下面，跟「📜 歷史開獎」並排的那顆 <b class="hy">📅 同日對照</b>，按下去跳出滿版視窗。</p>
-  <div class="fig">
-    <div class="figh">第一步：最上面選<b>要預測的那一期</b></div>
-    <div class="figb">
-      <div class="sd">
-        <div class="selbox">🎯 要預測的那一期 <span>▾</span></div>
-        <div class="selbox" style="font-weight:800">2026-08-05（三）· 尚未開獎 <span>▾</span></div>
-        <div class="sdlb"><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span><span class="q">?</span></div>
-        <div class="chips"><i class="on">上 1 個月</i><i>上 2 個月</i><i>上 3 個月</i><i>上 4 個月</i></div>
-      </div>
-    </div>
-    <div class="figcap">
-      <div class="pt"><span class="cal">1</span>預設就是<b>下一期</b>，五顆球是<b>虛線問號</b>＝還沒開，正等你來找號。</div>
-      <div class="pt"><span class="cal">2</span>下面選<b>往回幾個月</b>，可以複選；選幾個月就出現幾張卡。</div>
-    </div>
-  </div>
-  <div class="fig">
-    <div class="figh">第二步：看下面那張卡（這是<b>已經開獎、回頭驗證</b>的樣子）</div>
-    <div class="figb">
-      <div class="sd">
-        <div class="sdcard">
-          <div class="sdtit">上 1 個月 → 對照日 2026-07-04</div>
-          <div class="sdlast">最新一期 08-03　<b>07　21　23　28　35</b></div>
-          <div class="sdnote">當天有開獎　·　這 5 期裡重複的號 4 個</div>
-          <div class="sdd"><div class="sdt">上2期<b>07-02（四）</b><span class="sdc">重複 1</span></div>
-            <div class="sdn"><span class="hit">01</span><span>06</span><span>08</span><span>13</span><span>30</span></div></div>
-          <div class="sdd"><div class="sdt">上1期<b>07-03（五）</b><span class="sdc">重複 2</span></div>
-            <div class="sdn"><span>07</span><span>11</span><span class="hit">31</span><span>36</span><span class="hit real">37</span></div></div>
-          <div class="sdd anchor"><div class="sdt"><span class="st">★</span> <span class="aw">對照日</span><b>07-04（六）</b><span class="sdc">重複 3</span></div>
-            <div class="sdn"><span>02</span><span class="hit">10</span><span>15</span><span class="hit">31</span><span class="hit real">37</span></div></div>
-          <div class="sdd"><div class="sdt">下1期<b>07-06（一）</b><span class="sdc">重複 2</span></div>
-            <div class="sdn"><span class="hit">01</span><span class="hit">10</span><span>12</span><span>14</span><span>38</span></div></div>
-          <div class="sdd"><div class="sdt">下2期<b>07-07（二）</b><span class="sdc n">無重複</span></div>
-            <div class="sdn"><span class="real">09</span><span>21</span><span>24</span><span>27</span><span>34</span></div></div>
-        </div>
-      </div>
-    </div>
-    <div class="figcap">
-      <div class="pt"><span class="cal">1</span><b>暗黃色小字</b>＝最新一期開的號，邊看邊對，不用往上捲。</div>
-      <div class="pt"><span class="cal">2</span><b>★ 對照日</b>那一列（左邊有黃線）＝上個月的同一天。那天沒開獎會<b>自動順延</b>，卡上會註明。</div>
-      <div class="pt"><span class="cal">3</span>上面／下面各兩期＝<b>上2期、上1期、下1期、下2期</b>，可以自己調 1~3 期。</div>
-      <div class="pt"><span class="cal y">4</span><b>黃底黑字</b>＝這幾期裡<b>重複出現</b>的號，就是參考號。</div>
-      <div class="pt"><span class="cal r">5</span><b>暗紅框＋右上角紅點</b>＝這個號<b>後來真的開出來了</b>（只有在驗證模式才會出現）。</div>
-    </div>
-  </div>
-  <div class="fig">
-    <div class="figh">顏色對照表（記這五個就夠）</div>
-    <div class="figb">
-      <div class="sd">
-        <div class="keys">
-          <div class="keyrow"><span class="kk" style="background:#1b3d2c;color:#e6ebe7;box-shadow:inset 0 0 0 1px #28563d">06</span>綠底白字＝<b>一般號碼</b>，只出現一次。</div>
-          <div class="keyrow"><span class="kk" style="background:#d4bc42;color:#141002">31</span>黃底黑字＝<b>參考號</b>，在這個範圍裡重複出現。</div>
-          <div class="keyrow"><span class="kk real" style="background:#d4bc42;color:#141002;box-shadow:inset 0 0 0 2px #a8443c">37</span>黃底＋紅框紅點＝<b>參考號，而且真的開出來了</b>。</div>
-          <div class="keyrow"><span class="kk real" style="background:#1b3d2c;color:#e6ebe7;box-shadow:inset 0 0 0 2px #a8443c">09</span>綠底＋紅框紅點＝<b>沒被選為參考號，但開出來了</b>。</div>
-          <div class="keyrow"><span class="kk" style="background:#12160f;color:#4aa3d8;box-shadow:inset 3px 0 0 #d4bc42;font-size:.72rem">★對照日</span>藍字＋黃線＝<b>對照日那一列</b>。</div>
-        </div>
-      </div>
-    </div>
-    <div class="figcap">看不懂顏色的時候，回來看這張就好。</div>
-  </div>
-
+  <p>位置：<b>最新一期</b>那一塊的下面，跟「📜 歷史開獎」並排的那顆 <b>📅 同日對照</b>，按下去跳出滿版視窗。</p>
 
   <p><b>它在做什麼？</b>很多人相信「同一個日子會有類似的號」。這個功能就是把這件事自動化：<b>今天還沒開獎</b>的時候，
      它幫你翻到<b>上個月的同一天</b>（例如今天 8/4 就翻到 7/4），連同那天的<b>前後幾期</b>一起排出來，
@@ -1015,7 +542,7 @@
 
   <p><b>參考號門檻（很重要）</b></p>
   <div class="note">選愈多月份，重複的號就愈多，一次列十幾個等於沒篩選。<br>
-    「<b>參考號門檻</b>」可以只留重複 <b>3 次以上</b>或 <b>4 次以上</b>的號。<br>另外有一個「<b>全部號碼（含只出現 1 次）</b>」，那個<b>不是拿來選號的</b>，是想知道這個視窗到底出現過哪些號、各幾次的時候，拿來<b>看全貌</b>用的。<br>
+    「<b>參考號門檻</b>」可以只留重複 <b>3 次以上</b>或 <b>4 次以上</b>的號。<br>反過來也可以：選「<b>只看沒重複的（只出現 1 次）</b>」就只挑那些在這個視窗裡<b>只出現過一次</b>的號；選「<b>全部號碼</b>」則是連只出現一次的也一起列入排行。<br>
     實例：8/4 往回三個月，門檻 2 次會列出 <b>13 個號</b>；切到 <b>3 次只剩 1 個（08）</b>，乾淨很多，講起來也有力。<br>
     另外「<b>重複怎麼算</b>」建議維持<b>每個月各自算</b>；切成「全部合起來算」會把不同月份混在一起數，黃底會爆量、失去鑑別度。</div>
 
@@ -1034,98 +561,8 @@
     這個功能是幫你<b>有依據地縮小範圍</b>，不是明牌，也不保證會中。</div>
 </div>
 
-<h2 id="ht">⑭ 🌡 冷熱／遺漏表</h2>
-<div class="step">
-  <p>位置：「最新一期」那塊下面，<b class="hy">📜 歷史開獎 · 📅 同日對照 · 🌡 冷熱表</b> 三顆並排的最後一顆。</p>
-  <p>這張表<b>只講兩件事</b>，看懂這兩個就夠了：</p>
-  <div class="note"><b class="hy">❶ 這個號「幾期沒開」了</b> —— 上一次開出到現在，中間隔了幾期。<br>
-    <b class="hb">❷ 最近 30 期它「開了幾次」</b> —— 最近這 30 期裡面，這個號出現過幾次。<br>
-    上面的排序鈕、排行榜、格子裡的兩行小字，全部都是在講這兩件事，畫面上會標 <b class="hy">❶</b> <b class="hb">❷</b> 讓你對得起來。</div>
-
-  <div class="fig">
-    <div class="figh">畫面長這樣（每個號兩行小字）</div>
-    <div class="figb">
-      <div style="background:#050607;border-radius:12px;padding:10px">
-        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px">
-          <div style="border-radius:9px;padding:7px 2px 5px;text-align:center;background:#1b3d2c;color:#e6ebe7;box-shadow:inset 0 0 0 1px #28563d">
-            <b style="display:block;font-size:1.1rem">01</b><small style="display:block;font-size:.6rem;opacity:.85">3 期沒開</small><small style="display:block;font-size:.6rem;opacity:.6">近30期 6 次</small></div>
-          <div style="position:relative;border-radius:9px;padding:7px 2px 5px;text-align:center;background:#d4bc42;color:#141002;box-shadow:inset 0 0 0 2px #a8443c">
-            <b style="display:block;font-size:1.1rem">02</b><small style="display:block;font-size:.6rem;opacity:.85">26 期沒開</small><small style="display:block;font-size:.6rem;opacity:.6">近30期 1 次</small>
-            <span style="position:absolute;top:-3px;right:-3px;width:9px;height:9px;border-radius:50%;background:#c0564d;box-shadow:0 0 0 2px #050607"></span></div>
-          <div style="border-radius:9px;padding:7px 2px 5px;text-align:center;background:#1b3d2c;color:#e6ebe7;box-shadow:inset 0 0 0 1px #28563d">
-            <b style="display:block;font-size:1.1rem">08</b><small style="display:block;font-size:.6rem;opacity:.85">4 期沒開</small><small style="display:block;font-size:.6rem;opacity:.6">近30期 4 次</small></div>
-          <div style="border-radius:9px;padding:7px 2px 5px;text-align:center;background:#1b3d2c;color:#e6ebe7;box-shadow:inset 0 0 0 2px #4aa3d8">
-            <b style="display:block;font-size:1.1rem">09</b><small style="display:block;font-size:.6rem;opacity:.85">最新開出</small><small style="display:block;font-size:.6rem;opacity:.6">近30期 3 次</small></div>
-          <div style="border-radius:9px;padding:7px 2px 5px;text-align:center;background:#d4bc42;color:#141002">
-            <b style="display:block;font-size:1.1rem">10</b><small style="display:block;font-size:.6rem;opacity:.85">13 期沒開</small><small style="display:block;font-size:.6rem;opacity:.6">近30期 5 次</small></div>
-        </div>
-      </div>
-    </div>
-    <div class="figcap">
-      <div class="pt"><span class="cal">1</span>大數字＝號碼；第一行小字＝<b>幾期沒開</b>；第二行＝<b>近 30 期出現幾次</b>。</div>
-      <div class="pt"><span class="cal">2</span><b>點號碼</b>＝把它設成正在分析的號，<b class="hg">視窗不會關掉</b>，可以繼續看；想看它的拖牌，按右上角 ✕ 關掉就在下面。</div>
-      <div class="pt"><span class="cal">3</span>上面可以切三種排序：<b>依號碼</b>（找號最快）／<b>最久沒開</b>（照❶排）／<b>開最多次</b>（照❷排）。</div>
-      <div class="pt"><span class="cal">4</span>切到「<b>開最多次</b>」時，格子裡<b>第一行會變成次數</b>；但<b class="hl">顏色永遠只在講❶幾期沒開</b>，不會跟著變。</div>
-    </div>
-  </div>
-
-  <div class="fig">
-    <div class="figh">四種顏色的意思</div>
-    <div class="figb">
-      <div style="background:#050607;border-radius:12px;padding:12px;font-size:.82rem;line-height:2.1;color:#ccd1d6">
-        <span style="display:inline-block;width:34px;text-align:center;border-radius:6px;padding:2px 0;font-weight:800;margin-right:8px;background:#1b3d2c;color:#e6ebe7;box-shadow:inset 0 0 0 1px #28563d">06</span>正常（8 期內開過）<br>
-        <span style="display:inline-block;width:34px;text-align:center;border-radius:6px;padding:2px 0;font-weight:800;margin-right:8px;background:#1b3d2c;color:#e6ebe7;box-shadow:inset 0 0 0 2px #4aa3d8">09</span>藍框＝<b style="color:#4aa3d8">最新一期剛開出</b><br>
-        <span style="display:inline-block;width:34px;text-align:center;border-radius:6px;padding:2px 0;font-weight:800;margin-right:8px;background:#d4bc42;color:#141002">14</span>黃底＝<b style="color:#d4bc42">8 期以上沒開</b>（比平均久）<br>
-        <span style="display:inline-block;width:34px;text-align:center;border-radius:6px;padding:2px 0;font-weight:800;margin-right:8px;background:#d4bc42;color:#141002;box-shadow:inset 0 0 0 2px #a8443c">27</span>黃底紅框＝<b style="color:#c0564d">16 期以上沒開</b>（平均的兩倍）
-      </div>
-    </div>
-    <div class="figcap">8 期跟 16 期不是我亂訂的：39 個號、每期開 5 個，<b>平均 7.8 期</b>會輪到同一個號一次，所以 8 期＝比平均久、16 期＝平均的兩倍。</div>
-  </div>
-
-  <div class="note warn"><b>最重要的一句話：久沒開<b class="hl">不代表比較會開</b>。</b><br>
-    每一期都是獨立的，球不會記得自己多久沒被抽到。這張表是給你<b>挑號的時候有個依據</b>，
-    以及回答「哪些號最近很冷」這種問題用的，<b>不是預測</b>。<br>
-    有人相信「久沒開該補了」，也有人相信「熱的會繼續熱」，兩種說法統計上都站不住腳，工具兩種資料都給你，怎麼用你自己決定。</div>
-</div>
-
 <h2 id="j">⑩ 常見問題</h2>
 <div class="step">
-  <div class="fig">
-    <div class="figh">最常被問的一題：<b>昨天看的，今天怎麼變了？</b></div>
-    <div class="figb">
-      <div style="font-size:.78rem;color:var(--dim);margin-bottom:6px">「回看 5 期」＝一條<b style="color:var(--pick)">只放 5 格的輸送帶</b></div>
-      <div style="border:1px solid var(--line);border-radius:10px;padding:9px;background:var(--panel2)">
-        <div style="font-size:.74rem;color:var(--dim);margin-bottom:5px">昨天（8/3）看的時候</div>
-        <div class="draw" style="gap:4px;margin:0">
-          <span style="display:inline-block;background:#0f1115;border:1px solid var(--line);color:var(--txt);border-radius:7px;padding:5px 7px;font-size:.76rem;font-weight:700;white-space:nowrap">07-28</span>
-          <span style="display:inline-block;background:#0f1115;border:1px solid var(--line);color:var(--txt);border-radius:7px;padding:5px 7px;font-size:.76rem;font-weight:700;white-space:nowrap">07-16</span>
-          <span style="display:inline-block;background:#0f1115;border:1px solid var(--line);color:var(--txt);border-radius:7px;padding:5px 7px;font-size:.76rem;font-weight:700;white-space:nowrap">07-08</span>
-          <span style="display:inline-block;background:#0f1115;border:1px solid var(--line);color:var(--txt);border-radius:7px;padding:5px 7px;font-size:.76rem;font-weight:700;white-space:nowrap">06-30</span>
-          <span style="display:inline-block;background:#0f1115;border:1px solid var(--line);color:var(--txt);border-radius:7px;padding:5px 7px;font-size:.76rem;font-weight:700;white-space:nowrap">06-21</span></div>
-        <div class="draw" style="margin-top:6px"><span class="lbl">前三名</span>
-          <span class="rball top">36</span><span class="rball">16</span><span class="rball">28</span></div>
-      </div>
-      <div style="text-align:center;color:var(--pick);font-size:1.1rem;margin:6px 0">↓　8/4 新開一期，有你的號</div>
-      <div style="border:1px solid var(--blue);border-radius:10px;padding:9px;background:var(--panel2)">
-        <div style="font-size:.74rem;color:var(--blue);margin-bottom:5px">今天（8/4）再看</div>
-        <div class="draw" style="gap:4px;margin:0">
-          <span style="display:inline-block;background:#0f1115;border:1px solid var(--blue);color:#cdeafd;border-radius:7px;padding:5px 7px;font-size:.76rem;font-weight:700;white-space:nowrap">08-04</span>
-          <span style="display:inline-block;background:#0f1115;border:1px solid var(--line);color:var(--txt);border-radius:7px;padding:5px 7px;font-size:.76rem;font-weight:700;white-space:nowrap">07-28</span>
-          <span style="display:inline-block;background:#0f1115;border:1px solid var(--line);color:var(--txt);border-radius:7px;padding:5px 7px;font-size:.76rem;font-weight:700;white-space:nowrap">07-16</span>
-          <span style="display:inline-block;background:#0f1115;border:1px solid var(--line);color:var(--txt);border-radius:7px;padding:5px 7px;font-size:.76rem;font-weight:700;white-space:nowrap">07-08</span>
-          <span style="display:inline-block;background:#0f1115;border:1px solid var(--line);color:var(--txt);border-radius:7px;padding:5px 7px;font-size:.76rem;font-weight:700;white-space:nowrap">06-30</span>
-          <span style="color:var(--hot);font-size:.72rem">06-21 被擠出去</span></div>
-        <div class="draw" style="margin-top:6px"><span class="lbl">前三名</span>
-          <span class="rball top">07</span><span class="rball">21</span><span class="rball">28</span></div>
-      </div>
-    </div>
-    <div class="figcap">
-      <div class="pt"><span class="cal">1</span>新的一期<b>擠進來</b>，最舊那期<b class="hl">被擠出去</b>，統計的樣本就不一樣了，答案當然會變。</div>
-      <div class="pt"><span class="cal">2</span>想看「<b>那天到底長什麼樣</b>」：把號碼盤上方的<b>期別選單轉回那一天</b>，結果會跟當天<b class="hg">一模一樣</b>。</div>
-      <div class="pt"><span class="cal">3</span>把<b>回看期數調大</b>（10 或 20），輸送帶變長，每天的變動就小很多。</div>
-    </div>
-  </div>
-
   <div class="qa"><b>Q：資料要自己更新嗎？</b><br>不用。系統每天開獎後自動抓最新一期，你打開就是最新的。看標題下方灰字就知道目前最新是哪一期。</div>
   <div class="qa"><b>Q：手機、平板、電腦都能用嗎？</b><br>可以。同一條連結可綁定多台裝置（預設由客服設定台數）。綁滿時再開，會自動釋放最早那一台，不會被鎖在外面。</div>
   <div class="qa"><b>Q：在 LINE 裡打得開，換 Chrome 就說「尚未啟用」？</b><br>
