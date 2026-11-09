@@ -1,0 +1,720 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>4合1 指標設定說明</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* 版面:左側目錄 + 右側章節;每個設定分組 = 一張「3D 面板」:設定名稱 + 預設值 + 改了會怎樣 + 示意圖 */
+:root{
+  --bg:#0c1016; --panel:#141a22; --panel2:#1b232e; --line:#2a3542; --fg:#e4eaf1; --mute:#8d9aab;
+  --accent:#3fa8ff; --good:#36c48a; --warn:#f0a73a; --bad:#ef5a5a; --gold:#d9b25c;
+  --shadow:0 18px 40px -18px rgba(0,0,0,.75);
+  --f-body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){
+  --bg:#eef2f6; --panel:#ffffff; --panel2:#f3f6fa; --line:#d5dde7; --fg:#18212c; --mute:#5c6b7d;
+  --accent:#1572d3; --good:#14915c; --warn:#b86e00; --bad:#cf3434; --gold:#9a7220;
+  --shadow:0 18px 36px -20px rgba(30,50,80,.35); color-scheme:light}}
+:root[data-theme="light"]{
+  --bg:#eef2f6; --panel:#ffffff; --panel2:#f3f6fa; --line:#d5dde7; --fg:#18212c; --mute:#5c6b7d;
+  --accent:#1572d3; --good:#14915c; --warn:#b86e00; --bad:#cf3434; --gold:#9a7220;
+  --shadow:0 18px 36px -20px rgba(30,50,80,.35); color-scheme:light}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15.5px;line-height:1.75;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
+.wrap{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:220px minmax(0,1fr);gap:36px}
+@media (max-width:860px){.wrap{grid-template-columns:minmax(0,1fr)}.toc{display:none}}
+h1,h2,h3{text-wrap:balance;line-height:1.3;margin:0}
+h2{font-size:1.55rem;font-weight:900;letter-spacing:.01em}
+h3{font-size:1.08rem;font-weight:700}
+p{margin:0}
+.mono,.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* hero */
+.hero{max-width:1120px;margin:0 auto;padding:36px 0 28px;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:24px;align-items:center}
+@media (max-width:860px){.hero{grid-template-columns:minmax(0,1fr)}}
+.eyebrow{font-family:var(--f-mono);font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.hero h1{font-size:clamp(2rem,6vw,3.2rem);font-weight:900;margin:8px 0 12px}
+.hero p{color:var(--mute);max-width:34em}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.chip{font-size:.8rem;padding:3px 10px;border-radius:999px;border:1px solid var(--line);background:var(--panel);color:var(--mute)}
+.chip b{color:var(--fg)}
+
+/* 3D 疊層:四道保護 */
+.stage{perspective:900px;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px;min-height:280px}
+.stage .holder{height:280px;display:grid;place-items:center}
+@media (max-width:520px){.stage .holder{transform:scale(.78);transform-origin:center}}
+.legend{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;font-size:.88rem;font-weight:700}
+.legend li{display:flex;align-items:center;gap:8px;white-space:nowrap}
+.legend i{width:14px;height:14px;border-radius:4px;display:inline-block;box-shadow:0 3px 0 rgba(0,0,0,.3)}
+.stack{position:relative;width:170px;height:115px;transform-style:preserve-3d;transform:rotateX(58deg) rotateZ(-38deg);animation:spin 14s ease-in-out infinite alternate}
+@keyframes spin{from{transform:rotateX(58deg) rotateZ(-38deg)}to{transform:rotateX(58deg) rotateZ(-22deg)}}
+@media (prefers-reduced-motion:reduce){.stack{animation:none}}
+.plate{position:absolute;inset:0;border-radius:14px;border:1px solid rgba(255,255,255,.18);display:flex;align-items:flex-end;justify-content:flex-end;padding:10px 14px;
+  font-weight:700;font-size:.85rem;color:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.2),0 30px 40px -10px rgba(0,0,0,.6)}
+.plate span{transform:rotateZ(38deg);transform-origin:right bottom;white-space:nowrap;text-shadow:0 1px 2px rgba(0,0,0,.6)}
+.p1{background:linear-gradient(135deg,#a33a3a,#ef5a5a);transform:translateZ(0)}
+.p2{background:linear-gradient(135deg,#2f6d9b,#3fa8ff);transform:translateZ(36px)}
+.p3{background:linear-gradient(135deg,#1f7b56,#36c48a);transform:translateZ(72px)}
+.p4{background:linear-gradient(135deg,#8a6a22,#d9b25c);transform:translateZ(108px)}
+
+/* toc */
+.toc{position:sticky;top:calc(env(safe-area-inset-top,0px) + 16px);align-self:start;font-size:.9rem;border-left:1px solid var(--line);padding-left:14px}
+.toc a{display:block;color:var(--mute);text-decoration:none;padding:3px 0}
+.toc a:hover{color:var(--fg)}
+.toc .t{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.12em;color:var(--accent);margin-bottom:6px}
+
+main{display:flex;flex-direction:column;gap:56px;min-width:0}
+section{display:flex;flex-direction:column;gap:18px;min-width:0;scroll-margin-top:20px}
+.lead{color:var(--mute);max-width:44em}
+
+/* 3D 面板 */
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:var(--shadow);
+  transform:perspective(1200px) rotateX(0) translateY(0);transition:transform .35s ease,box-shadow .35s ease;min-width:0}
+@media (hover:hover) and (prefers-reduced-motion:no-preference){.panel:hover{transform:perspective(1200px) rotateX(2.5deg) translateY(-3px)}}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:16px}
+.btnname{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:.95rem;background:var(--panel2);border:1px solid var(--line);
+  border-bottom-width:3px;border-radius:10px;padding:4px 12px;box-shadow:0 3px 0 rgba(0,0,0,.25)}
+.card{display:flex;flex-direction:column;gap:10px}
+.card .what{color:var(--fg)}
+.ex{background:var(--panel2);border-radius:10px;padding:10px 12px;font-size:.92rem;color:var(--mute);border:1px dashed var(--line)}
+.ex b{color:var(--fg)}
+.rec{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:.85rem}
+.pill{font-weight:700;font-size:.78rem;border-radius:999px;padding:2px 10px;border:1px solid currentColor}
+.on{color:var(--good)} .off{color:var(--mute)} .chop{color:var(--warn)} .danger{color:var(--bad)}
+.note{font-size:.88rem;color:var(--mute)}
+.callout{border-radius:14px;padding:14px 16px;border:1px solid var(--line);background:linear-gradient(180deg,var(--panel2),var(--panel))}
+.callout.warn{border-color:color-mix(in srgb,var(--warn) 55%,var(--line))}
+.callout.bad{border-color:color-mix(in srgb,var(--bad) 55%,var(--line))}
+
+/* tables */
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;font-size:.9rem;min-width:520px}
+th,td{padding:8px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{white-space:nowrap;background:var(--panel2);font-weight:700;color:var(--mute);font-size:.8rem;letter-spacing:.04em}
+tr:last-child td{border-bottom:0}
+td.n{font-family:var(--f-mono);font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.pos{color:var(--good)} .neg{color:var(--bad)}
+
+/* flow */
+.flow{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;perspective:1000px}
+@media (max-width:640px){.flow{grid-template-columns:minmax(0,1fr)}}
+.step{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:12px;transform:rotateY(-6deg);transform-origin:center;box-shadow:var(--shadow)}
+@media (max-width:640px){.step{transform:none}}
+.step .k{font-family:var(--f-mono);font-size:.72rem;color:var(--accent);letter-spacing:.1em}
+.step h3{font-size:.98rem;margin:4px 0}
+.step p{font-size:.85rem;color:var(--mute)}
+
+/* svg charts */
+.chart{width:100%;height:auto;display:block}
+.chart text{fill:var(--mute);font-family:var(--f-mono);font-size:11px}
+.chart .lbl{fill:var(--fg);font-family:var(--f-body);font-size:12px;font-weight:700}
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:16px}
+figure{margin:0}
+figcaption{font-size:.85rem;color:var(--mute);margin-top:8px}
+
+/* playbook */
+.play{counter-reset:s;display:flex;flex-direction:column;gap:12px}
+.ps{display:grid;grid-template-columns:44px minmax(0,1fr);gap:12px;align-items:start}
+.ps .no{counter-increment:s;width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-family:var(--f-mono);font-weight:700;
+  background:linear-gradient(145deg,var(--panel2),var(--panel));border:1px solid var(--line);box-shadow:0 6px 0 rgba(0,0,0,.35),var(--shadow)}
+.ps .no::before{content:counter(s)}
+
+/* calculator */
+.calc{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:12px;align-items:end}
+.calc label{display:flex;flex-direction:column;gap:4px;font-size:.85rem;color:var(--mute)}
+.calc input{font:inherit;font-family:var(--f-mono);background:var(--panel2);color:var(--fg);border:1px solid var(--line);border-radius:10px;padding:8px 10px;width:100%}
+.out{font-family:var(--f-mono);font-size:1.25rem;font-weight:700}
+code{font-family:var(--f-mono);font-size:.85em;background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:1px 6px;overflow-wrap:anywhere}
+pre{margin:0;overflow-x:auto;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-family:var(--f-mono);font-size:.82rem}
+.slim table{min-width:0;table-layout:fixed}.slim td:first-child,.slim th:first-child{width:36%}.slim code{word-break:break-all}
+footer{max-width:1120px;margin:56px auto 0;color:var(--mute);font-size:.82rem;border-top:1px solid var(--line);padding-top:16px}
+/* 示意圖用色(都走 token) */
+.up{fill:var(--good)} .dn{fill:var(--bad)} .sup{stroke:var(--good)} .sdn{stroke:var(--bad)}
+.gl{stroke:var(--line)} .tx{fill:var(--fg)} .mu{fill:var(--mute)} .ac{fill:var(--accent)} .sac{stroke:var(--accent)}
+.gd{fill:var(--gold)} .sgd{stroke:var(--gold)} .wn{fill:var(--warn)} .bgp{fill:var(--panel2)} .bgc{fill:var(--panel)} .sln{stroke:var(--line)}
+.fig{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:12px;box-shadow:var(--shadow);
+  transform:perspective(1100px) rotateX(4deg);transform-origin:center bottom;overflow-x:auto}
+@media (prefers-reduced-motion:no-preference) and (hover:hover){.fig{transition:transform .35s}.fig:hover{transform:perspective(1100px) rotateX(0)}}
+.fig svg{display:block;width:100%;height:auto;min-width:300px}
+.fig svg text{font-family:var(--f-body);font-size:12px}
+.def{display:inline-flex;gap:4px;align-items:center;font-size:.78rem;font-weight:700;border-radius:999px;padding:1px 9px;background:color-mix(in srgb,var(--accent) 16%,transparent);color:var(--accent);white-space:nowrap}
+.def.off{background:color-mix(in srgb,var(--mute) 16%,transparent);color:var(--mute)}
+.def.on{background:color-mix(in srgb,var(--good) 16%,transparent);color:var(--good)}
+.set{display:flex;flex-direction:column;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px;box-shadow:var(--shadow);min-width:0}
+.set .hd{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
+.set .ef{font-size:.9rem;color:var(--mute)}
+.set .ef b{color:var(--fg)}
+.gname{font-family:var(--f-mono);font-size:.8rem;color:var(--mute);letter-spacing:.04em}
+.tabs3{display:flex;gap:6px;flex-wrap:wrap}
+.calc select{font:inherit;background:var(--panel2);color:var(--fg);border:1px solid var(--line);border-radius:10px;padding:8px 10px;width:100%}
+.lv{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,130px),1fr));gap:10px}
+.lv div{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:2px}
+.lv small{color:var(--mute);font-size:.78rem}
+
+</style>
+</head><body>
+<header class="hero">
+  <div>
+    <div class="eyebrow">TradingView 指標 · 設定說明</div>
+    <h1>4合1 指標怎麼調</h1>
+    <p>一顆指標裡有四個功能：① AI 漲跌、② SMC 聰明錢、③ 止盈止損、④ 世界開盤時間。這份說明照設定視窗的順序，一格一格講：它是做什麼的、現在預設是什麼、改了圖上會變怎樣。</p>
+    <div class="chips">
+      <span class="chip">預設 <b>四個功能全開</b></span>
+      <span class="chip">開盤框 <b>固定台灣時間</b></span>
+      <span class="chip">新手儀表板 <b>預設關</b></span>
+      <span class="chip">止盈止損框 <b>預設不畫</b></span>
+    </div>
+  </div>
+  <div class="stage">
+    <div class="holder">
+      <div class="stack" aria-hidden="true">
+        <div class="plate p1"><span>④ 世界開盤</span></div>
+        <div class="plate p2"><span>③ 止盈止損</span></div>
+        <div class="plate p3"><span>② SMC</span></div>
+        <div class="plate p4"><span>① AI 漲跌</span></div>
+      </div>
+    </div>
+    <ul class="legend">
+      <li><i style="background:#d9b25c"></i>① AI 漲跌</li>
+      <li><i style="background:#36c48a"></i>② SMC 聰明錢</li>
+      <li><i style="background:#3fa8ff"></i>③ 止盈止損</li>
+      <li><i style="background:#ef5a5a"></i>④ 世界開盤</li>
+    </ul>
+  </div>
+</header>
+
+<div class="wrap">
+<nav class="toc" aria-label="目錄">
+  <div class="t">目錄</div>
+  <a href="#open">打開設定</a>
+  <a href="#menu">🧭 功能選單</a>
+  <a href="#ai">① AI 漲跌</a>
+  <a href="#star">⭐ 星星</a>
+  <a href="#tpsl">③ 止盈止損</a>
+  <a href="#smc">② SMC 聰明錢</a>
+  <a href="#world">④ 世界開盤</a>
+  <a href="#faq">常見狀況</a>
+  <a href="#all">預設總表</a>
+</nav>
+
+<main>
+<section id="open">
+  <h2>先找到設定在哪裡</h2>
+  <p class="lead">圖表左上角有指標的名字。點名字旁邊的齒輪 ⚙，打開後停在「輸入」分頁，所有功能都在這裡，由上往下分組排好。</p>
+  <div class="fig"><svg viewBox="0 0 640 260" role="img" aria-label="圖表左上角指標名稱和設定視窗示意">
+<rect x="10" y="10" width="270" height="34" rx="8" class="bgc"/><rect x="10" y="10" width="270" height="34" rx="8" fill="none" class="sln"/>
+<text x="22" y="32" class="tx" font-weight="700">AI漲跌+SMC+TP+世界開盤 4合1</text>
+<circle cx="300" cy="27" r="13" class="ac"/><text x="300" y="32" text-anchor="middle" fill="#fff" font-size="14">⚙</text>
+<path d="M300 44 C300 80 340 80 350 96" fill="none" class="sac" stroke-width="2" stroke-dasharray="4 4"/>
+<text x="318" y="64" class="ac" font-weight="700">① 點齒輪</text>
+<rect x="340" y="96" width="290" height="156" rx="12" class="bgc"/><rect x="340" y="96" width="290" height="156" rx="12" fill="none" class="sln"/>
+<rect x="356" y="110" width="58" height="26" rx="7" class="ac"/><text x="385" y="128" text-anchor="middle" fill="#fff" font-weight="700">輸入</text>
+<text x="446" y="128" class="mu">樣式</text><text x="500" y="128" class="mu">可見性</text>
+<text x="356" y="160" class="gd" font-weight="700">② 在「輸入」由上往下找分組</text>
+<text x="356" y="184" class="tx">🧭 功能選單</text><text x="356" y="204" class="tx">AI 漲跌 V3／星星／止盈止損</text><text x="356" y="224" class="tx">聰明錢概念…／③世界開盤…</text>
+<text x="356" y="244" class="mu">③ 改完按「確定」就生效</text>
+<text x="20" y="80" class="mu">指標名稱在圖表左上角，</text><text x="20" y="100" class="mu">手指點一下名稱就會出現齒輪</text>
+</svg></div>
+  <div class="callout"><b>改壞了怎麼辦？</b> 設定視窗左下角有「預設值 → 重設設定」，按下去全部回到這份說明寫的預設。</div>
+</section>
+
+<section id="menu">
+  <h2>🧭 功能選單：先決定要看哪幾個</h2>
+  <p class="lead">設定最上面那一組。它像總開關：選哪一個，圖上就只畫那幾個功能。</p>
+  <div class="grid2">
+    <div class="set">
+      <div class="hd"><span class="btnname">要顯示哪些功能</span><span class="def">預設：⚙️ 自訂</span></div>
+      <p class="ef">下拉有 15 種組合，例如「① 只看 AI 漲跌」「①+④ AI漲跌＋世界開盤」「🔥 全部顯示」。<b>選了組合，下面四個勾選就不管用</b>；選「⚙️ 自訂」才照下面四個勾選。</p>
+    </div>
+    <div class="set">
+      <div class="hd"><span class="btnname">⚙️自訂專用 ①②③④ 四個勾</span><span class="def on">預設：四個都勾</span></div>
+      <p class="ef">只有上面選「⚙️ 自訂」時有用。拿掉哪個勾，那個功能整組消失。</p>
+    </div>
+  </div>
+  <div class="ex"><b>例：</b>覺得畫面太亂 → 把 ② SMC 的勾拿掉，剩趨勢線、漲跌和開盤框，最乾淨。<br><b>③ 止盈止損建議一直勾著</b>：它的框預設已經不畫（看下面 ③ 的「📦 顯示框」），勾著也不會擋畫面。</div>
+</section>
+
+<section id="ai">
+  <h2>① AI 漲跌：趨勢線＋漲跌訊號</h2>
+  <p class="lead">一條會變色的粗線跟著價格走。線轉綠就是轉多、轉紅就是轉空，轉向那根 K 棒收盤時出「漲」或「跌」標籤。</p>
+  <div class="fig"><svg viewBox="0 0 640 250" role="img" aria-label="K 棒、趨勢線和漲跌標籤示意">
+<line x1="20" x2="620" y1="20.0" y2="20.0" class="gl" stroke-width="1"/>
+<line x1="20" x2="620" y1="70.0" y2="70.0" class="gl" stroke-width="1"/>
+<line x1="20" x2="620" y1="120.0" y2="120.0" class="gl" stroke-width="1"/>
+<line x1="20" x2="620" y1="170.0" y2="170.0" class="gl" stroke-width="1"/>
+<line x1="20" x2="620" y1="220.0" y2="220.0" class="gl" stroke-width="1"/>
+<line x1="26.5" x2="26.5" y1="138.6" y2="149.2" class="sup" stroke-width="1.2"/>
+<rect x="22.3" y="140.9" width="8.3" height="2.0" class="up" rx="1"/>
+<line x1="39.6" x2="39.6" y1="135.4" y2="149.6" class="sup" stroke-width="1.2"/>
+<rect x="35.4" y="140.9" width="8.3" height="4.5" class="up" rx="1"/>
+<line x1="52.6" x2="52.6" y1="140.2" y2="151.8" class="sup" stroke-width="1.2"/>
+<rect x="48.4" y="145.5" width="8.3" height="4.9" class="up" rx="1"/>
+<line x1="65.7" x2="65.7" y1="143.9" y2="152.2" class="sup" stroke-width="1.2"/>
+<rect x="61.5" y="145.7" width="8.3" height="4.7" class="up" rx="1"/>
+<line x1="78.7" x2="78.7" y1="133.4" y2="147.8" class="sup" stroke-width="1.2"/>
+<rect x="74.5" y="141.2" width="8.3" height="4.4" class="up" rx="1"/>
+<line x1="91.7" x2="91.7" y1="135.0" y2="150.7" class="sup" stroke-width="1.2"/>
+<rect x="87.6" y="141.2" width="8.3" height="2.0" class="up" rx="1"/>
+<line x1="104.8" x2="104.8" y1="129.2" y2="151.0" class="sup" stroke-width="1.2"/>
+<rect x="100.6" y="133.6" width="8.3" height="8.3" class="up" rx="1"/>
+<line x1="117.8" x2="117.8" y1="125.5" y2="142.3" class="sup" stroke-width="1.2"/>
+<rect x="113.7" y="133.6" width="8.3" height="5.2" class="up" rx="1"/>
+<line x1="130.9" x2="130.9" y1="136.7" y2="145.1" class="sup" stroke-width="1.2"/>
+<rect x="126.7" y="138.8" width="8.3" height="2.7" class="up" rx="1"/>
+<line x1="143.9" x2="143.9" y1="124.4" y2="147.3" class="sup" stroke-width="1.2"/>
+<rect x="139.7" y="127.0" width="8.3" height="14.4" class="up" rx="1"/>
+<line x1="157.0" x2="157.0" y1="113.0" y2="132.6" class="sup" stroke-width="1.2"/>
+<rect x="152.8" y="117.1" width="8.3" height="9.9" class="up" rx="1"/>
+<line x1="170.0" x2="170.0" y1="115.5" y2="124.7" class="sup" stroke-width="1.2"/>
+<rect x="165.8" y="117.1" width="8.3" height="4.8" class="up" rx="1"/>
+<line x1="183.0" x2="183.0" y1="106.3" y2="125.6" class="sup" stroke-width="1.2"/>
+<rect x="178.9" y="111.0" width="8.3" height="11.0" class="up" rx="1"/>
+<line x1="196.1" x2="196.1" y1="97.6" y2="114.5" class="sup" stroke-width="1.2"/>
+<rect x="191.9" y="102.4" width="8.3" height="8.5" class="up" rx="1"/>
+<line x1="209.1" x2="209.1" y1="81.7" y2="105.5" class="sup" stroke-width="1.2"/>
+<rect x="205.0" y="88.6" width="8.3" height="13.9" class="up" rx="1"/>
+<line x1="222.2" x2="222.2" y1="74.9" y2="96.8" class="sup" stroke-width="1.2"/>
+<rect x="218.0" y="80.3" width="8.3" height="8.3" class="up" rx="1"/>
+<line x1="235.2" x2="235.2" y1="64.6" y2="89.4" class="sup" stroke-width="1.2"/>
+<rect x="231.0" y="68.1" width="8.3" height="12.2" class="up" rx="1"/>
+<line x1="248.3" x2="248.3" y1="63.6" y2="78.7" class="sup" stroke-width="1.2"/>
+<rect x="244.1" y="68.1" width="8.3" height="3.4" class="up" rx="1"/>
+<line x1="261.3" x2="261.3" y1="66.3" y2="75.4" class="sup" stroke-width="1.2"/>
+<rect x="257.1" y="71.5" width="8.3" height="2.5" class="up" rx="1"/>
+<line x1="274.3" x2="274.3" y1="56.0" y2="79.7" class="sup" stroke-width="1.2"/>
+<rect x="270.2" y="63.3" width="8.3" height="10.6" class="up" rx="1"/>
+<line x1="287.4" x2="287.4" y1="57.0" y2="70.1" class="sup" stroke-width="1.2"/>
+<rect x="283.2" y="60.7" width="8.3" height="2.6" class="up" rx="1"/>
+<line x1="300.4" x2="300.4" y1="54.8" y2="70.1" class="sup" stroke-width="1.2"/>
+<rect x="296.3" y="60.7" width="8.3" height="4.5" class="up" rx="1"/>
+<line x1="313.5" x2="313.5" y1="54.7" y2="70.2" class="sup" stroke-width="1.2"/>
+<rect x="309.3" y="63.5" width="8.3" height="2.0" class="up" rx="1"/>
+<line x1="326.5" x2="326.5" y1="61.9" y2="73.1" class="sup" stroke-width="1.2"/>
+<rect x="322.3" y="63.5" width="8.3" height="2.8" class="up" rx="1"/>
+<line x1="339.6" x2="339.6" y1="57.1" y2="77.3" class="sup" stroke-width="1.2"/>
+<rect x="335.4" y="66.3" width="8.3" height="3.2" class="up" rx="1"/>
+<line x1="352.6" x2="352.6" y1="65.2" y2="88.5" class="sup" stroke-width="1.2"/>
+<rect x="348.4" y="69.5" width="8.3" height="12.4" class="up" rx="1"/>
+<line x1="365.7" x2="365.7" y1="77.0" y2="103.5" class="sup" stroke-width="1.2"/>
+<rect x="361.5" y="81.9" width="8.3" height="19.1" class="up" rx="1"/>
+<line x1="378.7" x2="378.7" y1="99.4" y2="125.1" class="sdn" stroke-width="1.2"/>
+<rect x="374.5" y="101.0" width="8.3" height="16.7" class="dn" rx="1"/>
+<line x1="391.7" x2="391.7" y1="114.5" y2="138.4" class="sdn" stroke-width="1.2"/>
+<rect x="387.6" y="117.7" width="8.3" height="16.4" class="dn" rx="1"/>
+<line x1="404.8" x2="404.8" y1="129.7" y2="138.9" class="sdn" stroke-width="1.2"/>
+<rect x="400.6" y="131.5" width="8.3" height="2.5" class="dn" rx="1"/>
+<line x1="417.8" x2="417.8" y1="123.2" y2="145.0" class="sdn" stroke-width="1.2"/>
+<rect x="413.7" y="131.5" width="8.3" height="5.7" class="dn" rx="1"/>
+<line x1="430.9" x2="430.9" y1="131.5" y2="141.8" class="sdn" stroke-width="1.2"/>
+<rect x="426.7" y="134.9" width="8.3" height="2.3" class="dn" rx="1"/>
+<line x1="443.9" x2="443.9" y1="126.6" y2="154.4" class="sdn" stroke-width="1.2"/>
+<rect x="439.7" y="134.9" width="8.3" height="10.5" class="dn" rx="1"/>
+<line x1="457.0" x2="457.0" y1="142.9" y2="164.3" class="sdn" stroke-width="1.2"/>
+<rect x="452.8" y="145.4" width="8.3" height="15.8" class="dn" rx="1"/>
+<line x1="470.0" x2="470.0" y1="156.2" y2="180.9" class="sdn" stroke-width="1.2"/>
+<rect x="465.8" y="161.3" width="8.3" height="13.7" class="dn" rx="1"/>
+<line x1="483.0" x2="483.0" y1="173.8" y2="192.5" class="sdn" stroke-width="1.2"/>
+<rect x="478.9" y="175.0" width="8.3" height="13.0" class="dn" rx="1"/>
+<line x1="496.1" x2="496.1" y1="180.9" y2="196.9" class="sdn" stroke-width="1.2"/>
+<rect x="491.9" y="186.7" width="8.3" height="2.0" class="dn" rx="1"/>
+<line x1="509.1" x2="509.1" y1="171.9" y2="192.8" class="sdn" stroke-width="1.2"/>
+<rect x="505.0" y="177.2" width="8.3" height="9.5" class="dn" rx="1"/>
+<line x1="522.2" x2="522.2" y1="166.5" y2="185.6" class="sdn" stroke-width="1.2"/>
+<rect x="518.0" y="168.1" width="8.3" height="9.1" class="dn" rx="1"/>
+<line x1="535.2" x2="535.2" y1="148.1" y2="175.7" class="sdn" stroke-width="1.2"/>
+<rect x="531.0" y="156.3" width="8.3" height="11.8" class="dn" rx="1"/>
+<line x1="548.3" x2="548.3" y1="150.1" y2="158.3" class="sdn" stroke-width="1.2"/>
+<rect x="544.1" y="154.5" width="8.3" height="2.0" class="dn" rx="1"/>
+<line x1="561.3" x2="561.3" y1="144.7" y2="156.2" class="sdn" stroke-width="1.2"/>
+<rect x="557.1" y="146.4" width="8.3" height="8.0" class="dn" rx="1"/>
+<line x1="574.3" x2="574.3" y1="143.9" y2="153.1" class="sdn" stroke-width="1.2"/>
+<rect x="570.2" y="146.4" width="8.3" height="2.8" class="dn" rx="1"/>
+<line x1="587.4" x2="587.4" y1="148.0" y2="158.3" class="sdn" stroke-width="1.2"/>
+<rect x="583.2" y="149.2" width="8.3" height="6.8" class="dn" rx="1"/>
+<line x1="600.4" x2="600.4" y1="151.8" y2="162.8" class="sdn" stroke-width="1.2"/>
+<rect x="596.3" y="156.0" width="8.3" height="5.5" class="dn" rx="1"/>
+<line x1="613.5" x2="613.5" y1="141.2" y2="163.8" class="sdn" stroke-width="1.2"/>
+<rect x="609.3" y="147.3" width="8.3" height="14.2" class="dn" rx="1"/>
+<line x1="26.5" x2="39.6" y1="140.9" y2="140.9" class="sup" stroke-width="3" stroke-linecap="round"/>
+<line x1="39.6" x2="52.6" y1="140.9" y2="140.9" class="sup" stroke-width="3" stroke-linecap="round"/>
+<line x1="52.6" x2="65.7" y1="140.9" y2="140.9" class="sup" stroke-width="3" stroke-linecap="round"/>
+<line x1="65.7" x2="78.7" y1="140.9" y2="140.9" class="sup" stroke-width="3" stroke-linecap="round"/>
+<line x1="78.7" x2="91.7" y1="140.9" y2="140.9" class="sup" stroke-width="3" stroke-linecap="round"/>
+<line x1="91.7" x2="104.8" y1="140.9" y2="140.9" class="sup" stroke-width="3" stroke-linecap="round"/>
+<line x1="104.8" x2="117.8" y1="140.9" y2="140.9" class="sup" stroke-width="3" stroke-linecap="round"/>
+<line x1="117.8" x2="130.9" y1="140.9" y2="140.9" class="sup" stroke-width="3" stroke-linecap="round"/>
+<line x1="130.9" x2="143.9" y1="140.9" y2="140.9" class="sup" stroke-width="3" stroke-linecap="round"/>
+<line x1="143.9" x2="157.0" y1="140.9" y2="140.9" class="sup" stroke-width="3" stroke-linecap="round"/>
+<line x1="157.0" x2="170.0" y1="140.9" y2="140.9" class="sup" stroke-width="3" stroke-linecap="round"/>
+<line x1="170.0" x2="183.0" y1="140.9" y2="136.4" class="sup" stroke-width="3" stroke-linecap="round"/>
+<line x1="183.0" x2="196.1" y1="136.4" y2="127.9" class="sup" stroke-width="3" stroke-linecap="round"/>
+<line x1="196.1" x2="209.1" y1="127.9" y2="114.0" class="sup" stroke-width="3" stroke-linecap="round"/>
+<line x1="209.1" x2="222.2" y1="114.0" y2="105.8" class="sup" stroke-width="3" stroke-linecap="round"/>
+<line x1="222.2" x2="235.2" y1="105.8" y2="93.6" class="sup" stroke-width="3" stroke-linecap="round"/>
+<line x1="235.2" x2="248.3" y1="93.6" y2="93.6" class="sup" stroke-width="3" stroke-linecap="round"/>
+<line x1="248.3" x2="261.3" y1="93.6" y2="93.6" class="sup" stroke-width="3" stroke-linecap="round"/>
+<line x1="261.3" x2="274.3" y1="93.6" y2="88.8" class="sup" stroke-width="3" stroke-linecap="round"/>
+<line x1="274.3" x2="287.4" y1="88.8" y2="86.1" class="sup" stroke-width="3" stroke-linecap="round"/>
+<line x1="287.4" x2="300.4" y1="86.1" y2="86.1" class="sup" stroke-width="3" stroke-linecap="round"/>
+<line x1="300.4" x2="313.5" y1="86.1" y2="86.1" class="sup" stroke-width="3" stroke-linecap="round"/>
+<line x1="313.5" x2="326.5" y1="86.1" y2="86.1" class="sup" stroke-width="3" stroke-linecap="round"/>
+<line x1="326.5" x2="339.6" y1="86.1" y2="86.1" class="sup" stroke-width="3" stroke-linecap="round"/>
+<line x1="339.6" x2="352.6" y1="86.1" y2="86.1" class="sup" stroke-width="3" stroke-linecap="round"/>
+<line x1="352.6" x2="365.7" y1="86.1" y2="86.1" class="sup" stroke-width="3" stroke-linecap="round"/>
+<line x1="365.7" x2="378.7" y1="86.1" y2="92.2" class="sdn" stroke-width="3" stroke-linecap="round"/>
+<line x1="378.7" x2="391.7" y1="92.2" y2="108.6" class="sdn" stroke-width="3" stroke-linecap="round"/>
+<line x1="391.7" x2="404.8" y1="108.6" y2="108.6" class="sdn" stroke-width="3" stroke-linecap="round"/>
+<line x1="404.8" x2="417.8" y1="108.6" y2="111.8" class="sdn" stroke-width="3" stroke-linecap="round"/>
+<line x1="417.8" x2="430.9" y1="111.8" y2="111.8" class="sdn" stroke-width="3" stroke-linecap="round"/>
+<line x1="430.9" x2="443.9" y1="111.8" y2="120.0" class="sdn" stroke-width="3" stroke-linecap="round"/>
+<line x1="443.9" x2="457.0" y1="120.0" y2="135.8" class="sdn" stroke-width="3" stroke-linecap="round"/>
+<line x1="457.0" x2="470.0" y1="135.8" y2="149.5" class="sdn" stroke-width="3" stroke-linecap="round"/>
+<line x1="470.0" x2="483.0" y1="149.5" y2="162.5" class="sdn" stroke-width="3" stroke-linecap="round"/>
+<line x1="483.0" x2="496.1" y1="162.5" y2="162.5" class="sdn" stroke-width="3" stroke-linecap="round"/>
+<line x1="496.1" x2="509.1" y1="162.5" y2="162.5" class="sdn" stroke-width="3" stroke-linecap="round"/>
+<line x1="509.1" x2="522.2" y1="162.5" y2="162.5" class="sdn" stroke-width="3" stroke-linecap="round"/>
+<line x1="522.2" x2="535.2" y1="162.5" y2="162.5" class="sdn" stroke-width="3" stroke-linecap="round"/>
+<line x1="535.2" x2="548.3" y1="162.5" y2="162.5" class="sdn" stroke-width="3" stroke-linecap="round"/>
+<line x1="548.3" x2="561.3" y1="162.5" y2="162.5" class="sdn" stroke-width="3" stroke-linecap="round"/>
+<line x1="561.3" x2="574.3" y1="162.5" y2="162.5" class="sdn" stroke-width="3" stroke-linecap="round"/>
+<line x1="574.3" x2="587.4" y1="162.5" y2="162.5" class="sdn" stroke-width="3" stroke-linecap="round"/>
+<line x1="587.4" x2="600.4" y1="162.5" y2="162.5" class="sdn" stroke-width="3" stroke-linecap="round"/>
+<line x1="600.4" x2="613.5" y1="162.5" y2="162.5" class="sdn" stroke-width="3" stroke-linecap="round"/>
+<rect x="168.0" y="139.6" width="30" height="20" rx="5" class="up"/><text x="183.0" y="153.6" text-anchor="middle" fill="#fff" font-weight="700">漲</text>
+<rect x="363.7" y="65.4" width="30" height="20" rx="5" class="dn"/><text x="378.7" y="79.4" text-anchor="middle" fill="#fff" font-weight="700">跌</text>
+<text x="24" y="242" class="mu">粗線＝趨勢線(綠＝偏多、紅＝偏空)　K 棒跟著趨勢上色　趨勢翻轉那根收盤出「漲／跌」</text></svg></div>
+  <div class="gname">分組名稱：AI 漲跌 V3</div>
+  <div class="grid2">
+    <div class="set"><div class="hd"><span class="btnname">取樣週期</span><span class="def">預設 100</span></div>
+      <p class="ef">趨勢線參考多少根 K 棒。<b>調小</b>：線貼著價格、訊號多但假訊號也多；<b>調大</b>：線平滑、訊號少、比較慢。</p></div>
+    <div class="set"><div class="hd"><span class="btnname">區間倍率</span><span class="def">預設 3</span></div>
+      <p class="ef">價格要動多少，線才肯轉向。<b>調大</b>：要走一大段才翻，訊號更少更穩；<b>調小</b>：小波動就翻。</p></div>
+    <div class="set"><div class="hd"><span class="btnname">出現哪些訊號</span><span class="def">預設 漲跌都要</span></div>
+      <p class="ef">可改成「只出現漲」或「只出現跌」，另一邊的標籤和提醒就都不出。</p></div>
+    <div class="set"><div class="hd"><span class="btnname">收盤確認</span><span class="def on">預設 勾</span></div>
+      <p class="ef"><b>勾</b>：K 棒走完才出標籤，出了就不會消失。<b>不勾</b>：盤中先出，但可能出了又不見。新手請保持勾。</p></div>
+    <div class="set"><div class="hd"><span class="btnname">🟢🔴 漲跌配色</span><span class="def">預設 漲綠跌紅</span></div>
+      <p class="ef">習慣台股看法可改「漲紅跌綠」，趨勢線、K 棒顏色、標籤一起換。</p></div>
+    <div class="set"><div class="hd"><span class="btnname">🌈 顏色深淺表示力道</span><span class="def on">預設 勾</span></div>
+      <p class="ef">漲得越強綠色越亮、越弱越暗。不勾就只用一種綠、一種紅。</p></div>
+    <div class="set"><div class="hd"><span class="btnname">🤍 最強勢的漲用亮白色</span><span class="def off">預設 不勾</span></div>
+      <p class="ef">勾了，最強的漲 K 棒變白色。只適合黑底圖表，白底會看不見。</p></div>
+    <div class="set"><div class="hd"><span class="btnname">介面語言</span><span class="def">預設 繁體中文</span></div>
+      <p class="ef">改「英文」後標籤變成 Buy／Sell。</p></div>
+  </div>
+  <figure class="fig"><svg viewBox="0 0 640 190" role="img" aria-label="取樣週期小和大的差別">
+<path d="M20.0,139.8 L30.0,138.5 L40.0,138.0 L50.0,134.4 L60.0,129.9 L70.0,130.0 L80.0,130.1 L90.0,122.0 L100.0,119.0 L110.0,116.2 L120.0,106.1 L130.0,101.2 L140.0,93.2 L150.0,88.9 L160.0,83.7 L170.0,83.8 L180.0,80.1 L190.0,75.0 L200.0,74.0 L210.0,71.9 L220.0,71.3 L230.0,77.3 L240.0,77.6 L250.0,80.1 L260.0,86.1 L270.0,95.1 L280.0,96.6 L290.0,102.1 L300.0,105.4 L310.0,107.2 L320.0,110.4 L330.0,111.2 L340.0,116.6 L350.0,117.6 L360.0,121.2 L370.0,119.4 L380.0,117.4 L390.0,121.8 L400.0,124.9 L410.0,126.4 L420.0,120.0 L430.0,117.8 L440.0,113.1 L450.0,110.8 L460.0,106.1 L470.0,102.1 L480.0,98.2 L490.0,92.1 L500.0,86.0 L510.0,77.0 L520.0,70.6 L530.0,62.2 L540.0,55.2 L550.0,47.6 L560.0,43.7 L570.0,45.5 L580.0,41.6 L590.0,37.7 L600.0,35.2 L610.0,36.6 L620.0,37.6" fill="none" class="sln" stroke-width="1.5"/>
+<path d="M20.0,139.8 L30.0,139.2 L40.0,138.7 L50.0,136.8 L60.0,133.7 L70.0,132.0 L80.0,131.1 L90.0,127.0 L100.0,123.4 L110.0,120.1 L120.0,113.7 L130.0,108.1 L140.0,101.3 L150.0,95.7 L160.0,90.3 L170.0,87.3 L180.0,84.0 L190.0,79.9 L200.0,77.2 L210.0,74.8 L220.0,73.2 L230.0,75.1 L240.0,76.2 L250.0,78.0 L260.0,81.7 L270.0,87.8 L280.0,91.8 L290.0,96.5 L300.0,100.6 L310.0,103.6 L320.0,106.7 L330.0,108.7 L340.0,112.3 L350.0,114.7 L360.0,117.6 L370.0,118.5 L380.0,118.0 L390.0,119.7 L400.0,122.1 L410.0,124.1 L420.0,122.2 L430.0,120.2 L440.0,117.0 L450.0,114.2 L460.0,110.5 L470.0,106.7 L480.0,102.9 L490.0,98.0 L500.0,92.5 L510.0,85.5 L520.0,78.7 L530.0,71.2 L540.0,63.9 L550.0,56.5 L560.0,50.7 L570.0,48.3 L580.0,45.3 L590.0,41.8 L600.0,38.8 L610.0,37.8 L620.0,37.7" fill="none" class="sgd" stroke-width="2.5"/>
+<path d="M20.0,139.8 L30.0,139.7 L40.0,139.5 L50.0,138.9 L60.0,137.9 L70.0,137.1 L80.0,136.3 L90.0,134.7 L100.0,133.0 L110.0,131.1 L120.0,128.3 L130.0,125.3 L140.0,121.7 L150.0,118.1 L160.0,114.3 L170.0,110.9 L180.0,107.5 L190.0,103.9 L200.0,100.5 L210.0,97.4 L220.0,94.5 L230.0,92.6 L240.0,90.9 L250.0,89.7 L260.0,89.3 L270.0,89.9 L280.0,90.7 L290.0,91.9 L300.0,93.4 L310.0,95.0 L320.0,96.7 L330.0,98.3 L340.0,100.3 L350.0,102.2 L360.0,104.4 L370.0,106.0 L380.0,107.3 L390.0,108.9 L400.0,110.7 L410.0,112.4 L420.0,113.3 L430.0,113.8 L440.0,113.7 L450.0,113.4 L460.0,112.6 L470.0,111.4 L480.0,110.0 L490.0,108.0 L500.0,105.5 L510.0,102.4 L520.0,98.8 L530.0,94.8 L540.0,90.4 L550.0,85.6 L560.0,81.0 L570.0,77.0 L580.0,73.1 L590.0,69.2 L600.0,65.4 L610.0,62.2 L620.0,59.4" fill="none" class="sac" stroke-width="3.5"/>
+<rect x="24" y="164" width="14" height="4" class="gd"/><text x="44" y="170" class="mu">數字小：貼著價格跑，轉向多、訊號多</text>
+<rect x="330" y="164" width="14" height="4" class="ac"/><text x="350" y="170" class="mu">數字大：平滑穩定，訊號少、比較慢</text></svg></figure>
+  <p class="note">上圖：同一段價格，取樣週期小（金線）和大（藍線）的差別。「區間倍率」也是同樣的道理。</p>
+</section>
+
+<section id="star">
+  <h2>⭐ 星星：標出頂和底</h2>
+  <p class="lead">在高點畫紅星（可能到頂）、低點畫綠星（可能到底）。<b>預設整組關閉</b>，要看才打開。</p>
+  <div class="fig"><svg viewBox="0 0 640 200" role="img" aria-label="只標最高最低點和即時星的差別">
+<path d="M20.0,95.0 L24.8,87.0 L29.7,79.8 L34.5,73.9 L39.3,69.8 L44.2,67.5 L49.0,66.8 L53.8,67.2 L58.7,68.1 L63.5,68.8 L68.3,68.7 L73.2,67.3 L78.0,64.8 L82.8,61.1 L87.7,56.9 L92.5,52.9 L97.3,49.6 L102.2,47.9 L107.0,48.1 L111.8,50.4 L116.7,54.6 L121.5,60.3 L126.3,66.9 L131.2,73.5 L136.0,79.5 L140.8,84.4 L145.7,87.8 L150.5,89.8 L155.3,90.7 L160.2,91.1 L165.0,91.5 L169.8,92.7 L174.7,95.2 L179.5,99.2 L184.3,104.8 L189.2,111.4 L194.0,118.6 L198.8,125.7 L203.7,131.8 L208.5,136.4 L213.3,139.0 L218.2,139.6 L223.0,138.3 L227.8,135.7 L232.7,132.4 L237.5,129.1 L242.3,126.4 L247.2,124.9 L252.0,124.6 L256.8,125.4 L261.7,126.8 L266.5,128.3 L271.3,129.2 L276.2,128.7 L281.0,126.5 L285.8,122.4 L290.7,116.5 L295.5,109.3 L300.3,101.3 L305.2,93.4 L310.0,86.4" fill="none" class="sln" stroke-width="2.4"/>
+<text x="102.2" y="33.9" text-anchor="middle" font-size="17" class="dn">★</text>
+<text x="218.2" y="159.6" text-anchor="middle" font-size="17" class="up">★</text>
+<text x="165.0" y="192" text-anchor="middle" class="tx" font-weight="700">只標最高/最低點（預設）：只有大頂、大底</text>
+<path d="M330.0,95.0 L334.8,87.0 L339.7,79.8 L344.5,73.9 L349.3,69.8 L354.2,67.5 L359.0,66.8 L363.8,67.2 L368.7,68.1 L373.5,68.8 L378.3,68.7 L383.2,67.3 L388.0,64.8 L392.8,61.1 L397.7,56.9 L402.5,52.9 L407.3,49.6 L412.2,47.9 L417.0,48.1 L421.8,50.4 L426.7,54.6 L431.5,60.3 L436.3,66.9 L441.2,73.5 L446.0,79.5 L450.8,84.4 L455.7,87.8 L460.5,89.8 L465.3,90.7 L470.2,91.1 L475.0,91.5 L479.8,92.7 L484.7,95.2 L489.5,99.2 L494.3,104.8 L499.2,111.4 L504.0,118.6 L508.8,125.7 L513.7,131.8 L518.5,136.4 L523.3,139.0 L528.2,139.6 L533.0,138.3 L537.8,135.7 L542.7,132.4 L547.5,129.1 L552.3,126.4 L557.2,124.9 L562.0,124.6 L566.8,125.4 L571.7,126.8 L576.5,128.3 L581.3,129.2 L586.2,128.7 L591.0,126.5 L595.8,122.4 L600.7,116.5 L605.5,109.3 L610.3,101.3 L615.2,93.4 L620.0,86.4" fill="none" class="sln" stroke-width="2.4"/>
+<text x="359.0" y="52.8" text-anchor="middle" font-size="17" class="dn">★</text>
+<text x="373.5" y="54.8" text-anchor="middle" font-size="17" class="dn">★</text>
+<text x="412.2" y="33.9" text-anchor="middle" font-size="17" class="dn">★</text>
+<text x="528.2" y="159.6" text-anchor="middle" font-size="17" class="up">★</text>
+<text x="562.0" y="144.6" text-anchor="middle" font-size="17" class="up">★</text>
+<text x="581.3" y="149.2" text-anchor="middle" font-size="17" class="up">★</text>
+<text x="475.0" y="192" text-anchor="middle" class="tx" font-weight="700">即時星：每個小轉折都冒星</text>
+<line x1="320" x2="320" y1="10" y2="170" class="gl" stroke-dasharray="4 4"/></svg></div>
+  <div class="gname">分組名稱：AI 漲跌 V3・星星</div>
+  <div class="grid2">
+    <div class="set"><div class="hd"><span class="btnname">⭐ 顯示星星功能</span><span class="def off">預設 不勾</span></div>
+      <p class="ef">總開關。不勾，下面的設定都沒作用。</p></div>
+    <div class="set"><div class="hd"><span class="btnname">★ 只標最高/最低點</span><span class="def on">預設 勾</span></div>
+      <p class="ef"><b>勾</b>：一整段只標真正的大頂、大底，星很少（上圖左）。<b>不勾</b>：改成即時星，每次反轉就冒星（上圖右）。</p></div>
+    <div class="set"><div class="hd"><span class="btnname">↳ 最高/最低點 靈敏度</span><span class="def">預設 30</span></div>
+      <p class="ef">左右各看幾根 K 棒來判斷頂底。越大只抓越大的頂底。只在「只標最高/最低點」勾著時有用。</p></div>
+    <div class="set"><div class="hd"><span class="btnname">★ 最高點星／最低點星靈敏度</span><span class="def">預設 3 / 3</span></div>
+      <p class="ef">即時星用的：先連漲（或連跌）幾根才算頂（底）。數字小星多，數字大星少。</p></div>
+  </div>
+</section>
+
+<section id="tpsl">
+  <h2>③ 止盈止損：幫你算進場、止損、兩個止盈</h2>
+  <p class="lead">每次出漲或跌，用那根收盤價當進場價，算出止損、止盈1、止盈2 三個價位。<b>框和提示卡預設不畫</b>，想在圖上看到要勾「📦 顯示框」。</p>
+  <div class="fig"><svg viewBox="0 0 640 230" role="img" aria-label="止盈止損框示意">
+<rect x="150" y="43" width="410" height="77" class="up" opacity=".22"/>
+<rect x="150" y="120" width="410" height="55" class="dn" opacity=".22"/>
+<line x1="150" x2="560" y1="43.0" y2="43.0" class="sup" stroke-width="2" />
+<text x="140" y="47.0" text-anchor="end" class="tx" font-weight="700">止盈2　+1.4%</text>
+<line x1="150" x2="560" y1="70.5" y2="70.5" class="sup" stroke-width="2" stroke-dasharray="6 4"/>
+<text x="140" y="74.5" text-anchor="end" class="tx" font-weight="700">止盈1　+0.9%</text>
+<line x1="150" x2="560" y1="120.0" y2="120.0" class="sac" stroke-width="2" />
+<text x="140" y="124.0" text-anchor="end" class="tx" font-weight="700">進場　收盤價</text>
+<line x1="150" x2="560" y1="175.0" y2="175.0" class="sdn" stroke-width="2" />
+<text x="140" y="179.0" text-anchor="end" class="tx" font-weight="700">止損　−1.0%</text>
+<rect x="146" y="114" width="12" height="34" class="up" rx="1"/>
+<rect x="166" y="126" width="30" height="20" rx="5" class="up"/><text x="181" y="140" text-anchor="middle" fill="#fff" font-weight="700">漲</text>
+<text x="355.0" y="220" text-anchor="middle" class="mu">往右延伸 20 根 K 棒；跌訊號時整個框上下顛倒</text></svg></div>
+  <div class="gname">分組名稱：AI 漲跌 V3・止盈止損提示</div>
+  <div class="grid2">
+    <div class="set"><div class="hd"><span class="btnname">止損 (%)</span><span class="def">預設 1.0</span></div>
+      <p class="ef">離進場價多遠算止損。做多＝進場價往下 1%，做空＝往上 1%。</p></div>
+    <div class="set"><div class="hd"><span class="btnname">止盈1 倍數 RR1／止盈2 倍數 RR2</span><span class="def">預設 0.9 / 1.4</span></div>
+      <p class="ef">止盈距離＝止損距離 × 倍數。止損 1% 時，止盈1 在 +0.9%、止盈2 在 +1.4%。</p></div>
+    <div class="set"><div class="hd"><span class="btnname">📦 在圖上顯示止盈止損框與提示卡</span><span class="def off">預設 不勾</span></div>
+      <p class="ef"><b>勾</b>：圖上畫出上面那種彩色框，左下出現提示卡寫四個價位。<b>不勾</b>：圖上不畫，但價位照樣在算。</p></div>
+    <div class="set"><div class="hd"><span class="btnname">框線往右延伸幾根K棒</span><span class="def">預設 20</span></div>
+      <p class="ef">框要畫多長。數字越大框越長。</p></div>
+    <div class="set"><div class="hd"><span class="btnname">提示卡位置／文字大小</span><span class="def">預設 左下 / 小</span></div>
+      <p class="ef">跟開盤倒數面板一樣在左下，兩個都開會疊在一起，建議把提示卡改到「右下」。</p></div>
+    <div class="set"><div class="hd"><span class="btnname">止盈止損觸發來源</span><span class="def">預設 漲跌訊號</span></div>
+      <p class="ef"><b>漲跌訊號</b>：出漲／跌才畫。<b>星星訊號</b>：反轉一確認就畫。<b>突破高低點</b>：價格突破或跌破前 10 根的高低點就畫，三種裡最快、也最多雜訊。</p></div>
+  </div>
+  <div class="panel card">
+    <span class="btnname">自己算算看</span>
+    <div class="calc">
+      <label for="c-px">進場價<input id="c-px" type="number" inputmode="decimal" value="100000" step="any"></label>
+      <label for="c-dir">方向<select id="c-dir"><option value="1">漲（做多）</option><option value="-1">跌（做空）</option></select></label>
+      <label for="c-sl">止損 %<input id="c-sl" type="number" inputmode="decimal" value="1.0" step="0.1"></label>
+      <label for="c-r1">RR1<input id="c-r1" type="number" inputmode="decimal" value="0.9" step="0.1"></label>
+      <label for="c-r2">RR2<input id="c-r2" type="number" inputmode="decimal" value="1.4" step="0.1"></label>
+    </div>
+    <div class="lv" aria-live="polite">
+      <div><small>止損</small><span class="out neg" id="o-sl">—</span></div>
+      <div><small>進場</small><span class="out" id="o-en">—</span></div>
+      <div><small>止盈1</small><span class="out pos" id="o-t1">—</span></div>
+      <div><small>止盈2</small><span class="out pos" id="o-t2">—</span></div>
+    </div>
+    <p class="note">例：BTC 漲訊號收盤 100,000 → 止損 99,000、止盈1 100,900、止盈2 101,400。</p>
+  </div>
+</section>
+
+<section id="smc">
+  <h2>② SMC 聰明錢：看結構、看大戶留下的區域</h2>
+  <p class="lead">SMC 會在圖上標出「趨勢有沒有延續」和「價格常回來的區域」。功能很多，新手先看 BOS、CHoCH 和訂單塊三樣就夠。</p>
+  <div class="fig"><svg viewBox="0 0 640 260" role="img" aria-label="SMC 結構、訂單塊、等高點示意">
+<rect x="112" y="165" width="300" height="22" class="ac" opacity=".22"/><text x="300" y="181" class="tx" font-size="11">多方訂單塊（回來這裡常有支撐）</text>
+<path d="M20,200 L80,150 L120,175 L190,95 L240,130 L300,60 L350,110 L400,105 L430,90 L470,180 L520,150 L560,215 L620,170" fill="none" class="sln" stroke-width="2.6" stroke-linejoin="round"/>
+<line x1="80" x2="205" y1="150" y2="150" class="sup" stroke-width="1.6" stroke-dasharray="5 4"/><text x="140" y="144" text-anchor="middle" class="up" font-weight="700">BOS 突破</text>
+<line x1="190" x2="315" y1="95" y2="95" class="sup" stroke-width="1.6" stroke-dasharray="5 4"/><text x="250" y="89" text-anchor="middle" class="up" font-weight="700">BOS 突破</text>
+<line x1="300" x2="440" y1="62" y2="62" class="sgd" stroke-width="1.6" stroke-dasharray="2 3"/>
+<text x="370" y="52" text-anchor="middle" class="gd" font-weight="700">等高點 EQH</text>
+<line x1="350" x2="490" y1="110" y2="110" class="sdn" stroke-width="1.6" stroke-dasharray="5 4"/><text x="490" y="104" class="dn" font-weight="700">CHoCH 轉空</text>
+<line x1="240" x2="575" y1="130" y2="130" class="sdn" stroke-width="1" opacity=".35"/>
+<text x="20" y="250" class="mu">綠虛線：順著原方向再破前高＝趨勢延續　紅虛線：反方向破關鍵低點＝可能轉向</text></svg></div>
+  <div class="tw slim"><table>
+    <thead><tr><th>設定（分組）</th><th>預設</th><th>圖上會看到什麼</th></tr></thead>
+    <tbody>
+      <tr><td>顯示模式（聰明錢概念總覽）</td><td>即時模式</td><td>只畫最近的結構；改「歷史模式」會把以前的全部畫出來，畫面很滿</td></tr>
+      <tr><td>K棒依趨勢上色</td><td>不勾</td><td>勾了 K 棒改用 SMC 的趨勢上色，會蓋掉 ① 的顏色，建議不勾</td></tr>
+      <tr><td>顯示內部結構（即時內部結構）</td><td>勾</td><td>短線的 BOS／CHoCH 小標籤</td></tr>
+      <tr><td>顯示波段結構（即時波段結構）</td><td>勾</td><td>大一級的 BOS／CHoCH，標籤比較大</td></tr>
+      <tr><td>顯示轉折點</td><td>不勾（50）</td><td>勾了在每個轉折標 HH、HL、LH、LL</td></tr>
+      <tr><td>顯示強勢／弱勢高低點</td><td>勾</td><td>標出目前最重要的高點和低點</td></tr>
+      <tr><td>內部訂單塊（訂單塊）</td><td>勾（5 個）</td><td>藍色／粉紅色方塊，價格回來常有支撐或壓力</td></tr>
+      <tr><td>波段訂單塊</td><td>不勾</td><td>勾了多畫大級別的訂單塊</td></tr>
+      <tr><td>等高點／等低點</td><td>勾</td><td>EQH／EQL 虛線：兩個差不多高（低）的點，常被刺穿</td></tr>
+      <tr><td>失衡缺口</td><td>不勾</td><td>勾了標出急漲急跌留下的空洞，價格常回來補</td></tr>
+      <tr><td>多週期高低點（日線／週線／月線）</td><td>都不勾</td><td>勾了畫出昨天、上週、上月的最高最低線</td></tr>
+      <tr><td>溢價／折價區</td><td>不勾</td><td>勾了把區間分三段：上面貴（溢價）、中間平衡、下面便宜（折價）</td></tr>
+      <tr><td>顯示新手儀表板（新手儀表板）</td><td>不勾（右上）</td><td>勾了右上角出現表格，用白話寫目前多空和建議</td></tr>
+      <tr><td>白話模式</td><td>勾</td><td>標籤加上箭頭和符號，比較好懂</td></tr>
+      <tr><td>顯示訊號共振評分</td><td>不勾</td><td>勾了在訊號旁打 ★ 星等，條件越多重疊星越多</td></tr>
+    </tbody>
+  </table></div>
+  <div class="ex"><b>看圖口訣：</b>綠色 BOS 一直出現＝多頭還在走；突然出現紅色 CHoCH＝要小心可能轉空。價格跌回藍色訂單塊又站穩，常是回檔結束的位置。</div>
+</section>
+
+<section id="world">
+  <h2>④ 世界開盤時間：一天三個爆量時段</h2>
+  <p class="lead">全世界的交易員在亞洲、倫敦、紐約開盤時最活躍，行情常在這幾段走出來。這組會在圖上把時段框起來，並在左下倒數下一個開盤。</p>
+  <div class="fig"><svg viewBox="0 0 660 170" role="img" aria-label="大波段三個開盤框的台灣時間">
+<rect x="30.0" y="60" width="600.0" height="44" class="bgc" rx="8"/>
+<rect x="230.0" y="60" width="50.0" height="44" class="gd" opacity=".85" rx="6"/>
+<text x="255.0" y="46" text-anchor="middle" class="tx" font-weight="700">🇯🇵 亞洲 08–10</text>
+<rect x="380.0" y="60" width="50.0" height="44" class="gd" opacity=".85" rx="6"/>
+<text x="405.0" y="46" text-anchor="middle" class="tx" font-weight="700">🇬🇧 倫敦 14–16</text>
+<rect x="530.0" y="60" width="75.0" height="44" class="gd" opacity=".85" rx="6"/>
+<text x="567.5" y="46" text-anchor="middle" class="tx" font-weight="700">🇺🇸 紐約 20–23</text>
+<line x1="30.0" x2="30.0" y1="106" y2="114" class="gl" stroke-width="1"/><text x="30.0" y="130" text-anchor="middle" class="mu">00</text>
+<line x1="80.0" x2="80.0" y1="106" y2="114" class="gl" stroke-width="1"/><text x="80.0" y="130" text-anchor="middle" class="mu">02</text>
+<line x1="130.0" x2="130.0" y1="106" y2="114" class="gl" stroke-width="1"/><text x="130.0" y="130" text-anchor="middle" class="mu">04</text>
+<line x1="180.0" x2="180.0" y1="106" y2="114" class="gl" stroke-width="1"/><text x="180.0" y="130" text-anchor="middle" class="mu">06</text>
+<line x1="230.0" x2="230.0" y1="106" y2="114" class="gl" stroke-width="1"/><text x="230.0" y="130" text-anchor="middle" class="mu">08</text>
+<line x1="280.0" x2="280.0" y1="106" y2="114" class="gl" stroke-width="1"/><text x="280.0" y="130" text-anchor="middle" class="mu">10</text>
+<line x1="330.0" x2="330.0" y1="106" y2="114" class="gl" stroke-width="1"/><text x="330.0" y="130" text-anchor="middle" class="mu">12</text>
+<line x1="380.0" x2="380.0" y1="106" y2="114" class="gl" stroke-width="1"/><text x="380.0" y="130" text-anchor="middle" class="mu">14</text>
+<line x1="430.0" x2="430.0" y1="106" y2="114" class="gl" stroke-width="1"/><text x="430.0" y="130" text-anchor="middle" class="mu">16</text>
+<line x1="480.0" x2="480.0" y1="106" y2="114" class="gl" stroke-width="1"/><text x="480.0" y="130" text-anchor="middle" class="mu">18</text>
+<line x1="530.0" x2="530.0" y1="106" y2="114" class="gl" stroke-width="1"/><text x="530.0" y="130" text-anchor="middle" class="mu">20</text>
+<line x1="580.0" x2="580.0" y1="106" y2="114" class="gl" stroke-width="1"/><text x="580.0" y="130" text-anchor="middle" class="mu">22</text>
+<line x1="630.0" x2="630.0" y1="106" y2="114" class="gl" stroke-width="1"/><text x="630.0" y="130" text-anchor="middle" class="mu">24</text>
+<text x="330.0" y="158" text-anchor="middle" class="mu">台灣時間，一年四季固定，冬令也不會變成 9 點</text></svg></div>
+  <div class="fig"><svg viewBox="0 0 640 250" role="img" aria-label="開盤框、高低點樞紐和倒數面板示意">
+<rect x="290.0" y="77.2" width="91.7" height="88.2" class="gd" opacity=".18" stroke-width="2" rx="3"/>
+<rect x="290.0" y="77.2" width="91.7" height="88.2" fill="none" class="sgd" stroke-width="2" rx="3"/>
+<text x="294.0" y="71.2" class="tx" font-weight="700">🇬🇧 倫敦</text>
+<text x="377.7" y="181.5" text-anchor="end" class="gd" font-weight="700">收 16:00</text>
+<line x1="381.7" x2="620" y1="77.2" y2="77.2" class="sgd" stroke-width="1.4"/><text x="618" y="72.2" text-anchor="end" class="gd">倫.高</text>
+<line x1="381.7" x2="620" y1="165.5" y2="165.5" class="sgd" stroke-width="1.4"/><text x="618" y="179.5" text-anchor="end" class="gd">倫.低</text>
+<line x1="184.6" x2="184.6" y1="102.3" y2="118.0" class="sdn"/><rect x="181.8" y="107.6" width="5.5" height="1.6" class="dn"/>
+<line x1="193.8" x2="193.8" y1="104.5" y2="116.0" class="sdn"/><rect x="191.0" y="109.3" width="5.5" height="1.5" class="dn"/>
+<line x1="202.9" x2="202.9" y1="105.6" y2="127.1" class="sdn"/><rect x="200.2" y="110.4" width="5.5" height="10.7" class="dn"/>
+<line x1="212.1" x2="212.1" y1="110.3" y2="124.0" class="sup"/><rect x="209.3" y="111.2" width="5.5" height="10.0" class="up"/>
+<line x1="221.2" x2="221.2" y1="103.5" y2="131.7" class="sdn"/><rect x="218.5" y="111.2" width="5.5" height="13.9" class="dn"/>
+<line x1="230.4" x2="230.4" y1="115.8" y2="149.8" class="sdn"/><rect x="227.7" y="125.1" width="5.5" height="15.6" class="dn"/>
+<line x1="239.6" x2="239.6" y1="129.6" y2="142.2" class="sup"/><rect x="236.8" y="135.4" width="5.5" height="5.2" class="up"/>
+<line x1="248.8" x2="248.8" y1="130.5" y2="152.5" class="sdn"/><rect x="246.0" y="135.4" width="5.5" height="16.5" class="dn"/>
+<line x1="257.9" x2="257.9" y1="149.7" y2="162.8" class="sdn"/><rect x="255.2" y="151.9" width="5.5" height="10.5" class="dn"/>
+<line x1="267.1" x2="267.1" y1="158.3" y2="171.7" class="sdn"/><rect x="264.3" y="162.5" width="5.5" height="1.5" class="dn"/>
+<line x1="276.2" x2="276.2" y1="157.0" y2="168.4" class="sup"/><rect x="273.5" y="163.1" width="5.5" height="1.5" class="up"/>
+<line x1="285.4" x2="285.4" y1="153.2" y2="165.7" class="sup"/><rect x="282.7" y="157.5" width="5.5" height="5.5" class="up"/>
+<line x1="294.6" x2="294.6" y1="131.2" y2="165.5" class="sup"/><rect x="291.8" y="140.6" width="5.5" height="16.9" class="up"/>
+<line x1="303.7" x2="303.7" y1="125.8" y2="142.8" class="sup"/><rect x="301.0" y="128.8" width="5.5" height="11.8" class="up"/>
+<line x1="312.9" x2="312.9" y1="128.1" y2="138.5" class="sdn"/><rect x="310.2" y="128.8" width="5.5" height="2.5" class="dn"/>
+<line x1="322.1" x2="322.1" y1="121.9" y2="134.9" class="sup"/><rect x="319.3" y="129.9" width="5.5" height="1.5" class="up"/>
+<line x1="331.2" x2="331.2" y1="101.6" y2="129.9" class="sup"/><rect x="328.5" y="109.6" width="5.5" height="20.3" class="up"/>
+<line x1="340.4" x2="340.4" y1="101.0" y2="119.2" class="sdn"/><rect x="337.7" y="109.6" width="5.5" height="5.1" class="dn"/>
+<line x1="349.6" x2="349.6" y1="90.0" y2="115.5" class="sup"/><rect x="346.8" y="93.7" width="5.5" height="21.1" class="up"/>
+<line x1="358.7" x2="358.7" y1="77.2" y2="96.3" class="sup"/><rect x="356.0" y="84.6" width="5.5" height="9.1" class="up"/>
+<line x1="367.9" x2="367.9" y1="81.4" y2="103.0" class="sdn"/><rect x="365.2" y="84.6" width="5.5" height="9.3" class="dn"/>
+<line x1="377.1" x2="377.1" y1="79.3" y2="96.2" class="sup"/><rect x="374.3" y="80.4" width="5.5" height="13.5" class="up"/>
+<line x1="386.2" x2="386.2" y1="79.8" y2="101.5" class="sdn"/><rect x="383.5" y="80.4" width="5.5" height="13.6" class="dn"/>
+<line x1="395.4" x2="395.4" y1="88.7" y2="109.2" class="sdn"/><rect x="392.7" y="94.0" width="5.5" height="11.0" class="dn"/>
+<line x1="404.6" x2="404.6" y1="98.0" y2="116.7" class="sdn"/><rect x="401.8" y="104.9" width="5.5" height="10.5" class="dn"/>
+<line x1="413.7" x2="413.7" y1="109.5" y2="119.4" class="sup"/><rect x="411.0" y="110.6" width="5.5" height="4.9" class="up"/>
+<line x1="422.9" x2="422.9" y1="108.0" y2="129.5" class="sdn"/><rect x="420.2" y="110.6" width="5.5" height="9.8" class="dn"/>
+<line x1="432.1" x2="432.1" y1="107.1" y2="128.7" class="sup"/><rect x="429.3" y="110.0" width="5.5" height="10.3" class="up"/>
+<line x1="441.2" x2="441.2" y1="106.3" y2="127.9" class="sdn"/><rect x="438.5" y="110.0" width="5.5" height="9.8" class="dn"/>
+<line x1="450.4" x2="450.4" y1="114.1" y2="129.2" class="sup"/><rect x="447.7" y="115.0" width="5.5" height="4.8" class="up"/>
+<line x1="459.6" x2="459.6" y1="112.6" y2="132.1" class="sdn"/><rect x="456.8" y="115.0" width="5.5" height="9.8" class="dn"/>
+<line x1="468.7" x2="468.7" y1="122.0" y2="131.3" class="sdn"/><rect x="466.0" y="124.8" width="5.5" height="5.8" class="dn"/>
+<line x1="477.9" x2="477.9" y1="125.1" y2="146.8" class="sdn"/><rect x="475.2" y="130.6" width="5.5" height="13.9" class="dn"/>
+<line x1="487.1" x2="487.1" y1="137.6" y2="148.8" class="sup"/><rect x="484.3" y="141.1" width="5.5" height="3.4" class="up"/>
+<line x1="496.2" x2="496.2" y1="120.9" y2="146.5" class="sup"/><rect x="493.5" y="125.5" width="5.5" height="15.6" class="up"/>
+<line x1="505.4" x2="505.4" y1="111.3" y2="126.9" class="sup"/><rect x="502.7" y="113.0" width="5.5" height="12.5" class="up"/>
+<line x1="514.6" x2="514.6" y1="91.4" y2="115.4" class="sup"/><rect x="511.8" y="99.1" width="5.5" height="13.9" class="up"/>
+<line x1="523.8" x2="523.8" y1="92.1" y2="118.6" class="sdn"/><rect x="521.0" y="99.1" width="5.5" height="10.5" class="dn"/>
+<line x1="532.9" x2="532.9" y1="100.7" y2="128.3" class="sdn"/><rect x="530.2" y="109.7" width="5.5" height="10.3" class="dn"/>
+<line x1="542.1" x2="542.1" y1="112.5" y2="121.0" class="sup"/><rect x="539.3" y="116.5" width="5.5" height="3.5" class="up"/>
+<line x1="551.2" x2="551.2" y1="107.4" y2="134.4" class="sdn"/><rect x="548.5" y="116.5" width="5.5" height="15.7" class="dn"/>
+<line x1="560.4" x2="560.4" y1="122.8" y2="139.9" class="sup"/><rect x="557.7" y="125.2" width="5.5" height="7.0" class="up"/>
+<line x1="569.6" x2="569.6" y1="119.1" y2="126.9" class="sup"/><rect x="566.8" y="121.9" width="5.5" height="3.3" class="up"/>
+<line x1="578.8" x2="578.8" y1="113.8" y2="124.1" class="sup"/><rect x="576.0" y="114.4" width="5.5" height="7.5" class="up"/>
+<line x1="587.9" x2="587.9" y1="104.4" y2="120.2" class="sup"/><rect x="585.2" y="112.4" width="5.5" height="2.0" class="up"/>
+<line x1="597.1" x2="597.1" y1="103.7" y2="121.8" class="sdn"/><rect x="594.3" y="112.4" width="5.5" height="7.5" class="dn"/>
+<line x1="606.2" x2="606.2" y1="117.3" y2="140.5" class="sdn"/><rect x="603.5" y="119.9" width="5.5" height="16.4" class="dn"/>
+<line x1="615.4" x2="615.4" y1="134.7" y2="154.8" class="sdn"/><rect x="612.7" y="136.3" width="5.5" height="14.9" class="dn"/>
+<rect x="12" y="158" width="156" height="80" rx="8" class="bgc" stroke-width="1" />
+<rect x="12" y="158" width="156" height="80" rx="8" fill="none" class="sln"/>
+<text x="22" y="180" class="tx" font-weight="700">下一個：🇺🇸 紐約</text><text x="22" y="200" class="gd" font-weight="700">倒數 3:42:10</text><text x="22" y="220" class="mu">進行中：無</text>
+<text x="22" y="22" class="mu">左下＝開盤倒數面板</text></svg></div>
+
+  <h3>一鍵預設（③世界開盤・一鍵預設）</h3>
+  <div class="grid2">
+    <div class="set"><div class="hd"><span class="btnname">一鍵預設</span><span class="def">預設 💥 大波段</span></div>
+      <p class="ef"><b>💥 大波段</b>：只框亞洲 08–10、倫敦 14–16、紐約 20–23（台灣時間，固定不動）。其他選項：🌍 外匯（亞／倫／紐早）、🇺🇸 美股當沖（紐約三盤）、📘 ICT 新手（倫敦＋紐早）、全部顯示、自訂。<b>改成其他選項，框就照紐約時間走</b>，冬天會晚一小時。</p></div>
+    <div class="set"><div class="hd"><span class="btnname">🥇 黃金／比特幣精準時段</span><span class="def on">預設 勾</span></div>
+      <p class="ef">選大波段時沒有作用（大波段優先）。改用其他預設時，勾著會把時段縮短成開盤最熱的那一段。</p></div>
+  </div>
+
+  <h3>畫面設定（③世界開盤・設定／狙擊時段）</h3>
+  <div class="grid2">
+    <div class="set"><div class="hd"><span class="btnname">我的時區／顯示我的當地時間</span><span class="def">預設 台北 / 勾</span></div>
+      <p class="ef">框上的時間、倒數都用台灣時間顯示，不用自己換算。</p></div>
+    <div class="set"><div class="hd"><span class="btnname">週期上限</span><span class="def">預設 30 分</span></div>
+      <p class="ef"><b>圖表週期 30 分以上（含 1 小時、4 小時、日線）就不畫框</b>。想在 1 小時圖看到框，改成 1 天。</p></div>
+    <div class="set"><div class="hd"><span class="btnname">時段繪圖上限</span><span class="def">預設 3</span></div>
+      <p class="ef">每種圖形最多保留幾個，3＝只留最近三天的框。</p></div>
+    <div class="set"><div class="hd"><span class="btnname">顯示時段方框／顯示文字</span><span class="def on">預設 勾 / 勾</span></div>
+      <p class="ef">框和框上的國旗名稱。「只描邊不填色」勾了框變空心，完全不擋 K 棒（預設不勾）。</p></div>
+    <div class="set"><div class="hd"><span class="btnname">高亮目前進行中的時段</span><span class="def on">預設 勾</span></div>
+      <p class="ef">正在進行的那個框邊線加粗，一眼看出現在在哪一段。</p></div>
+    <div class="set"><div class="hd"><span class="btnname">顯示下一個時段開盤倒數</span><span class="def on">預設 勾・左下</span></div>
+      <p class="ef">左下面板：下一個開盤是誰、還剩多久；下面一行寫目前進行中的時段還剩多久收。</p></div>
+    <div class="set"><div class="hd"><span class="btnname">開盤前先畫出淡色時段框</span><span class="def on">預設 勾</span></div>
+      <p class="ef">開盤前 10 分鐘先在右邊畫一個淡色虛線框，預告等一下要開哪一段。</p></div>
+    <div class="set"><div class="hd"><span class="btnname">方框右下角預告『本時段幾點收』</span><span class="def on">預設 勾</span></div>
+      <p class="ef">框一開始就在右下角釘「收 16:00」這種小標籤。</p></div>
+    <div class="set"><div class="hd"><span class="btnname">開盤前提醒</span><span class="def on">預設 勾・10 分鐘</span></div>
+      <p class="ef">開盤前 10 分鐘發一則提醒，週末自動暫停（「週末暫停開盤前提醒」預設勾）。</p></div>
+    <div class="set"><div class="hd"><span class="btnname">週末不顯示時段</span><span class="def off">預設 不勾</span></div>
+      <p class="ef">勾了週六、日不畫框也不顯示倒數。</p></div>
+    <div class="set"><div class="hd"><span class="btnname">透明度（每個時段後面的數字）</span><span class="def">預設 90</span></div>
+      <p class="ef">越大框越淡、越不擋 K 棒；越小顏色越深。</p></div>
+    <div class="set"><div class="hd"><span class="btnname">時段名稱文字大小</span><span class="def">預設 正常</span></div>
+      <p class="ef">手機上覺得字太大，改成「小」。</p></div>
+  </div>
+
+  <h3>線和表格（時段樞紐／時段區間／日-週-月／開盤價位／時間戳記）</h3>
+  <div class="tw slim"><table>
+    <thead><tr><th>設定</th><th>預設</th><th>圖上會看到什麼</th></tr></thead>
+    <tbody>
+      <tr><td>顯示樞紐</td><td>勾</td><td>每個框的最高、最低拉出橫線（例：倫.高、倫.低），價格碰到就停</td></tr>
+      <tr><td>樞紐突破警報</td><td>勾</td><td>價格突破這些高低線時可以發提醒</td></tr>
+      <tr><td>顯示樞紐中點</td><td>不勾</td><td>勾了多畫框的正中間那條點線</td></tr>
+      <tr><td>顯示價格／右側</td><td>不勾</td><td>勾了標籤上多寫價格、或把標籤移到圖表最右邊</td></tr>
+      <tr><td>樞紐延伸方式</td><td>觸及即停</td><td>改「穿越後延續」線會一直畫下去</td></tr>
+      <tr><td>顯示時段區間</td><td>不勾</td><td>勾了右上出現表格：每段振幅和平均，比平均大 1.3 倍標紅 🔥</td></tr>
+      <tr><td>日開盤／週開盤／月開盤</td><td>都不勾</td><td>勾了畫出今天、本週、本月的開盤價線，可再加高低和分隔線</td></tr>
+      <tr><td>星期標籤</td><td>勾</td><td>圖表下方標「週一、週二…」，週末不標</td></tr>
+      <tr><td>開盤價位：真實日開盤</td><td>勾</td><td>紐約午夜那根的開盤價畫一條點線（台灣冬天約 13:00、夏天約 12:00）</td></tr>
+      <tr><td>時間戳記（直線）</td><td>都不勾</td><td>勾了在指定時間畫一條直線，例如每天 08:00</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="faq">
+  <h2>常見狀況</h2>
+  <div class="play">
+    <div class="ps"><div class="no"></div><div><h3>為什麼看不到開盤框？</h3><p class="note">看一下圖表週期：30 分以上不畫（「週期上限」預設 30 分）。換成 5 分或 15 分就會出現，或把週期上限改大。</p></div></div>
+    <div class="ps"><div class="no"></div><div><h3>為什麼看不到止盈止損的框？</h3><p class="note">預設就不畫。到 ③ 勾「📦 在圖上顯示止盈止損框與提示卡」。</p></div></div>
+    <div class="ps"><div class="no"></div><div><h3>畫面太亂</h3><p class="note">先拿掉功能選單的 ② SMC；還是亂就把「顯示內部結構」關掉，或把開盤框「只描邊不填色」打勾。</p></div></div>
+    <div class="ps"><div class="no"></div><div><h3>左下兩個面板疊在一起</h3><p class="note">開盤倒數和止盈止損提示卡都在左下，把其中一個的「位置」改到右下。</p></div></div>
+    <div class="ps"><div class="no"></div><div><h3>漲跌標籤出了又不見</h3><p class="note">「收盤確認」被取消了，勾回去就會等 K 棒走完才出、不會再消失。</p></div></div>
+    <div class="ps"><div class="no"></div><div><h3>冬天開盤框變 9 點？</h3><p class="note">這版的 💥 大波段固定台灣時間 08–10、14–16、20–23，一年四季都一樣。若變了，檢查「一鍵預設」是不是被改成別的。</p></div></div>
+  </div>
+</section>
+
+<section id="all">
+  <h2>預設總表</h2>
+  <div class="tw"><table>
+    <thead><tr><th>功能</th><th>預設狀態</th><th>重點設定</th></tr></thead>
+    <tbody>
+      <tr><td>🧭 功能選單</td><td>⚙️ 自訂、四個全勾</td><td>拿掉哪個勾就少哪個功能</td></tr>
+      <tr><td>① AI 漲跌</td><td class="pos">開</td><td>取樣週期 100、區間倍率 3、收盤確認 勾、漲綠跌紅</td></tr>
+      <tr><td>⭐ 星星</td><td>關</td><td>打開後預設只標大頂大底（靈敏度 30）</td></tr>
+      <tr><td>③ 止盈止損</td><td class="pos">開（框不畫）</td><td>止損 1%、RR1 0.9、RR2 1.4、觸發＝漲跌訊號</td></tr>
+      <tr><td>② SMC</td><td class="pos">開</td><td>內部＋波段結構、內部訂單塊、等高低；儀表板 關</td></tr>
+      <tr><td>④ 世界開盤</td><td class="pos">開</td><td>💥 大波段：台灣 08–10／14–16／20–23；30 分以上不畫；倒數在左下</td></tr>
+    </tbody>
+  </table></div>
+</section>
+</main>
+</div>
+<footer>4合1 指標設定說明 · 對應 2026-11-06 台灣時間版 · 2026-11-09。指標只是看盤工具，訊號不保證獲利。</footer>
+
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  const f=v=>{if(!isFinite(v))return '—';const d=Math.abs(v)>=1000?0:Math.abs(v)>=10?2:4;return v.toLocaleString('zh-TW',{minimumFractionDigits:d,maximumFractionDigits:d})};
+  function calc(){
+    const px=parseFloat($('c-px').value),d=+$('c-dir').value,sl=parseFloat($('c-sl').value)/100,r1=parseFloat($('c-r1').value),r2=parseFloat($('c-r2').value);
+    const dist=px*sl;
+    $('o-en').textContent=f(px);$('o-sl').textContent=f(px-d*dist);$('o-t1').textContent=f(px+d*dist*r1);$('o-t2').textContent=f(px+d*dist*r2);
+  }
+  ['c-px','c-dir','c-sl','c-r1','c-r2'].forEach(id=>$(id).addEventListener('input',calc));calc();
+})();
+</script>
+
+</body>
+</html>
