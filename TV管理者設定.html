@@ -337,6 +337,17 @@ footer{max-width:1120px;margin:56px auto 0;color:var(--mute);font-size:.82rem;bo
           <div class="rec"><span class="pill danger">緊急用</span></div>
         </div>
         <div class="panel card">
+          <span class="btnname">⏸ 只平不開（v222）</span>
+          <p class="what">全部客戶、全部週期（5 分 / 15 分 / 1 時 / 📊 1 時回測版）<b>不開新倉</b>，但反向訊號來<b>照常幫客戶平倉</b>（框外單邊、虧損抱著、大週期優先照樣生效）；止損 / 止盈 / 鎖利、盤中先出場照常。客戶會收到「⏸ 目前暫停開新倉：只平倉、不開新倉」。你手動開倉 / 手動反手不受影響；管理員止盈成交後的自動反手不會開。開著時按鈕變橘色。</p>
+          <div class="tw slim"><table><thead><tr><th></th><th>開新倉</th><th>反向訊號平倉</th></tr></thead><tbody>
+            <tr><td>⏸ 全部 TV 暫停</td><td>❌</td><td>❌（倉繼續抱著）</td></tr>
+            <tr><td>⏸ 只平不開</td><td>❌</td><td>✅ 照常平</td></tr>
+            <tr><td>🛑 自動暫停</td><td>❌（只管 15 分，成績轉正自動恢復）</td><td>✅ 照常平</td></tr>
+          </tbody></table></div>
+          <div class="ex">用在：想先休息、不再加單，但手上的倉讓它照訊號正常出場（例如大數據前、週末、你自己不在的時候）。不會通知客戶。</div>
+          <div class="rec"><span class="pill">平常 關</span></div>
+        </div>
+        <div class="panel card">
           <span class="btnname">🛑 自動暫停</span>
           <p class="what">每 15 分鐘用線上設定紙上算「最近 <b>5 天</b>」成績（v198 從 3 天改 5 天）：合計是負的 → 只平倉、不開新倉；轉正自動恢復。<br><b>關掉時（v202）</b>：成績照樣每 15 分鐘算、顯示在按鈕上（「關（近5天成績 +0.8，只算不擋）」），只是不擋單；看到轉正再打開，打開的那一刻直接套用最新成績。關掉後不會自己打開；唯一例外是 v206 的 🔵 趨勢：按 🔵 會關掉它，按回 🟢、24 小時到時、或手動改設定離開趨勢（v213）時，恢復成按 🔵 之前的開關。</p>
           <div class="ex">例：最近 5 天加起來是負的 → 系統自己停手，不用你判斷盤整。11/1 的 30 天回測：3 天 +10.76（回撤 −5.55）、<b>5 天 +12.63（回撤 −4.09）</b>、7 天 +9.57。<b>E24 模式下不會擋。</b></div>
@@ -588,7 +599,7 @@ footer{max-width:1120px;margin:56px auto 0;color:var(--mute);font-size:.82rem;bo
     </section>
   </main>
 </div>
-<footer>TV管理者設定 · 對應版本 v221 · 2026-11-11。回測數字是真實成交單 × BingX 1 分 K 回放，40 倍、已扣手續費 0.14%；過去結果不代表未來。</footer>
+<footer>TV管理者設定 · 對應版本 v222 · 2026-11-11。回測數字是真實成交單 × BingX 1 分 K 回放，40 倍、已扣手續費 0.14%；過去結果不代表未來。</footer>
 
 <script>
 (function(){
