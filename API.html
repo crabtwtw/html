@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>跟單 API 圖解教學</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* 版面：每一步 = 一支斜放的 3D 手機（畫面示意）＋ 右邊文字說明；手機上黃色圈 = 要點的地方。窄螢幕上下排 */
+:root{
+  --bg:#edf2f6; --panel:#ffffff; --ink:#132433; --mute:#5a6b7b; --line:#d3dde6;
+  --accent:#2457d6; --tap:#f2a516; --ok:#13875a; --bad:#c83a3a;
+  --phone:#1b2734; --screen:#f7f9fb; --scr-ink:#16202b; --scr-mute:#7a8794; --scr-line:#e3e8ee;
+  --shadow:0 30px 50px -24px rgba(20,40,70,.45);
+  --f-body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0e161e; --panel:#16212c; --ink:#e6edf4; --mute:#97a6b5; --line:#263544;
+  --accent:#6f9bff; --tap:#f5b53a; --ok:#3cc98a; --bad:#f06a6a;
+  --phone:#05090d; --screen:#1c2834; --scr-ink:#e9eef4; --scr-mute:#8d9bab; --scr-line:#2b3a49;
+  --shadow:0 30px 50px -24px rgba(0,0,0,.8); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e161e; --panel:#16212c; --ink:#e6edf4; --mute:#97a6b5; --line:#263544;
+  --accent:#6f9bff; --tap:#f5b53a; --ok:#3cc98a; --bad:#f06a6a;
+  --phone:#05090d; --screen:#1c2834; --scr-ink:#e9eef4; --scr-mute:#8d9bab; --scr-line:#2b3a49;
+  --shadow:0 30px 50px -24px rgba(0,0,0,.8); color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.75;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 56px}
+.wrap{max-width:960px;margin:0 auto}
+h1,h2,h3{margin:0;line-height:1.3;text-wrap:balance}
+p{margin:0}
+.mono{font-family:var(--f-mono)}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+header{padding-block:40px 28px;display:grid;gap:14px}
+.eyebrow{font-size:.8rem;font-weight:700;letter-spacing:.14em;color:var(--accent)}
+h1{font-size:clamp(1.9rem,6vw,2.8rem);font-weight:900}
+.lead{color:var(--mute);max-width:36em}
+.route{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-weight:700;font-size:.92rem}
+.route span{background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:4px 12px}
+.route i{color:var(--mute);font-style:normal}
+.need{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:grid;gap:6px;font-size:.95rem}
+.need b{font-size:1rem}
+.need ul{margin:0;padding-left:20px}
+
+.stage-h{display:flex;align-items:baseline;gap:12px;margin:44px 0 6px;flex-wrap:wrap}
+.stage-h .tag{font-family:var(--f-mono);font-weight:700;font-size:.8rem;letter-spacing:.1em;color:#fff;background:var(--accent);border-radius:8px;padding:2px 10px}
+.stage-h h2{font-size:1.5rem;font-weight:900}
+.stage-p{color:var(--mute);margin-bottom:8px}
+
+.step{display:grid;grid-template-columns:260px minmax(0,1fr);gap:28px;align-items:center;padding-block:22px;border-top:1px dashed var(--line)}
+.step:first-of-type{border-top:0}
+@media (max-width:680px){.step{grid-template-columns:minmax(0,1fr);gap:14px}.scene{justify-self:center}}
+.txt{min-width:0;display:grid;gap:8px}
+.num{font-family:var(--f-mono);font-weight:700;color:var(--accent);font-size:.85rem;letter-spacing:.08em}
+.txt h3{font-size:1.2rem;font-weight:900}
+.txt p{color:var(--mute)}
+.txt p b{color:var(--ink)}
+.warn{border:1px solid color-mix(in srgb,var(--bad) 45%,var(--line));background:color-mix(in srgb,var(--bad) 7%,var(--panel));border-radius:12px;padding:10px 12px;font-size:.93rem}
+.warn b{color:var(--bad)}
+.good{border:1px solid color-mix(in srgb,var(--ok) 45%,var(--line));background:color-mix(in srgb,var(--ok) 7%,var(--panel));border-radius:12px;padding:10px 12px;font-size:.93rem}
+.copy{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.copy code{font-family:var(--f-mono);font-weight:700;font-size:1.05rem;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:4px 10px;user-select:all}
+.copy button{font:inherit;font-size:.85rem;font-weight:700;border:1px solid var(--accent);color:var(--accent);background:transparent;border-radius:8px;padding:4px 12px;cursor:pointer}
+
+/* ---- 3D 手機 ---- */
+.scene{perspective:900px;width:240px;max-width:100%;padding:10px 0 26px;position:relative}
+.scene::after{content:"";position:absolute;left:12%;right:12%;bottom:6px;height:22px;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.28),transparent);filter:blur(2px)}
+.phone{width:220px;max-width:100%;aspect-ratio:9/17;margin:0 auto;background:var(--phone);border-radius:30px;padding:9px;box-shadow:var(--shadow),inset 0 0 0 2px rgba(255,255,255,.08);
+  transform:rotateY(-20deg) rotateX(10deg) rotateZ(1.5deg);transform-style:preserve-3d;transition:transform .5s ease}
+.step:nth-of-type(even) .phone{transform:rotateY(20deg) rotateX(10deg) rotateZ(-1.5deg)}
+@media (hover:hover) and (prefers-reduced-motion:no-preference){.step:hover .phone{transform:rotateY(0) rotateX(4deg)}}
+.scr{height:100%;background:var(--screen);color:var(--scr-ink);border-radius:22px;overflow:hidden;display:flex;flex-direction:column;font-size:11px;line-height:1.45;position:relative}
+.bar{display:flex;align-items:center;gap:6px;padding:12px 12px 8px;font-weight:700;font-size:12px;border-bottom:1px solid var(--scr-line)}
+.bar .back{color:var(--scr-mute)}
+.body{padding:10px 12px;display:flex;flex-direction:column;gap:8px;flex:1}
+.row{display:flex;justify-content:space-between;align-items:center;gap:6px;padding:7px 8px;border:1px solid var(--scr-line);border-radius:8px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.ic{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:9.5px;color:var(--scr-mute)}
+.ic i{width:30px;height:30px;border-radius:9px;background:var(--scr-line);display:grid;place-items:center;font-style:normal;font-size:14px}
+.field{border:1px solid var(--scr-line);border-radius:7px;padding:6px 8px;color:var(--scr-mute);font-family:var(--f-mono);font-size:10px;overflow-wrap:anywhere}
+.field.fill{color:var(--scr-ink)}
+.lbl{font-size:9.5px;color:var(--scr-mute)}
+.chk{display:flex;align-items:center;gap:6px}
+.chk i{width:13px;height:13px;border-radius:4px;border:1.5px solid var(--scr-mute);display:grid;place-items:center;font-style:normal;font-size:9px;color:#fff;flex:none}
+.chk.on i{background:var(--accent);border-color:var(--accent)}
+.chk.no{color:var(--bad)}
+.btnm{background:var(--accent);color:#fff;text-align:center;border-radius:8px;padding:7px;font-weight:700}
+.btnm.ghost{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+.mini{font-size:9.5px;color:var(--scr-mute)}
+.bubble{align-self:flex-start;background:var(--scr-line);border-radius:10px 10px 10px 3px;padding:6px 8px;max-width:85%}
+.bubble.me{align-self:flex-end;background:var(--accent);color:#fff;border-radius:10px 10px 3px 10px}
+.okbig{display:grid;place-items:center;text-align:center;gap:6px;flex:1;font-weight:700;font-size:13px}
+.okbig b{font-size:30px}
+/* 要點的地方：黃色圈 + 腳註編號 */
+.tap{position:relative;outline:2.5px solid var(--tap);outline-offset:2px;border-radius:9px}
+.tap::after{content:"點";position:absolute;right:-8px;top:-9px;background:var(--tap);color:#1b1300;font-size:9px;font-weight:900;border-radius:999px;padding:1px 5px}
+@media (prefers-reduced-motion:no-preference){.tap{animation:pulse 1.8s ease-in-out infinite}}
+@keyframes pulse{0%,100%{outline-offset:2px}50%{outline-offset:5px}}
+
+.faq{display:grid;gap:10px;margin-top:10px}
+.faq details{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 14px}
+.faq summary{cursor:pointer;font-weight:700}
+.faq p{color:var(--mute);margin-top:6px}
+footer{margin-top:40px;color:var(--mute);font-size:.85rem;border-top:1px solid var(--line);padding-top:14px}
+</style>
+</head><body>
+
+
+<div class="wrap">
+<header>
+  <div class="eyebrow">跟單申請 · BingX</div>
+  <h1>建立 API，貼到跟單申請頁</h1>
+  <p class="lead">照著做大約 5 分鐘。先在 BingX 建一組 API，再到跟單申請頁貼上，驗證通過就自動開通。圖上的<b style="color:var(--tap)">黃色圈</b>是要點的地方。</p>
+  <div class="route"><span>BingX App</span><i>→</i><span>建立 API</span><i>→</i><span>Telegram 拿 ID</span><i>→</i><span>bot.chaho.com.tw/join</span><i>→</i><span>貼上開通</span></div>
+  <div class="need"><b>開始前準備</b>
+    <ul>
+      <li>BingX 帳戶要用<b>團隊邀請連結</b>註冊（不是團隊的帳戶會被擋下）。</li>
+      <li>BingX 帳戶已完成身分驗證，並綁好 <b>Google 驗證</b>（建立 API 時要輸入驗證碼）。</li>
+      <li>手機有裝 Telegram。</li>
+    </ul>
+  </div>
+</header>
+
+<div class="stage-h"><span class="tag">第一段</span><h2>在 BingX 建立 API</h2></div>
+<p class="stage-p">API 是讓機器人幫你下單的鑰匙。只開合約交易，不開提幣，錢只能在你的帳戶裡交易，沒辦法被領走。</p>
+
+<section class="step">
+  <div class="scene" aria-hidden="true"><div class="phone"><div class="scr">
+    <div class="bar">首頁</div>
+    <div class="body">
+      <div class="row"><span>總資產</span><b>— USDT</b></div>
+      <div class="grid4">
+        <div class="ic"><i>💱</i>現貨</div><div class="ic"><i>📈</i>合約</div><div class="ic"><i>🎁</i>獎勵</div><div class="ic tap"><i>⋯</i>更多</div>
+      </div>
+      <div class="lbl" style="margin-top:4px">更多功能</div>
+      <div class="grid4">
+        <div class="ic"><i>👥</i>邀請</div><div class="ic"><i>🔐</i>安全</div><div class="ic tap"><i>🔑</i>API 管理</div><div class="ic"><i>❓</i>幫助</div>
+      </div>
+    </div>
+  </div></div></div>
+  <div class="txt">
+    <div class="num">步驟 1</div>
+    <h3>打開「API 管理」</h3>
+    <p>打開 BingX App，在首頁按 <b>「更多」</b>，找到 <b>「API 管理」</b>。也可以點左上角頭像，在帳戶設定裡找到「API 管理」。</p>
+  </div>
+</section>
+
+<section class="step">
+  <div class="scene" aria-hidden="true"><div class="phone"><div class="scr">
+    <div class="bar"><span class="back">‹</span>API 管理</div>
+    <div class="body">
+      <div class="mini">還沒有 API</div>
+      <div class="lbl">API 名稱（備註）</div>
+      <div class="field fill">跟單</div>
+      <div class="btnm tap">建立 API</div>
+    </div>
+  </div></div></div>
+  <div class="txt">
+    <div class="num">步驟 2</div>
+    <h3>按「建立 API」，名稱填「跟單」</h3>
+    <p>名稱只是給你自己看的備註，填什麼都可以，建議填 <b>跟單</b>，之後比較好認。</p>
+  </div>
+</section>
+
+<section class="step">
+  <div class="scene" aria-hidden="true"><div class="phone"><div class="scr">
+    <div class="bar"><span class="back">‹</span>API 權限</div>
+    <div class="body">
+      <div class="chk on"><i>✓</i>讀取（預設）</div>
+      <div class="chk on tap"><i>✓</i>合約交易（永續合約）</div>
+      <div class="chk"><i></i>現貨交易</div>
+      <div class="chk no"><i></i>提幣 ← 不要勾</div>
+      <div class="mini" style="margin-top:auto">只勾讀取＋合約交易</div>
+    </div>
+  </div></div></div>
+  <div class="txt">
+    <div class="num">步驟 3</div>
+    <h3>權限只勾「合約交易」</h3>
+    <p>「讀取」通常預設就有勾。再勾 <b>永續合約交易</b>，其他都不用勾。</p>
+    <div class="warn"><b>千萬不要勾「提幣」。</b>機器人只需要下單，不需要提幣權限；不勾提幣，就算 API 外流也沒辦法把錢領走。</div>
+  </div>
+</section>
+
+<section class="step">
+  <div class="scene" aria-hidden="true"><div class="phone"><div class="scr">
+    <div class="bar"><span class="back">‹</span>IP 白名單</div>
+    <div class="body">
+      <div class="chk on"><i>✓</i>限制 IP 存取</div>
+      <div class="lbl">IP 位址</div>
+      <div class="field fill tap">107.191.52.90</div>
+      <div class="mini">填好 IP 的 API 比較安全，也不會過期</div>
+      <div class="btnm" style="margin-top:auto">確認</div>
+    </div>
+  </div></div></div>
+  <div class="txt">
+    <div class="num">步驟 4</div>
+    <h3>IP 白名單填我們的伺服器</h3>
+    <p>選 <b>限制 IP 存取</b>（或「綁定 IP」），把下面這組 IP 貼進去：</p>
+    <div class="copy"><code id="ip">107.191.52.90</code><button type="button" id="b-ip">複製</button></div>
+    <p>只有我們的伺服器能用這把 API，別人拿到也用不了。沒填 IP 的話，申請時會驗證失敗。</p>
+  </div>
+</section>
+
+<section class="step">
+  <div class="scene" aria-hidden="true"><div class="phone"><div class="scr">
+    <div class="bar">安全驗證</div>
+    <div class="body">
+      <div class="lbl">Email 驗證碼</div>
+      <div class="field fill">● ● ● ● ● ●</div>
+      <div class="lbl">Google 驗證碼</div>
+      <div class="field fill tap">● ● ● ● ● ●</div>
+      <div class="btnm" style="margin-top:auto">提交</div>
+    </div>
+  </div></div></div>
+  <div class="txt">
+    <div class="num">步驟 5</div>
+    <h3>輸入驗證碼</h3>
+    <p>BingX 會要你輸入 <b>Email／簡訊驗證碼</b> 和 <b>Google 驗證碼</b>。還沒綁 Google 驗證的話，要先到「帳戶安全」綁好，才建得了 API。</p>
+  </div>
+</section>
+
+<section class="step">
+  <div class="scene" aria-hidden="true"><div class="phone"><div class="scr">
+    <div class="bar">建立成功</div>
+    <div class="body">
+      <div class="lbl">API Key</div>
+      <div class="field fill">aB3x…（一長串）</div>
+      <div class="btnm ghost tap">複製 API Key</div>
+      <div class="lbl">Secret Key（只顯示一次）</div>
+      <div class="field fill">Zk9q…（一長串）</div>
+      <div class="btnm ghost tap">複製 Secret Key</div>
+    </div>
+  </div></div></div>
+  <div class="txt">
+    <div class="num">步驟 6</div>
+    <h3>複製 API Key 和 Secret Key</h3>
+    <p>畫面會出現兩串很長的英文數字。兩個都要複製下來，先貼在手機的備忘錄。</p>
+    <div class="warn"><b>Secret Key 只會出現這一次。</b>關掉畫面就看不到了。忘了複製的話，把這把 API 刪掉，重新建立一把就好。這兩串不要傳給任何人，也不要截圖到群組。</div>
+  </div>
+</section>
+
+<div class="stage-h"><span class="tag">第二段</span><h2>到跟單申請頁貼上</h2></div>
+<p class="stage-p">跟單的通知和確認下單都在 Telegram，所以申請要用 Telegram 確認身分。</p>
+
+<section class="step">
+  <div class="scene" aria-hidden="true"><div class="phone"><div class="scr">
+    <div class="bar">🤖 機器人</div>
+    <div class="body">
+      <div class="btnm tap">開始（START）</div>
+      <div class="bubble me">/id</div>
+      <div class="bubble">🆔 你的 Telegram ID：<br><b class="mono">123456789</b></div>
+      <div class="mini" style="margin-top:auto">長按數字就能複製</div>
+    </div>
+  </div></div></div>
+  <div class="txt">
+    <div class="num">步驟 7</div>
+    <h3>在 Telegram 拿到你的 ID</h3>
+    <p>打開我們的機器人 <a href="https://t.me/bingxB_bot" target="_blank" rel="noopener">@bingxB_bot</a>，按 <b>「開始」</b>。在聊天框輸入 <b>/id</b> 送出，機器人會回你一串數字，長按複製。</p>
+    <p>一定要先按「開始」，不然下一步的驗證碼傳不到你那邊。</p>
+  </div>
+</section>
+
+<section class="step">
+  <div class="scene" aria-hidden="true"><div class="phone"><div class="scr">
+    <div class="bar">🤖 跟單申請</div>
+    <div class="body">
+      <div class="lbl">你的 Telegram ID</div>
+      <div class="field fill">123456789</div>
+      <div class="btnm tap">取得驗證碼</div>
+      <div class="lbl">Telegram 收到的 6 位數驗證碼</div>
+      <div class="field fill">4 8 2 9 1 7</div>
+      <div class="btnm">登入</div>
+    </div>
+  </div></div></div>
+  <div class="txt">
+    <div class="num">步驟 8</div>
+    <h3>打開跟單申請頁，用驗證碼登入</h3>
+    <p>打開 <a href="https://bot.chaho.com.tw/join" target="_blank" rel="noopener">bot.chaho.com.tw/join</a>，貼上你的 Telegram ID，按 <b>「取得驗證碼」</b>。機器人會傳 6 位數驗證碼給你，填回來按 <b>「登入」</b>。</p>
+  </div>
+</section>
+
+<section class="step">
+  <div class="scene" aria-hidden="true"><div class="phone"><div class="scr">
+    <div class="bar">綁定交易所 API</div>
+    <div class="body">
+      <div class="lbl">交易所</div>
+      <div class="field fill">BingX ▾</div>
+      <div class="lbl">API Key</div>
+      <div class="field fill tap">aB3x…</div>
+      <div class="lbl">Secret Key</div>
+      <div class="field fill tap">••••••••</div>
+      <div class="btnm tap">驗證並申請</div>
+    </div>
+  </div></div></div>
+  <div class="txt">
+    <div class="num">步驟 9</div>
+    <h3>選 BingX，貼上兩串 Key</h3>
+    <p>交易所選 <b>BingX</b>（預設就是）。把步驟 6 複製的 <b>API Key</b> 和 <b>Secret Key</b> 分別貼進去，按 <b>「驗證並申請」</b>，等大約 10 秒。</p>
+    <p>系統會檢查這把 API 能不能下合約單，並用它查出你的 UID，確認是團隊成員。</p>
+  </div>
+</section>
+
+<section class="step">
+  <div class="scene" aria-hidden="true"><div class="phone"><div class="scr">
+    <div class="body">
+      <div class="okbig"><b>🎉</b>開通完成！<span class="mini">回到 Telegram 機器人<br>點下方「🌐 網頁登入」</span></div>
+      <div class="btnm tap">🌐 網頁登入</div>
+    </div>
+  </div></div></div>
+  <div class="txt">
+    <div class="num">步驟 10</div>
+    <h3>開通完成，回 Telegram 設定跟單</h3>
+    <p>看到 <b>「開通完成」</b> 就好了，機器人也會傳訊息通知你。回到 Telegram 機器人，點下方 <b>「🌐 網頁登入」</b>，就能設定每筆金額和槓桿。</p>
+    <div class="good">建議一開始「每筆金額」先設 <b>2U</b>，跑幾筆熟悉之後再慢慢調高。新開通的帳號預設是「手動確認」：訊號來時機器人先問你，按 ✅ 才下單。</div>
+  </div>
+</section>
+
+<div class="stage-h"><span class="tag">常見問題</span><h2>卡住的話看這裡</h2></div>
+<div class="faq">
+  <details><summary>顯示「BingX 驗證失敗」</summary><p>最常見是 IP 白名單沒填，或填錯。回到 BingX 的 API 管理，確認 IP 是 107.191.52.90。也可能是 Key 複製不完整（前後多了空格），重新複製再貼一次。</p></details>
+  <details><summary>顯示「金鑰正確，但讀不到合約帳戶」</summary><p>這把 API 沒有勾「永續合約交易」。刪掉重建一把，記得勾合約交易。也請確認你的 BingX 已經開通合約帳戶。</p></details>
+  <details><summary>顯示「非此團隊 UID，無法申請」</summary><p>這個 BingX 帳戶不是用團隊邀請連結註冊的。請洽客服，用團隊的邀請連結註冊後再申請。</p></details>
+  <details><summary>驗證碼一直收不到</summary><p>先確認有在 Telegram 打開 @bingxB_bot 按過「開始」，再回到申請頁重新按「取得驗證碼」。同一個 ID 一分鐘只能寄一次。</p></details>
+  <details><summary>Secret Key 忘記複製</summary><p>Secret Key 只會出現一次。到 BingX 的 API 管理把那把 API 刪掉，重新建立一把，這次兩串都先複製到備忘錄。</p></details>
+  <details><summary>顯示「已送出申請」而不是「開通完成」</summary><p>驗證都通過了，只是目前名額需要人工開通，開通後會在 Telegram 通知你，不用再申請一次。</p></details>
+</div>
+
+<footer>建 API 時只開合約交易、不要開提幣。API Key 和 Secret Key 只貼在 bot.chaho.com.tw/join，不要傳給任何人。合約交易有槓桿，可能虧損本金，建議每筆先從 2U 開始。</footer>
+</div>
+
+<script>
+(function(){
+  var b=document.getElementById('b-ip'),c=document.getElementById('ip');
+  b.addEventListener('click',function(){
+    function sel(){try{var r=document.createRange();r.selectNodeContents(c);var s=getSelection();s.removeAllRanges();s.addRange(r)}catch(e){}}
+    try{navigator.clipboard.writeText(c.textContent.trim()).then(function(){b.textContent='已複製'},function(){sel();b.textContent='已選取，請長按複製'})}catch(e){sel();b.textContent='已選取，請長按複製'}
+  });
+})();
+</script>
+
+</body></html>

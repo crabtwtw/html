@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>跟單使用說明</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* 版面:左側目錄 + 右側章節;每個控制台分類 = 一張「3D 面板」,用真實按鈕名稱 + 例子 + 建議值 */
+:root{
+  --bg:#0c1016; --panel:#141a22; --panel2:#1b232e; --line:#2a3542; --fg:#e4eaf1; --mute:#8d9aab;
+  --accent:#3fa8ff; --good:#36c48a; --warn:#f0a73a; --bad:#ef5a5a; --gold:#d9b25c;
+  --shadow:0 18px 40px -18px rgba(0,0,0,.75);
+  --f-body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){
+  --bg:#eef2f6; --panel:#ffffff; --panel2:#f3f6fa; --line:#d5dde7; --fg:#18212c; --mute:#5c6b7d;
+  --accent:#1572d3; --good:#14915c; --warn:#b86e00; --bad:#cf3434; --gold:#9a7220;
+  --shadow:0 18px 36px -20px rgba(30,50,80,.35); color-scheme:light}}
+:root[data-theme="light"]{
+  --bg:#eef2f6; --panel:#ffffff; --panel2:#f3f6fa; --line:#d5dde7; --fg:#18212c; --mute:#5c6b7d;
+  --accent:#1572d3; --good:#14915c; --warn:#b86e00; --bad:#cf3434; --gold:#9a7220;
+  --shadow:0 18px 36px -20px rgba(30,50,80,.35); color-scheme:light}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15.5px;line-height:1.75;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
+.wrap{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:220px minmax(0,1fr);gap:36px}
+@media (max-width:860px){.wrap{grid-template-columns:minmax(0,1fr)}.toc{display:none}}
+h1,h2,h3{text-wrap:balance;line-height:1.3;margin:0}
+h2{font-size:1.55rem;font-weight:900;letter-spacing:.01em}
+h3{font-size:1.08rem;font-weight:700}
+p{margin:0}
+.mono,.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* hero */
+.hero{max-width:1120px;margin:0 auto;padding:36px 0 28px;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:24px;align-items:center}
+@media (max-width:860px){.hero{grid-template-columns:minmax(0,1fr)}}
+.eyebrow{font-family:var(--f-mono);font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.hero h1{font-size:clamp(2rem,6vw,3.2rem);font-weight:900;margin:8px 0 12px}
+.hero p{color:var(--mute);max-width:34em}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.chip{font-size:.8rem;padding:3px 10px;border-radius:999px;border:1px solid var(--line);background:var(--panel);color:var(--mute)}
+.chip b{color:var(--fg)}
+
+/* 3D 疊層:四道保護 */
+.stage{perspective:900px;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px;min-height:280px}
+.stage .holder{height:280px;display:grid;place-items:center}
+@media (max-width:520px){.stage .holder{transform:scale(.78);transform-origin:center}}
+.legend{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;font-size:.88rem;font-weight:700}
+.legend li{display:flex;align-items:center;gap:8px;white-space:nowrap}
+.legend i{width:14px;height:14px;border-radius:4px;display:inline-block;box-shadow:0 3px 0 rgba(0,0,0,.3)}
+.stack{position:relative;width:170px;height:115px;transform-style:preserve-3d;transform:rotateX(58deg) rotateZ(-38deg);animation:spin 14s ease-in-out infinite alternate}
+@keyframes spin{from{transform:rotateX(58deg) rotateZ(-38deg)}to{transform:rotateX(58deg) rotateZ(-22deg)}}
+@media (prefers-reduced-motion:reduce){.stack{animation:none}}
+.plate{position:absolute;inset:0;border-radius:14px;border:1px solid rgba(255,255,255,.18);display:flex;align-items:flex-end;justify-content:flex-end;padding:10px 14px;
+  font-weight:700;font-size:.85rem;color:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.2),0 30px 40px -10px rgba(0,0,0,.6)}
+.plate span{transform:rotateZ(38deg);transform-origin:right bottom;white-space:nowrap;text-shadow:0 1px 2px rgba(0,0,0,.6)}
+.p1{background:linear-gradient(135deg,#a33a3a,#ef5a5a);transform:translateZ(0)}
+.p2{background:linear-gradient(135deg,#2f6d9b,#3fa8ff);transform:translateZ(36px)}
+.p3{background:linear-gradient(135deg,#1f7b56,#36c48a);transform:translateZ(72px)}
+.p4{background:linear-gradient(135deg,#8a6a22,#d9b25c);transform:translateZ(108px)}
+
+/* toc */
+.toc{position:sticky;top:calc(env(safe-area-inset-top,0px) + 16px);align-self:start;font-size:.9rem;border-left:1px solid var(--line);padding-left:14px}
+.toc a{display:block;color:var(--mute);text-decoration:none;padding:3px 0}
+.toc a:hover{color:var(--fg)}
+.toc .t{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.12em;color:var(--accent);margin-bottom:6px}
+
+main{display:flex;flex-direction:column;gap:56px;min-width:0}
+section{display:flex;flex-direction:column;gap:18px;min-width:0;scroll-margin-top:20px}
+.lead{color:var(--mute);max-width:44em}
+
+/* 3D 面板 */
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:var(--shadow);
+  transform:perspective(1200px) rotateX(0) translateY(0);transition:transform .35s ease,box-shadow .35s ease;min-width:0}
+@media (hover:hover) and (prefers-reduced-motion:no-preference){.panel:hover{transform:perspective(1200px) rotateX(2.5deg) translateY(-3px)}}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:16px}
+.btnname{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:.95rem;background:var(--panel2);border:1px solid var(--line);
+  border-bottom-width:3px;border-radius:10px;padding:4px 12px;box-shadow:0 3px 0 rgba(0,0,0,.25)}
+.card{display:flex;flex-direction:column;gap:10px}
+.card .what{color:var(--fg)}
+.ex{background:var(--panel2);border-radius:10px;padding:10px 12px;font-size:.92rem;color:var(--mute);border:1px dashed var(--line)}
+.ex b{color:var(--fg)}
+.rec{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:.85rem}
+.pill{font-weight:700;font-size:.78rem;border-radius:999px;padding:2px 10px;border:1px solid currentColor}
+.on{color:var(--good)} .off{color:var(--mute)} .chop{color:var(--warn)} .danger{color:var(--bad)}
+.note{font-size:.88rem;color:var(--mute)}
+.callout{border-radius:14px;padding:14px 16px;border:1px solid var(--line);background:linear-gradient(180deg,var(--panel2),var(--panel))}
+.callout.warn{border-color:color-mix(in srgb,var(--warn) 55%,var(--line))}
+.callout.bad{border-color:color-mix(in srgb,var(--bad) 55%,var(--line))}
+
+/* tables */
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;font-size:.9rem;min-width:520px}
+th,td{padding:8px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{white-space:nowrap;background:var(--panel2);font-weight:700;color:var(--mute);font-size:.8rem;letter-spacing:.04em}
+tr:last-child td{border-bottom:0}
+td.n{font-family:var(--f-mono);font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.pos{color:var(--good)} .neg{color:var(--bad)}
+
+/* flow */
+.flow{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;perspective:1000px}
+@media (max-width:640px){.flow{grid-template-columns:minmax(0,1fr)}}
+.step{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:12px;transform:rotateY(-6deg);transform-origin:center;box-shadow:var(--shadow)}
+@media (max-width:640px){.step{transform:none}}
+.step .k{font-family:var(--f-mono);font-size:.72rem;color:var(--accent);letter-spacing:.1em}
+.step h3{font-size:.98rem;margin:4px 0}
+.step p{font-size:.85rem;color:var(--mute)}
+
+/* svg charts */
+.chart{width:100%;height:auto;display:block}
+.chart text{fill:var(--mute);font-family:var(--f-mono);font-size:11px}
+.chart .lbl{fill:var(--fg);font-family:var(--f-body);font-size:12px;font-weight:700}
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:16px}
+figure{margin:0}
+figcaption{font-size:.85rem;color:var(--mute);margin-top:8px}
+
+/* playbook */
+.play{counter-reset:s;display:flex;flex-direction:column;gap:12px}
+.ps{display:grid;grid-template-columns:44px minmax(0,1fr);gap:12px;align-items:start}
+.ps .no{counter-increment:s;width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-family:var(--f-mono);font-weight:700;
+  background:linear-gradient(145deg,var(--panel2),var(--panel));border:1px solid var(--line);box-shadow:0 6px 0 rgba(0,0,0,.35),var(--shadow)}
+.ps .no::before{content:counter(s)}
+
+/* calculator */
+.calc{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:12px;align-items:end}
+.calc label{display:flex;flex-direction:column;gap:4px;font-size:.85rem;color:var(--mute)}
+.calc input{font:inherit;font-family:var(--f-mono);background:var(--panel2);color:var(--fg);border:1px solid var(--line);border-radius:10px;padding:8px 10px;width:100%}
+.out{font-family:var(--f-mono);font-size:1.25rem;font-weight:700}
+code{font-family:var(--f-mono);font-size:.85em;background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:1px 6px;overflow-wrap:anywhere}
+pre{margin:0;overflow-x:auto;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-family:var(--f-mono);font-size:.82rem}
+.slim table{min-width:0;table-layout:fixed}.slim td:first-child,.slim th:first-child{width:36%}.slim code{word-break:break-all}
+footer{max-width:1120px;margin:56px auto 0;color:var(--mute);font-size:.82rem;border-top:1px solid var(--line);padding-top:16px}
+</style>
+<header class="hero">
+  <div>
+    <div class="eyebrow">Crab 量化 · TV 跟單</div>
+    <h1>跟單使用說明</h1>
+    <p>機器人怎麼幫你下單、頁面上每個標籤代表什麼、每筆單有哪幾道保護，以及常見問題。例子都用「每筆 50U、40 倍」來算。</p>
+    <div class="chips">
+      <span class="chip">40 倍：價格動 1% = <b>保證金 40%</b></span>
+      <span class="chip">平倉紀錄 = <b>已扣手續費</b></span>
+    </div>
+  </div>
+  <div class="stage" aria-label="每筆單的保護,由下往上:止損、保本、鎖利、止盈">
+    <div class="holder"><div class="stack">
+      <div class="plate p1"></div><div class="plate p2"></div><div class="plate p3"></div><div class="plate p4"></div>
+    </div></div>
+    <ol class="legend">
+      <li><i style="background:var(--gold)"></i>🎯 止盈（可自選）</li>
+      <li><i style="background:var(--good)"></i>🔒 鎖利</li>
+      <li><i style="background:var(--accent)"></i>🛡 保本</li>
+      <li><i style="background:var(--bad)"></i>🛑 止損</li>
+    </ol>
+  </div>
+</header>
+
+<div class="wrap">
+  <nav class="toc" aria-label="目錄">
+    <div class="t">目錄</div>
+    <a href="#how">1 · 機器人怎麼下單</a>
+    <a href="#chips">2 · 頁面上的標籤</a>
+    <a href="#protect">3 · 每筆單的保護</a>
+    <a href="#math">4 · 槓桿與虧損換算</a>
+    <a href="#records">5 · 持倉與平倉紀錄</a>
+    <a href="#settings">6 · 你可以調的設定</a>
+    <a href="#faq">7 · 常見問題</a>
+    <a href="#calcfaq">8 · 計算機常見問題</a>
+    <a href="#safety">9 · 安全須知</a>
+  </nav>
+
+  <main>
+    <section id="how">
+      <h2>機器人怎麼下單</h2>
+      <p class="lead">TradingView 指標在 K 線（15 分或 1 小時）收盤時出現「漲」或「跌」，機器人就照方向幫你開倉。整個過程不用你盯盤。</p>
+      <div class="flow">
+        <div class="step"><div class="k">STEP 1</div><h3>出現訊號</h3><p>K 線收盤出現「漲」或「跌」。</p></div>
+        <div class="step"><div class="k">STEP 2</div><h3>判斷要不要做</h3><p>看時段、同幣冷卻、持倉上限，不符合就不開。</p></div>
+        <div class="step"><div class="k">STEP 3</div><h3>開倉</h3><p>用你設定的每筆金額和槓桿下單，同時掛好止損。</p></div>
+        <div class="step"><div class="k">STEP 4</div><h3>持倉保護</h3><p>賺到一定程度，系統自動把止損往有利的方向移。</p></div>
+        <div class="step"><div class="k">STEP 5</div><h3>出場</h3><p>打到止損 / 保本 / 鎖利 / 止盈，或出現反向訊號平倉。</p></div>
+      </div>
+      <div class="panel card">
+        <h3>開盤框是什麼？</h3>
+        <p class="what">世界三大市場開盤的時段（台灣時間約 08–10、14–16、20–23 點），行情比較有方向。標準設定是「<b>框內雙向、框外單邊</b>」：</p>
+        <div class="ex">框內：漲跌訊號都做。<br>框外：只做「框內最後一個訊號」的方向，反方向的訊號不理，倉照抱、止損照掛。<br><b>這樣盤整時比較不會被來回洗。</b></div>
+      </div>
+          <div class="panel card">
+        <h3>📊 1 時回測版（止損 2%／止盈 3%）</h3>
+        <p class="what">在 TV 跟單的 K 線週期，「1 時」旁邊多一顆「<b>📊 1 時回測版</b>」。選它就完全照 1 小時 K 今年回測、小金額實測的規則跑：</p>
+        <div class="ex">進場：<b>全天都做</b>，不看開盤框，出現漲／跌就開倉或反手。<br>出場：照實際進場價掛<b>止損 2%、止盈 3%</b>，碰到止盈整個倉一次平掉；還沒碰到前出現反向訊號，平倉並反手。<br>例：50U × 10 倍，止損 2% ≈ 虧保證金 20%（約 10U）、止盈 3% ≈ 賺保證金 30%（約 15U）；黃金 20 倍則是 −40%／+60%，另外扣手續費。</div>
+        <p class="note">回測版是獨立的：框外單邊、同幣冷卻、鎖利保本、統一固定止損這些設定都不套用，出場、止損、進場的選項也會收起來，槓桿也固定：一般幣 10x、黃金 20x（黃金波動小，給 2 倍），不吃你自己設的槓桿。原本的「1 時」不變，還是照一般設定跑，兩種可以自己選、自己比較。</p>
+      </div>
+    </section>
+
+    <section id="chips">
+      <h2>頁面上的標籤</h2>
+      <p class="lead">TV 跟單頁面會用一排標籤顯示你目前的設定。標準設定長這樣：</p>
+      <div class="chips"><span class="chip"><b>真實倉</b></span><span class="chip"><b>15 分 K</b></span><span class="chip"><b>放飛</b></span><span class="chip"><b>🛑 止損 1.2%</b></span><span class="chip"><b>止盈關閉</b></span><span class="chip"><b>框外單邊</b></span></div>
+      <div class="tw slim"><table>
+        <thead><tr><th>標籤</th><th>意思</th></tr></thead>
+        <tbody>
+          <tr><td>真實倉</td><td>用你交易所帳戶的真錢下單。</td></tr>
+          <tr><td>15 分 K / 1 時 K</td><td>看 15 分鐘或 1 小時 K 線的訊號。</td></tr>
+          <tr><td>📊 1 時回測版</td><td>另一種 1 小時 K：完全照回測跑，止損 2%、止盈 3% 一次全出，出現反向訊號平倉並反手（下面「1 時回測版」）。</td></tr>
+          <tr><td>🚀 放飛</td><td>開倉時一半倉位在 TP2（約順向 1.4%）先落袋，另一半不掛止盈、讓賺錢的單盡量跑；出現反向訊號時平倉並反手。</td></tr>
+          <tr><td>🛑 止損 1.2%</td><td>目前統一使用固定止損：進場價反向 1.2% 出場（40 倍 ≈ 虧保證金 48%）。</td></tr>
+          <tr><td>止盈關閉</td><td>不設固定止盈，靠鎖利和反向訊號出場。</td></tr>
+          <tr><td>🧭 框外單邊</td><td>框內雙向、框外只做單一方向（上一節）。</td></tr>
+          <tr><td>槓桿 / 每單 U</td><td>每筆用多少保證金、開幾倍。</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section id="protect">
+      <h2>每筆單的保護</h2>
+      <p class="lead">止損只會往對你有利的方向移，不會往回移。</p>
+      <figure class="panel">
+        <svg class="chart" viewBox="0 0 640 250" role="img" aria-label="價格階梯:止損 -1.2%、保本、鎖利 +2.5% 移到約 +0.64%">
+          <line x1="70" x2="620" y1="220" y2="220" stroke-width="2" style="stroke:var(--bad)"/>
+          <text x="62" y="224" text-anchor="end">−1.2%</text><text x="76" y="214" class="lbl" style="fill:var(--bad)">🛑 止損（40 倍 ≈ −48%）</text>
+          <line x1="70" x2="620" y1="170" y2="170" stroke-width="1.5" stroke-dasharray="2 4" style="stroke:var(--fg)"/>
+          <text x="62" y="174" text-anchor="end">0</text><text x="614" y="186" text-anchor="end" class="lbl">進場價</text>
+          <line x1="70" x2="620" y1="45" y2="45" stroke-width="2" style="stroke:var(--good)"/>
+          <text x="62" y="49" text-anchor="end">+2.5%</text><text x="76" y="39" class="lbl" style="fill:var(--good)">🔒 價格到 +2.5% → 止損移到約 +0.64%（虛線）</text>
+          <line x1="70" x2="620" y1="138" y2="138" stroke-width="1" stroke-dasharray="5 4" style="stroke:var(--good)"/>
+          <path d="M70 170 L130 150 L170 162 L230 120 L290 140 L360 80 L420 95 L480 40 L540 60 L620 30" fill="none" stroke-width="2.5" style="stroke:var(--fg)"/>
+          <text x="614" y="16" text-anchor="end">價格走勢（示意）</text>
+        </svg>
+        <figcaption>開倉就掛好止損；價格往對的方向走夠遠，系統自動把止損移到賺錢的位置。</figcaption>
+      </figure>
+      <div class="grid2">
+        <div class="panel card"><span class="btnname">🛑 止損</span><p class="what">每筆開倉時就掛在交易所上，最壞的情況就是虧到這裡。</p><div class="ex">例：50U × 40 倍，止損在價格反向 1.2% → 虧約 24U（保證金 48%），另外加手續費約 2U。</div></div>
+        <div class="panel card"><span class="btnname">🔒 鎖利</span><p class="what">價格順向走 2.5%，止損自動移到「進場價 + 手續費 + 0.5%」。之後就算行情反轉，也是小賺出場。</p><div class="ex">例：100 做多，漲到 102.5 → 止損移到約 100.64。</div></div>
+        <div class="panel card"><span class="btnname">🛡 保本出場</span><p class="what">在盤整的時候，系統可能會在小賺時就把止損移到進場價附近，避免小賺變大虧。</p><div class="ex">保本出場時扣完手續費大約打平，偶爾小賺或小虧幾塊，<b>這是正常的</b>。</div></div>
+        <div class="panel card"><span class="btnname">🎯 止盈（可自選）</span><p class="what">想要賺到一定比例就先落袋，可以自己設「賺到保證金 X% 平倉」。標準設定是關閉，讓大行情盡量跑。</p></div>
+      </div>
+    </section>
+
+    <section id="math">
+      <h2>槓桿與虧損換算</h2>
+      <p class="lead">保證金變化 = 價格變化 × 槓桿。槓桿越高，賺賠都放大。</p>
+      <div class="grid2">
+        <div class="panel card">
+          <div class="tw"><table style="min-width:0">
+            <thead><tr><th>價格動</th><th>20 倍</th><th>40 倍</th><th>50 倍</th></tr></thead>
+            <tbody>
+              <tr><td class="n">0.5%</td><td class="n">10%</td><td class="n">20%</td><td class="n">25%</td></tr>
+              <tr><td class="n">1%</td><td class="n">20%</td><td class="n">40%</td><td class="n">50%</td></tr>
+              <tr><td class="n">2%</td><td class="n">40%</td><td class="n">80%</td><td class="n">100%</td></tr>
+            </tbody>
+          </table></div>
+        </div>
+        <div class="panel card">
+          <h3>換算小工具</h3>
+          <div class="calc">
+            <label for="cAmt">每筆金額 (U)<input id="cAmt" type="number" inputmode="decimal" value="50"></label>
+            <label for="cLev">槓桿 (x)<input id="cLev" type="number" inputmode="decimal" value="40"></label>
+            <label for="cPx">價格動 %<input id="cPx" type="number" inputmode="decimal" value="1" step="0.1"></label>
+            <div><div class="note">= 盈虧約</div><div class="out" id="cOut">20 U</div></div>
+          </div>
+          <p class="note">手續費另計：開倉加平倉大約是倉位大小的 0.1%。50U × 40 倍 = 2000U 倉位，手續費約 2U。</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="records">
+      <h2>持倉與平倉紀錄</h2>
+      <div class="grid2">
+        <div class="panel card"><span class="btnname">📦 持倉</span><p class="what">目前手上的倉。每筆會顯示進場價、現價、槓桿、未實現盈虧，以及止損 / 止盈價。</p><div class="ex">止損旁邊的 % 是打到止損時保證金的變化。例：<b>🛑 止損 X（+4%）</b>的「+」代表止損已經移到賺錢那邊，最差也是保本出場。</div></div>
+        <div class="panel card"><span class="btnname">📋 平倉</span><p class="what">最近幾天出場的單，金額是<b>扣完手續費</b>後實際落袋的錢，下面會寫「手續費 X（已扣）」。最上面是 3 天合計。</p><div class="ex">出場方式：🔄 訊號反手、🛑 止損、🛡 保本出場、🔒 鎖利出場（止損已移到賺錢那邊後被打到，所以是賺錢的）、✅ 止盈、🌐 網頁平倉等。</div></div>
+      </div>
+    </section>
+
+    <section id="settings">
+      <h2>你可以調的設定</h2>
+      <p class="lead">建議先用標準設定，每筆金額先從 2U 開始，熟悉之後再慢慢調高。</p>
+      <div class="grid2">
+        <div class="panel card"><span class="btnname">✏️ 每單 U</span><p class="what">每筆用多少保證金。建議單筆不要超過帳戶的 10%–20%。</p></div>
+        <div class="panel card"><span class="btnname">⚡ 槓桿</span><p class="what">固定倍數，或自動（止損越遠槓桿越低）。實際槓桿仍會被幣種上限和強平保護壓低，只會變小。</p></div>
+        <div class="panel card"><span class="btnname">🎯 止盈</span><p class="what">賺到保證金 X% 就平倉；0 = 關閉。</p></div>
+        <div class="panel card"><span class="btnname">🛑 止損方式</span><p class="what">目前<b>統一使用固定止損：價格反向 1.2%</b>（40 倍 ≈ 虧保證金 48%），頁面上會顯示「🛑 止損 1.2%」，這段時間止損方式的選項暫時不作用。</p></div>
+        <div class="panel card"><span class="btnname">🤖 自動下單 / 🖐 手動確認</span><p class="what">在「跟單 → 🛠 進階」最上面可以看到你目前是哪一種（這項由系統統一設定：<b>開放自動的期間，你可以自己用開關切換自動 / 手動確認</b>；沒開放時開關是灰的，只能看，需要調整請洽客服）。<b>自動</b>：訊號來就照規則下單。<b>手動確認</b>：訊號來時 Bot 先傳訊息給你，按 ✅ 確認才下單、按 ❌ 取消這次不做，<b>5 分鐘沒按就略過</b>。新加入的會員預設是手動確認；自動下單可能有期限，頁面會顯示「到 MM-DD 改回手動確認」，到期後不管你切在哪邊都會自動變回手動；兩種的下單規則、止損、鎖利完全一樣，只差下單前要不要按確認。</p><div class="ex">手動確認的話，沒空看手機時訊號會被略過。止損、保本照常自動保護。</div></div>
+        <div class="panel card"><span class="btnname">📈 4合1 指標</span><p class="what">打開 <b>bot.chaho.com.tw/ind</b> → 輸入 Telegram ID，機器人會傳驗證碼給你登入 → 選交易所、填 UID 和 TradingView 帳號名稱（個人資料頁網址 tradingview.com/u/<b>帳號名稱</b>，不是 Email）送出申請，審核通過後免費使用 30 天。之後每 30 天看你的永續合約成交額：<b>滿門檻自動續期</b>，沒滿會暫停，量夠了會自動恢復。開通、續期、暫停都會在 Telegram 通知你。<br>沒有 Telegram 也可以：在同一頁點「沒有 Telegram？點這裡直接申請」，填好送出，之後回來用 UID 和 TradingView 帳號查詢結果。</p></div>
+        <div class="panel card"><span class="btnname">🕐 K 線週期</span><p class="what">5 分、15 分可以複選；<b>1 時跟 5 / 15 分二選一</b>。「1 時」照一般設定跑；旁邊的「📊 1 時回測版」完全照回測規則跑（見上面「機器人怎麼下單」）。</p></div>
+        <div class="panel card"><span class="btnname">⏸ 暫停</span><p class="what">點「開啟中」可以暫停跟單。暫停後不收新訊號，手上的倉照樣由止損保護。</p></div>
+      </div>
+    </section>
+
+    <section id="faq">
+      <h2>常見問題</h2>
+      <div class="panel play">
+        <div class="ps"><div class="no"></div><div><h3>有訊號但沒幫我開倉？</h3><p class="note">常見原因：這個幣剛虧損出場還在冷卻（約 60 分鐘）、框外的反方向訊號、跟上一個反向訊號價格太接近（差不到 0.5%，可能是盤整來回）、下單時價格已經跑掉（現價離訊號價超過 0.5%，系統不追高殺低，會通知「這次不追」）、已達持倉上限、這個幣已經有倉、帳戶餘額不足，或系統在連續虧損期間暫停開新倉保護帳戶；選了「手動確認」的話，也可能是 5 分鐘內沒按確認。</p></div></div>
+        <div class="ps"><div class="no"></div><div><h3>保本出場為什麼還小虧幾塊？</h3><p class="note">保本價已經包含手續費，但止損是用市價成交，價格跌得快時會有一點滑價，所以偶爾小虧幾塊，偶爾小賺。</p></div></div>
+        <div class="ps"><div class="no"></div><div><h3>為什麼平倉紀錄的金額跟交易所 App 不一樣？</h3><p class="note">這裡顯示的是扣完手續費的實際落袋金額；有些交易所 App 顯示的是還沒扣手續費的毛利。</p></div></div>
+        <div class="ps"><div class="no"></div><div><h3>盤整的時候一直小虧？</h3><p class="note">這是趨勢策略的正常成本：盤整時小虧幾筆，等大行情出來一次賺回來。系統有冷卻、框外單邊、保本等機制減少盤整損失，但沒辦法完全避免。</p></div></div>
+        <div class="ps"><div class="no"></div><div><h3>可以自己手動平倉嗎？</h3><p class="note">可以，用持倉頁的「平倉」按鈕。手動平倉後，同一個幣要等下一個訊號才會再開。</p></div></div>
+      </div>
+    </section>
+
+    <section id="calcfaq">
+      <h2>計算機常見問題</h2>
+      <p class="lead">強平計算機：<b>bot.chaho.com.tw/calc</b>（強平、全倉、槓桿獲利計算）；速算版：<b>bot.chaho.com.tw/calc/quick</b>（只看差幾點爆倉）。計算機最下面也有同樣的問答。</p>
+      <div class="panel play">
+        <div class="ps"><div class="no"></div><div><h3>為什麼爆倉只要兩百多點，賺本金一倍卻要八百多點？</h3><p class="note">以 BTC 100,000 做多、150 倍為例：保證金只有倉位的 0.667%，但<b>不是賠到 0 才爆倉</b>，交易所要先留「維持保證金」（約 0.44%）和平倉手續費，真正能扛的只剩約 0.22%，也就是<b>約 217 點</b>就爆。反過來要賺本金一倍，得把整整 0.667% 賺回來，再加上開倉、平倉手續費，大約要 <b>817 點</b>。所以兩個點數本來就不成正比，<b>槓桿越高差越多</b>。</p></div></div><div class="ps"><div class="no"></div><div><h3>為什麼第一次賺一倍要比較多點，之後每多一倍點數變少？</h3><p class="note">第一倍要先把開倉和平倉手續費都賺回來（150 倍約 817 點）；之後每多賺一倍，只要多付一點平倉手續費（約 717 點）。計算機上寫的「之後每多○點再賺一倍」就是這個。</p></div></div><div class="ps"><div class="no"></div><div><h3>槓桿減半，賺一倍的點數為什麼不是剛好兩倍？</h3><p class="note">以 BTC 100,000 做多為例：100 倍約 1,151 點賺一倍，50 倍約 2,151 點，不是 2,302 點。因為「1 ÷ 槓桿」那塊會跟著變兩倍，但<b>手續費那塊（約 0.15%）不管幾倍都一樣</b>。</p></div></div><div class="ps"><div class="no"></div><div><h3>計算機的強平價跟交易所不一樣？</h3><p class="note">計算機用實際下單的強平價校正過，<b>故意算得比交易所早一點點</b>，寧可提早提醒。倉位很大時維持保證金會變多、持倉很久時資金費率會讓強平價慢慢移動，實際一律<b>以交易所頁面為準</b>。</p></div></div><div class="ps"><div class="no"></div><div><h3>同樣開 100 倍，為什麼有的幣比較能扛？</h3><p class="note">每個幣交易所要留的維持保證金比例不一樣。像 BNB 比 BTC 高很多，同樣 100 倍比較早爆；黃金很低，比較能扛。計算機最下面有「同樣開 100 倍，哪個幣最能扛」的排行。</p></div></div><div class="ps"><div class="no"></div><div><h3>出現「開倉就爆倉」是什麼意思？</h3><p class="note">槓桿開太高，保證金比交易所要留的維持保證金還少，<b>一下單就被強平</b>。把槓桿調低，或改用全倉讓帳戶其他的錢一起撐（但全倉一爆就是整個帳戶）。</p></div></div><div class="ps"><div class="no"></div><div><h3>手續費要選 0.05% 還是 0.04%？</h3><p class="note">照你帳戶實際的手續費選：一般會員 0.05%，VIP 0.04%。手續費會影響強平價和賺一倍的點數。</p></div></div><div class="ps"><div class="no"></div><div><h3>槓桿獲利計算的「淨賺」怎麼算？</h3><p class="note">淨賺 ＝ 價差 × 數量 − 開倉手續費 − 平倉手續費，「獲利／本金」是跟你填的下單金額比。目標價如果在強平價外面，會直接顯示「還沒到就已經爆倉」。</p></div></div>
+      </div>
+    </section>
+
+    <section id="safety">
+      <h2>安全須知</h2>
+      <div class="callout bad">
+        <p><b>建立 API 時</b>：只開「永續合約」交易權限，<b>不要開提幣 / 提現</b>，並填好平台伺服器的 IP 白名單。這樣就算 API 外流，也沒辦法把錢領走。</p>
+      </div>
+      <div class="callout warn">
+        <p><b>風險提醒</b>：合約交易有槓桿，可能虧損本金。過去的績效不代表未來。請只用你能承受虧損的資金，建議每筆先從 2U 開始。</p>
+      </div>
+    </section>
+  </main>
+</div>
+<footer>跟單使用說明 · 2026-11-11。內容會隨系統更新調整。</footer>
+
+<script>
+(function(){
+  var a=document.getElementById('cAmt'),l=document.getElementById('cLev'),p=document.getElementById('cPx'),o=document.getElementById('cOut');
+  function c(){var A=parseFloat(a.value),L=parseFloat(l.value),P=parseFloat(p.value);o.textContent=(isFinite(A)&&isFinite(L)&&isFinite(P))?(Math.round(A*L*P)/100)+' U':'—';}
+  [a,l,p].forEach(function(x){x.addEventListener('input',c)});c();
+})();
+</script>
+
+</body></html>
