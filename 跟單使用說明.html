@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>跟單使用說明</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -135,6 +135,7 @@ pre{margin:0;overflow-x:auto;background:var(--panel2);border:1px solid var(--lin
 .slim table{min-width:0;table-layout:fixed}.slim td:first-child,.slim th:first-child{width:36%}.slim code{word-break:break-all}
 footer{max-width:1120px;margin:56px auto 0;color:var(--mute);font-size:.82rem;border-top:1px solid var(--line);padding-top:16px}
 </style>
+</head><body>
 <header class="hero">
   <div>
     <div class="eyebrow">Crab 量化 · TV 跟單</div>
@@ -284,7 +285,7 @@ footer{max-width:1120px;margin:56px auto 0;color:var(--mute);font-size:.82rem;bo
         <div class="panel card"><span class="btnname">🎯 止盈</span><p class="what">賺到保證金 X% 就平倉；0 = 關閉。</p></div>
         <div class="panel card"><span class="btnname">🛑 止損方式</span><p class="what">目前<b>統一使用固定止損：價格反向 1.2%</b>（40 倍 ≈ 虧保證金 48%），頁面上會顯示「🛑 止損 1.2%」，這段時間止損方式的選項暫時不作用。</p></div>
         <div class="panel card"><span class="btnname">🤖 自動下單 / 🖐 手動確認</span><p class="what">在「跟單 → 🛠 進階」最上面可以看到你目前是哪一種（這項由系統統一設定：<b>開放自動的期間，你可以自己用開關切換自動 / 手動確認</b>；沒開放時開關是灰的，只能看，需要調整請洽客服）。<b>自動</b>：訊號來就照規則下單。<b>手動確認</b>：訊號來時 Bot 先傳訊息給你，按 ✅ 確認才下單、按 ❌ 取消這次不做，<b>5 分鐘沒按就略過</b>。新加入的會員預設是手動確認；自動下單可能有期限，頁面會顯示「到 MM-DD 改回手動確認」，到期後不管你切在哪邊都會自動變回手動；兩種的下單規則、止損、鎖利完全一樣，只差下單前要不要按確認。</p><div class="ex">手動確認的話，沒空看手機時訊號會被略過。止損、保本照常自動保護。</div></div>
-        <div class="panel card"><span class="btnname">📈 4合1 指標</span><p class="what">打開 <b>bot.chaho.com.tw/ind</b> → 輸入 Telegram ID，機器人會傳驗證碼給你登入 → 選交易所、填 UID 和 TradingView 帳號名稱（個人資料頁網址 tradingview.com/u/<b>帳號名稱</b>，不是 Email）送出申請，審核通過後免費使用 30 天。之後每 30 天看你的永續合約成交額：<b>滿門檻自動續期</b>，沒滿會暫停，量夠了會自動恢復。開通、續期、暫停都會在 Telegram 通知你。<br>沒有 Telegram 也可以：在同一頁點「沒有 Telegram？點這裡直接申請」，填好送出，之後回來用 UID 和 TradingView 帳號查詢結果。</p></div>
+        <div class="panel card"><span class="btnname">🦄 AI獨角獸指標</span><p class="what">打開 <b>bot.chaho.com.tw/ind</b> → 按「📲 用 Telegram 一鍵登入」→ 在機器人按「開始」→ 按機器人回的「回到指標申請（已登入）」就登入好了（沒收到按鈕：在機器人輸入 <b>/ind</b>）→ 選交易所、填 UID 和 TradingView 帳號名稱（個人資料頁網址 tradingview.com/u/<b>帳號名稱</b>，不是 Email）送出申請，審核通過後免費使用 30 天。之後每 30 天看你的永續合約成交額：<b>滿門檻自動續期</b>，沒滿會暫停，量夠了會自動恢復。開通、續期、暫停都會在 Telegram 通知你。<br>沒有 Telegram 也可以：在同一頁點「還沒有 Telegram？」→「不想裝 Telegram？點這裡直接申請」，填好送出，之後回來用 UID 和 TradingView 帳號查詢結果。</p></div>
         <div class="panel card"><span class="btnname">🕐 K 線週期</span><p class="what">5 分、15 分可以複選；<b>1 時跟 5 / 15 分二選一</b>。「1 時」照一般設定跑；旁邊的「📊 1 時回測版」完全照回測規則跑（見上面「機器人怎麼下單」）。</p></div>
         <div class="panel card"><span class="btnname">⏸ 暫停</span><p class="what">點「開啟中」可以暫停跟單。暫停後不收新訊號，手上的倉照樣由止損保護。</p></div>
       </div>

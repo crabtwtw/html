@@ -337,11 +337,11 @@ footer{max-width:1120px;margin:56px auto 0;color:var(--mute);font-size:.82rem;bo
           <div class="rec"><span class="pill danger">緊急用</span></div>
         </div>
         <div class="panel card">
-          <span class="btnname">⏸ 只平不開（v222）</span>
+          <span class="btnname">❌ 只平不開（v222）</span>
           <p class="what">全部客戶、全部週期（5 分 / 15 分 / 1 時 / 📊 1 時回測版）<b>不開新倉</b>，但反向訊號來<b>照常幫客戶平倉</b>（框外單邊、虧損抱著、大週期優先照樣生效）；止損 / 止盈 / 鎖利、盤中先出場照常。客戶會收到「⏸ 目前暫停開新倉：只平倉、不開新倉」。你手動開倉 / 手動反手不受影響；管理員止盈成交後的自動反手不會開。開著時按鈕變橘色。</p>
           <div class="tw slim"><table><thead><tr><th></th><th>開新倉</th><th>反向訊號平倉</th></tr></thead><tbody>
             <tr><td>⏸ 全部 TV 暫停</td><td>❌</td><td>❌（倉繼續抱著）</td></tr>
-            <tr><td>⏸ 只平不開</td><td>❌</td><td>✅ 照常平</td></tr>
+            <tr><td>❌ 只平不開</td><td>❌</td><td>✅ 照常平</td></tr>
             <tr><td>🛑 自動暫停</td><td>❌（只管 15 分，成績轉正自動恢復）</td><td>✅ 照常平</td></tr>
           </tbody></table></div>
           <div class="ex">用在：想先休息、不再加單，但手上的倉讓它照訊號正常出場（例如大數據前、週末、你自己不在的時候）。不會通知客戶。</div>
@@ -517,12 +517,34 @@ footer{max-width:1120px;margin:56px auto 0;color:var(--mute);font-size:.82rem;bo
       <h2>📈 4合1 指標權限（獨立程式）</h2>
       <p class="what">客戶自己申請 TradingView「4合1 指標」，你按一下就開通，之後每 30 天看<b>合約成交額</b>自動續期或暫停，不用再手動到 TradingView 加人。<b>這是另一支獨立程式</b>（repo 的 <code>ind/</code> 資料夾、服務 <code>indapp</code>），跟單 Bot 一行都沒改、也不算版本；重開它不影響跟單。<b>目前開放 BingX / Gate 申請</b>（OKX 程式已寫好但先關閉，要開再說），但只收你團隊（主帳號直推 + 下線發展）的 UID，其他人直接顯示「非此團隊 UID，無法申請」。</p>
       <div class="grid2">
-        <div class="panel card"><span class="btnname">① 客戶申請</span><p class="what">客戶打開 <code>https://bot.chaho.com.tw/ind</code> → 輸入 Telegram ID，客戶 Bot 傳 6 位數驗證碼登入 → 選交易所、填 UID、填 TradingView 帳號名稱 → 送出。BingX 會員 UID 自動帶入；Gate 會員只能選 Gate。系統先確認 UID 是你團隊、TV 帳號存在。<br><b>沒有 Telegram 的客戶</b>：點「沒有 Telegram？點這裡直接申請」，直接填交易所、UID、TV 帳號送出；不會收到通知，之後回同一頁用 UID + TV 帳號查結果。管理員卡片會寫「網頁申請，沒有 Telegram」，管理頁顯示「無 TG」。同一個 UID 在審核中或使用中時，別人不能再拿來申請。</p></div>
+        <div class="panel card"><span class="btnname">① 客戶申請</span><p class="what">客戶打開 <code>https://bot.chaho.com.tw/ind</code>（標題「🦄 AI獨角獸指標申請」）→ 按「📲 用 Telegram 一鍵登入」→ 在機器人按「開始」→ 機器人回「👉 回到指標申請（已登入）」按鈕，按下去就登入（v225；10 分鐘內有效、只能用一次；舊的輸入 ID＋驗證碼收在「其他登入方式」；v226 起客戶在機器人輸入 <code>/ind</code> 也會收到登入按鈕，<code>/id</code> 卡片的「📈 申請指標」也是直接登入）→ 選交易所、填 UID、填 TradingView 帳號名稱 → 送出。BingX 會員 UID 自動帶入；Gate 會員只能選 Gate。系統先確認 UID 是你團隊、TV 帳號存在。<br><b>沒有 Telegram 的客戶</b>：點「還沒有 Telegram？」→「不想裝 Telegram？點這裡直接申請」，直接填交易所、UID、TV 帳號送出；不會收到通知，之後回同一頁用 UID + TV 帳號查結果。管理員卡片會寫「網頁申請，沒有 Telegram」，管理頁顯示「無 TG」。同一個 UID 在審核中或使用中時，別人不能再拿來申請。</p></div>
         <div class="panel card"><span class="btnname">② 你審核</span><p class="what">管理員 Bot 跳卡片：客戶、<b>交易所</b>、UID、TV 帳號、近 30 天合約成交額 → 按 <b>✅ 開通 30 天</b> 或 <b>❌ 拒絕</b>（按鈕會打開瀏覽器完成，連結 7 天有效）。開通會自動把 TV 帳號加進指標名單，TV 那邊也設 30 天到期。</p></div>
         <div class="panel card"><span class="btnname">③ 每 30 天自動檢查</span><p class="what">到期時看近 30 天成交額：<b>滿 10,000U → 自動再延 30 天</b>；沒滿 → 自動從 TV 名單移除，通知客戶和你。<b>之後每天檢查一次，量達標就自動恢復 30 天</b>（客戶不用重新申請）；你在管理頁手動按 ⏸ 暫停的不會自動恢復。到期前 3 天量還不夠，先提醒客戶一次。</p><div class="ex">例：阿明近 30 天成交 15,000U → 🔁 續期；小華 3,000U → ⏸ 暫停，客戶收到「還差 7,000U」的說明，量夠了可以再申請。</div></div>
         <div class="panel card"><span class="btnname">/ind/admin 管理頁</span><p class="what"><code>https://bot.chaho.com.tw/ind/admin</code>（登入：按「傳驗證碼到管理員 Bot」，填 Bot 收到的 6 位數；右上角登出）：分頁看 審核中 / 使用中 / 已暫停 / 未通過；每列可 ✅ 開通、❌ 拒絕、⏩ 延期、⏸ 暫停、▶️ 重新開通。工具區：馬上跑一次到期檢查、複製客戶申請網址、<b>🚀 一鍵部署指標程式</b>（只更新 ind 資料夾並重開指標程式，跟單 Bot 不動）、<b>續期門檻</b>（填數字按「儲存門檻」，馬上生效，客戶申請頁的規則也跟著變，管理員 Bot 會通知）、<b>測試代理 API</b>（選交易所 + UID）、<b>測試 TradingView</b>（填帳號）。</p></div>
       </div>
       <div class="callout warn"><p><b>第一次要設定</b>（步驟在 repo 的 <code>ind/README.md</code>）：.env 加 <code>TV_SESSIONID</code>、<code>TV_SESSIONID_SIGN</code>（TradingView 登入後的 cookie）、<code>TV_PINE_ID</code>（指標的 PUB; 編號）。三家代理 API 用<b>主帳號建立的唯讀金鑰</b>：BingX <code>BINGX_AGENT_API_KEY / BINGX_AGENT_SECRET_KEY</code>（沒填用主帳戶金鑰）、Gate <code>GATE_PARTNER_API_KEY / GATE_PARTNER_SECRET_KEY</code>。再加 systemd 服務 <code>indapp</code> 和 nginx 的 <code>location /ind</code>。門檻可用 <code>IND_MIN_VOL</code>、<code>IND_DAYS</code> 調整。TradingView 沒有官方權限 API，TV 改版可能要修；cookie 過期要重新貼。</p></div>
+    </section>
+
+    <section id="pt1h">
+      <h2>🧪 1 小時實測（/ind/admin 下方）— 損益怎麼看</h2>
+      <p class="what">每筆平倉後，管理頁那一列和管理員 Bot 的平倉通知都會把損益拆開寫（2026-11-12 起）：</p>
+      <div class="ex">價差（平倉盈虧）−128.87U｜開倉手續費 −6.00U｜平倉手續費 −5.94U｜資金費 −0.52U ＝ 合計 −141.33U</div>
+      <div class="grid2">
+        <div class="panel card"><span class="btnname">價差（平倉盈虧）</span><p class="what">只算價格漲跌，<b>不含手續費</b>。就是 BingX 訂單詳情上的「平倉盈虧」。</p></div>
+        <div class="panel card"><span class="btnname">開倉手續費</span><p class="what">開倉那張單收的。BingX 訂單詳情只看平倉單時<b>看不到</b>它，要點開倉那張單才有。</p></div>
+        <div class="panel card"><span class="btnname">平倉手續費</span><p class="what">平倉那張單收的（BingX 平倉單上的「手續費」）。</p></div>
+        <div class="panel card"><span class="btnname">資金費</span><p class="what">持倉期間每 8 小時收/付一次，在 BingX「資金流水」，不在訂單上。正數是收到、負數是付出。</p></div>
+      </div>
+      <div class="callout warn"><p>數字都向 BingX 查實際值；查不到的部分才用 0.05% 估，通知會寫「有部分查不到，用 0.05% 估」。11/12 以前的舊紀錄只有合計，管理頁會標「舊紀錄，只記合計」。</p></div>
+    </section>
+
+    <section id="join">
+      <h2>📝 新會員申請跟單（v220 / v223）</h2>
+      <div class="grid2">
+        <div class="panel card"><span class="btnname">① 客戶先到機器人按 /start</span><p class="what">還沒開通的人傳任何訊息，機器人都回「📝 網頁申請跟單（已登入）」按鈕（<code>https://bot.chaho.com.tw/join</code>，v225 起按下去直接登入，10 分鐘內有效）。代理邀請連結 <code>/start 代理碼</code>、直接貼 AG 代理碼都會先記住邀請代理，網頁開通時寫入。輸入 <code>/id</code> 回 ID 卡片（v224）：ID 點一下就複製，下面有「📋 複製 ID」和「📝 網頁申請跟單」（已開通的人是「📈 申請指標」，直接打開 /ind、ID 自動帶入）。<b>v223 起 /start 不再照「/new 新會員預設」自動分到 Gate</b>。</p></div>
+        <div class="panel card"><span class="btnname">② 網頁自己選交易所</span><p class="what">直接從申請頁進來的人按「📲 用 Telegram 一鍵登入」→ 機器人按「開始」→ 按「回到跟單申請（已登入）」（沒有 Telegram 的人點「還沒有 Telegram？」看下載步驟）→ 下拉選 BingX（第一個）或 Gate → 貼 API Key / Secret → 驗證金鑰、查 UID、團隊驗證（非團隊直接擋，管理員 Bot 收到通知）→ 通過就自動開通。<b>選哪個交易所就分到哪一組</b>，之後按 /start 才會出現那個交易所的畫面。會員上限滿了改送審核。</p></div>
+      </div>
+      <div class="ex">審核中、被拒絕、已開通的人照原本流程。要手動把某位改組：管理員 Bot <code>/bx ID</code>（改 BingX）、<code>/gate ID</code>（改 Gate）。</div>
     </section>
 
     <section id="lists">
@@ -599,7 +621,7 @@ footer{max-width:1120px;margin:56px auto 0;color:var(--mute);font-size:.82rem;bo
     </section>
   </main>
 </div>
-<footer>TV管理者設定 · 對應版本 v222 · 2026-11-11。回測數字是真實成交單 × BingX 1 分 K 回放，40 倍、已扣手續費 0.14%；過去結果不代表未來。</footer>
+<footer>TV管理者設定 · 對應版本 v226 · 2026-11-11。回測數字是真實成交單 × BingX 1 分 K 回放，40 倍、已扣手續費 0.14%；過去結果不代表未來。</footer>
 
 <script>
 (function(){
