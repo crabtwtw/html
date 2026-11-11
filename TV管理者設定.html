@@ -535,7 +535,8 @@ footer{max-width:1120px;margin:56px auto 0;color:var(--mute);font-size:.82rem;bo
         <div class="panel card"><span class="btnname">平倉手續費</span><p class="what">平倉那張單收的（BingX 平倉單上的「手續費」）。</p></div>
         <div class="panel card"><span class="btnname">資金費</span><p class="what">持倉期間每 8 小時收/付一次，在 BingX「資金流水」，不在訂單上。正數是收到、負數是付出。</p></div>
       </div>
-      <div class="callout warn"><p>數字都向 BingX 查實際值；查不到的部分才用 0.05% 估，通知會寫「有部分查不到，用 0.05% 估」。11/12 以前的舊紀錄只有合計，管理頁會標「舊紀錄，只記合計」。</p></div>
+      <div class="callout warn"><p>數字都向 BingX 查實際值；查不到的部分才用 0.05% 估，通知會寫「有部分查不到，用 0.05% 估」。11/12 以前的舊紀錄已用對帳工具向 BingX 查實際成交補齊（出場價、平倉原因、各項費用）。</p></div>
+      <div class="ex">對帳工具（只看不改）：<code>cd /root/bingxbot/ind &amp;&amp; python3 pt_fix.py</code>　確認後寫回：加 <code>--write</code>（會改資料庫）。平倉原因看 BingX 平倉單種類：止盈單＝止盈、止損單＝止損、整點後 3 分鐘內的市價單＝反向、其他市價單＝手動平倉。11/12 起程式平倉時就自動這樣判斷（你在 BingX 手動平倉，下一個整點會收到「✋ 手動平倉」通知），不用再跑對帳。</div>
     </section>
 
     <section id="join">
