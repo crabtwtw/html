@@ -536,7 +536,7 @@ footer{max-width:1120px;margin:56px auto 0;color:var(--mute);font-size:.82rem;bo
         <div class="panel card"><span class="btnname">資金費</span><p class="what">持倉期間每 8 小時收/付一次，在 BingX「資金流水」，不在訂單上。正數是收到、負數是付出。</p></div>
       </div>
       <div class="callout warn"><p>數字都向 BingX 查實際值；查不到的部分才用 0.05% 估，通知會寫「有部分查不到，用 0.05% 估」。11/12 以前的舊紀錄已用對帳工具向 BingX 查實際成交補齊（出場價、平倉原因、各項費用）。</p></div>
-      <div class="ex">對帳工具（只看不改）：<code>cd /root/bingxbot/ind &amp;&amp; python3 pt_fix.py</code>　確認後寫回：加 <code>--write</code>（會改資料庫）。平倉原因看 BingX 平倉單種類：止盈單＝止盈、止損單＝止損、整點後 3 分鐘內的市價單＝反向、其他市價單＝手動平倉。11/12 起程式平倉時就自動這樣判斷（你在 BingX 手動平倉，下一個整點會收到「✋ 手動平倉」通知），不用再跑對帳。</div>
+      <div class="ex">對帳工具（只看不改）：<code>cd /root/bingxbot/ind &amp;&amp; python3 pt_fix.py</code>　確認後寫回：加 <code>--write</code>（會改資料庫）。平倉原因看 BingX 平倉單種類：止盈單＝止盈、止損單＝止損、整點後 3 分鐘內的市價單＝反向、其他市價單＝手動平倉。11/12 起程式平倉時就自動這樣判斷（11/12 起每分鐘檢查一次倉位：你在 BingX 手動平倉、或止盈止損被打到，約 1 分鐘內就會收到通知；開新倉、反向訊號還是只在整點），不用再跑對帳。</div>
     </section>
 
     <section id="join">
@@ -545,7 +545,7 @@ footer{max-width:1120px;margin:56px auto 0;color:var(--mute);font-size:.82rem;bo
         <div class="panel card"><span class="btnname">① 客戶先到機器人按 /start</span><p class="what">還沒開通的人傳任何訊息，機器人都回「📝 網頁申請跟單（已登入）」按鈕（<code>https://bot.chaho.com.tw/join</code>，v225 起按下去直接登入，10 分鐘內有效）。代理邀請連結 <code>/start 代理碼</code>、直接貼 AG 代理碼都會先記住邀請代理，網頁開通時寫入。輸入 <code>/id</code> 回 ID 卡片（v224）：ID 點一下就複製，下面有「📋 複製 ID」和「📝 網頁申請跟單」（已開通的人是「📈 申請指標」，直接打開 /ind、ID 自動帶入）。<b>v223 起 /start 不再照「/new 新會員預設」自動分到 Gate</b>。</p></div>
         <div class="panel card"><span class="btnname">② 網頁自己選交易所</span><p class="what">直接從申請頁進來的人按「📲 用 Telegram 一鍵登入」→ 機器人按「開始」→ 按「回到跟單申請（已登入）」（沒有 Telegram 的人點「還沒有 Telegram？」看下載步驟）→ 下拉選 BingX（第一個）或 Gate → 貼 API Key / Secret → 驗證金鑰、查 UID、團隊驗證（非團隊直接擋，管理員 Bot 收到通知）→ 通過就自動開通。<b>選哪個交易所就分到哪一組</b>，之後按 /start 才會出現那個交易所的畫面。會員上限滿了改送審核。</p></div>
       </div>
-      <div class="ex">審核中、被拒絕、已開通的人照原本流程。要手動把某位改組：管理員 Bot <code>/bx ID</code>（改 BingX）、<code>/gate ID</code>（改 Gate）。</div>
+      <div class="ex">v227 起開通時，機器人會在「🎉 你的帳號已開通」後面直接傳「🌐 開啟網頁」一鍵登入按鈕，客戶不用再輸入 /start；模擬倉關閉時新會員網頁一打開就是真實倉（接收訊號、日線也預設真實，但都是暫停／關閉，不會下單）。審核中、被拒絕、已開通的人照原本流程。要手動把某位改組：管理員 Bot <code>/bx ID</code>（改 BingX）、<code>/gate ID</code>（改 Gate）。</div>
     </section>
 
     <section id="lists">
@@ -622,7 +622,7 @@ footer{max-width:1120px;margin:56px auto 0;color:var(--mute);font-size:.82rem;bo
     </section>
   </main>
 </div>
-<footer>TV管理者設定 · 對應版本 v226 · 2026-11-11。回測數字是真實成交單 × BingX 1 分 K 回放，40 倍、已扣手續費 0.14%；過去結果不代表未來。</footer>
+<footer>TV管理者設定 · 對應版本 v227 · 2026-11-12。回測數字是真實成交單 × BingX 1 分 K 回放，40 倍、已扣手續費 0.14%；過去結果不代表未來。</footer>
 
 <script>
 (function(){
