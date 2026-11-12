@@ -530,7 +530,7 @@ footer{max-width:1120px;margin:56px auto 0;color:var(--mute);font-size:.82rem;bo
       <div class="grid2">
         <div class="panel card"><span class="btnname">① 不會有動作就不通知</span><p class="what">訊號對他不會開倉、也沒有反向倉要平（已有同方向倉、自動暫停、只平不開、框外反向、距離過濾、模擬倉關閉）→ 不傳「待確認」。紀錄會寫「🔕 不問客戶」。有反向倉要平的照樣問。</p></div>
         <div class="panel card"><span class="btnname">② 會開倉才問</span><p class="what">傳「📺 TV 訊號待確認」，5 分鐘沒按就略過。訊息下面寫「目前是手動確認下單，所以訊號先問你」。</p></div>
-        <div class="panel card"><span class="btnname">③ 按確認時價格跑掉</span><p class="what">現價離訊號價超過 0.5% → 跳視窗「價格已超出訊號價 X%，這次不下單，等待下一個訊號」，不下單（有反向倉要平的照常平）。</p></div>
+        <div class="panel card"><span class="btnname">③ 按確認時價格跑掉</span><p class="what">現價離訊號價超過 0.3%（2026-11-12 回測後由 0.5% 改成 0.3%，.env 的 TV_ENTRY_DEV_PCT）→ 跳視窗「價格已超出訊號價 X%，這次不下單，等待下一個訊號」，不下單（有反向倉要平的照常平）。</p></div>
         <div class="panel card"><span class="btnname">④ 按確認後寫結果</span><p class="what">那則訊息改成「✅ 已開倉」或「ℹ️ 這次沒有開新倉：原因；等待下一個訊號」（例如餘額不足、冷卻中、持倉上限）。</p></div>
       </div>
     </section>
