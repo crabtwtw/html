@@ -525,6 +525,16 @@ footer{max-width:1120px;margin:56px auto 0;color:var(--mute);font-size:.82rem;bo
       <div class="callout warn"><p><b>第一次要設定</b>（步驟在 repo 的 <code>ind/README.md</code>）：.env 加 <code>TV_SESSIONID</code>、<code>TV_SESSIONID_SIGN</code>（TradingView 登入後的 cookie）、<code>TV_PINE_ID</code>（指標的 PUB; 編號）。三家代理 API 用<b>主帳號建立的唯讀金鑰</b>：BingX <code>BINGX_AGENT_API_KEY / BINGX_AGENT_SECRET_KEY</code>（沒填用主帳戶金鑰）、Gate <code>GATE_PARTNER_API_KEY / GATE_PARTNER_SECRET_KEY</code>。再加 systemd 服務 <code>indapp</code> 和 nginx 的 <code>location /ind</code>。門檻可用 <code>IND_MIN_VOL</code>、<code>IND_DAYS</code> 調整。TradingView 沒有官方權限 API，TV 改版可能要修；cookie 過期要重新貼。</p></div>
     </section>
 
+    <section id="manualcfm">
+      <h2>🖐 手動確認下單的客戶（v229）</h2>
+      <div class="grid2">
+        <div class="panel card"><span class="btnname">① 不會有動作就不通知</span><p class="what">訊號對他不會開倉、也沒有反向倉要平（已有同方向倉、自動暫停、只平不開、框外反向、距離過濾、模擬倉關閉）→ 不傳「待確認」。紀錄會寫「🔕 不問客戶」。有反向倉要平的照樣問。</p></div>
+        <div class="panel card"><span class="btnname">② 會開倉才問</span><p class="what">傳「📺 TV 訊號待確認」，5 分鐘沒按就略過。訊息下面寫「目前是手動確認下單，所以訊號先問你」。</p></div>
+        <div class="panel card"><span class="btnname">③ 按確認時價格跑掉</span><p class="what">現價離訊號價超過 0.5% → 跳視窗「價格已超出訊號價 X%，這次不下單，等待下一個訊號」，不下單（有反向倉要平的照常平）。</p></div>
+        <div class="panel card"><span class="btnname">④ 按確認後寫結果</span><p class="what">那則訊息改成「✅ 已開倉」或「ℹ️ 這次沒有開新倉：原因；等待下一個訊號」（例如餘額不足、冷卻中、持倉上限）。</p></div>
+      </div>
+    </section>
+
     <section id="pt1h">
       <h2>🧪 1 小時實測（/ind/admin 下方）— 損益怎麼看</h2>
       <p class="what">每筆平倉後，管理頁那一列和管理員 Bot 的平倉通知都會把損益拆開寫（2026-11-12 起）：</p>
@@ -622,7 +632,7 @@ footer{max-width:1120px;margin:56px auto 0;color:var(--mute);font-size:.82rem;bo
     </section>
   </main>
 </div>
-<footer>TV管理者設定 · 對應版本 v227 · 2026-11-12。回測數字是真實成交單 × BingX 1 分 K 回放，40 倍、已扣手續費 0.14%；過去結果不代表未來。</footer>
+<footer>TV管理者設定 · 對應版本 v229 · 2026-11-12。回測數字是真實成交單 × BingX 1 分 K 回放，40 倍、已扣手續費 0.14%；過去結果不代表未來。</footer>
 
 <script>
 (function(){
