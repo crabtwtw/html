@@ -525,6 +525,11 @@ footer{max-width:1120px;margin:56px auto 0;color:var(--mute);font-size:.82rem;bo
       <div class="callout warn"><p><b>第一次要設定</b>（步驟在 repo 的 <code>ind/README.md</code>）：.env 加 <code>TV_SESSIONID</code>、<code>TV_SESSIONID_SIGN</code>（TradingView 登入後的 cookie）、<code>TV_PINE_ID</code>（指標的 PUB; 編號）。三家代理 API 用<b>主帳號建立的唯讀金鑰</b>：BingX <code>BINGX_AGENT_API_KEY / BINGX_AGENT_SECRET_KEY</code>（沒填用主帳戶金鑰）、Gate <code>GATE_PARTNER_API_KEY / GATE_PARTNER_SECRET_KEY</code>。再加 systemd 服務 <code>indapp</code> 和 nginx 的 <code>location /ind</code>。門檻可用 <code>IND_MIN_VOL</code>、<code>IND_DAYS</code> 調整。TradingView 沒有官方權限 API，TV 改版可能要修；cookie 過期要重新貼。</p></div>
     </section>
 
+    <section id="dtweb">
+      <h2>🙈 日線趨勢網頁開關（v231）</h2>
+      <p class="what">管理員 Bot 傳 <code>/dtweb off</code>（預設）→ 客戶網頁看不到「📈 日線趨勢」卡片和相關說明，介面比較簡單；<code>/dtweb on</code> 恢復顯示；只傳 <code>/dtweb</code> 看目前狀態。已經開著日線或有日線持倉的客戶照常看得到（才能管理、關掉）。只改網頁顯示，不改設定、不動倉位。</p>
+    </section>
+
     <section id="manualcfm">
       <h2>🖐 手動確認下單的客戶（v229）</h2>
       <div class="grid2">
@@ -555,7 +560,7 @@ footer{max-width:1120px;margin:56px auto 0;color:var(--mute);font-size:.82rem;bo
         <div class="panel card"><span class="btnname">① 客戶先到機器人按 /start</span><p class="what">還沒開通的人傳任何訊息，機器人都回「📝 網頁申請跟單（已登入）」按鈕（<code>https://bot.chaho.com.tw/join</code>，v225 起按下去直接登入，10 分鐘內有效）。代理邀請連結 <code>/start 代理碼</code>、直接貼 AG 代理碼都會先記住邀請代理，網頁開通時寫入。輸入 <code>/id</code> 回 ID 卡片（v224）：ID 點一下就複製，下面有「📋 複製 ID」和「📝 網頁申請跟單」（已開通的人是「📈 申請指標」，直接打開 /ind、ID 自動帶入）。<b>v223 起 /start 不再照「/new 新會員預設」自動分到 Gate</b>。</p></div>
         <div class="panel card"><span class="btnname">② 網頁自己選交易所</span><p class="what">直接從申請頁進來的人按「📲 用 Telegram 一鍵登入」→ 機器人按「開始」→ 按「回到跟單申請（已登入）」（沒有 Telegram 的人點「還沒有 Telegram？」看下載步驟）→ 下拉選 BingX（第一個）或 Gate → 貼 API Key / Secret → 驗證金鑰、查 UID、團隊驗證（非團隊直接擋，管理員 Bot 收到通知）→ 通過就自動開通。<b>選哪個交易所就分到哪一組</b>，之後按 /start 才會出現那個交易所的畫面。會員上限滿了改送審核。</p></div>
       </div>
-      <div class="ex">v227 起開通時，機器人會在「🎉 你的帳號已開通」後面直接傳「🌐 開啟網頁」一鍵登入按鈕，客戶不用再輸入 /start；模擬倉關閉時新會員網頁一打開就是真實倉（接收訊號、日線也預設真實，但都是暫停／關閉，不會下單）。審核中、被拒絕、已開通的人照原本流程。要手動把某位改組：管理員 Bot <code>/bx ID</code>（改 BingX）、<code>/gate ID</code>（改 Gate）。</div>
+      <div class="ex">v227 起開通時，機器人會在「🎉 你的帳號已開通」後面直接傳「🌐 開啟網頁」一鍵登入按鈕，客戶不用再輸入 /start；模擬倉關閉時新會員網頁一打開就是真實倉（接收訊號、日線也預設真實，但都是暫停／關閉，不會下單）。審核中、被拒絕、已開通的人照原本流程。<b>v233 起新會員開通時「每筆金額」預設 2 USDT</b>（原本 100；只影響之後新加入的人，已加入的不變，客戶可自己在網頁改）。要手動把某位改組：管理員 Bot <code>/bx ID</code>（改 BingX）、<code>/gate ID</code>（改 Gate）。</div>
     </section>
 
     <section id="lists">
@@ -632,7 +637,7 @@ footer{max-width:1120px;margin:56px auto 0;color:var(--mute);font-size:.82rem;bo
     </section>
   </main>
 </div>
-<footer>TV管理者設定 · 對應版本 v229 · 2026-11-12。回測數字是真實成交單 × BingX 1 分 K 回放，40 倍、已扣手續費 0.14%；過去結果不代表未來。</footer>
+<footer>TV管理者設定 · 對應版本 v233 · 2026-11-13。回測數字是真實成交單 × BingX 1 分 K 回放，40 倍、已扣手續費 0.14%；過去結果不代表未來。</footer>
 
 <script>
 (function(){
